@@ -1,0 +1,525 @@
+---
+title: "ML sc transcriptome and fate"
+author: "Weihan Liu"
+date: "12/08/2021"
+output: html_document
+---
+Use a Mchine learning model on Weinreb_2020 data to test if
+
+Treatment
+1).Cux1 binding genes(from Jeff's Cut and Run on human CD34 HSPC)
+2).Intersect of Cux1 binding genes and DEGs after Cux1 KD in mouse Lin-CKit+Sca1+CD135- HSPC
+3).Cux1 signature(DEGs comparing Cux1 + and Cux1- cells)
+4).DE genes for each lineage from Tradeseq to predict fate of each lineage?
+5).Sites opened by Cux1 from Jeff's ATAC seq data on human CD34
+6).The intersect between these sites and DEGs from bulk RNA seq
+
+Controls:
+1).highly variable genes(+ ctrl)
+1).DEGs between progenitors genes(+ ctrl)
+3) randomly sampled genes (- ctrl)
+
+I want to test if the treatment groups are more accurate to predict HSPC cell fate than background(randomly sampled genes)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+Load relevant libraries
+```{r}
+library(Seurat)
+library(tidyverse)
+library(ggplot2)
+library(Matrix)
+```
+
+
+Read in the data from Weinreb 2020 and perform data cleaning
+
+Prepare the count matrix(only need to run this once, already done)
+```{r}
+# # #load the L1 normalized count matrix
+# count_mtx = readMM("/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/matrix.mtx")
+# # #Read10X() expect gene-by-cell-matrix, so we need to transpose and export 
+# count_mtx <- t(count_mtx)
+# writeMM(count_mtx, "/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/input_matrix_for_Seurat/matrix.mtx")
+```
+
+load metadata
+```{r}
+meta_data <- read.delim("/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/GSM4185643_stateFate_inVivo_metadata.txt",header = TRUE)
+
+```
+
+We have 182173 cells in total for the in vivo experiment, next we need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells
+Read in the clone membership metadata
+```{r}
+#read in the clonal membership matrix
+clone_meta_data <- readMM("/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/GSM4185643_stateFate_inVivo_clone_matrix.mtx")
+#convert to dataframe
+clone_meta_data_df <- clone_meta_data %>% as.data.frame(col.names = TRUE)
+#examine the dataframe
+dim(clone_meta_data_df)
+head(clone_meta_data_df)
+```
+
+This dataframe's row are 23241 clone membership IDs, and row are all 182173 cells. For each cell(each column), if it belong to a clone(a row), the value in the matrix is 1, if it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell
+```{r}
+#use match function to find the row number where the 1 occurs(indicating this cell below to this clone), and store the location of 1 for all cells into a vector
+clone_membership <- lapply(clone_meta_data_df,function(x) match(1,x))
+clone_membership <- unlist(clone_membership)
+length(clone_membership)
+#now clone membership is a vector of length 181173 that contains the clonal ID for each cell, the order should be the same as in the count matrix and metadata
+
+#attach the clonal membership vector to the metadata
+meta_data$clone_membership <- clone_membership
+```
+
+
+Further data cleaning
+```{r}
+library(stringr)
+#create a new cell barcode column wich incorporate library ID
+meta_data$cell <- str_c(meta_data$Cell.barcode,"-",meta_data$Library)
+#there are still some duplicated cell barcode within each library even if we attach the library name after cell barcode, so let's add a general number to the very end of the barcode, to make every cell barcode unique
+meta_data$index <- seq(1,182173)
+meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
+meta_data <- column_to_rownames(meta_data,var = "cell")
+```
+
+we need to use the new unique cell barcode to remake the barcode.tsv file for reading in seurat object(only need to do this once, already done)
+```{r}
+# barcode <- as.data.frame(rownames(meta_data),col.names = NULL)
+# 
+# #export the new cell barcode tsv file
+# write.table(barcode, file='/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/barcodes_unique.tsv', quote=FALSE, sep='\t', col.names = FALSE,row.names = FALSE)
+```
+
+Now read in the Seurat object
+```{r}
+LT.data <- Read10X(data.dir = "/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/input_matrix_for_Seurat",gene.column = 1)
+# Initialize the Seurat object with the raw (non-normalized data).
+LT.seu <- CreateSeuratObject(counts = LT.data, project = "Lineage_Tracing")
+```
+
+
+Next, find the destiny fate of each day 2 cell by uniting with the clonal membership of week1 and week2 cells
+```{r}
+#get rid of the cells that don't belong to any clones
+meta_data_unique <- meta_data[!is.na(meta_data$clone_membership),]
+#only retain the useful columns
+meta_data_unique <- dplyr::select(meta_data_unique,c("Time.point","Cell.type.annotation","clone_membership"))
+
+#select day 2 cells
+meta_data_d2 <- filter(meta_data_unique,Time.point == 2)
+#select terminal cells
+meta_data_terminal <- filter(meta_data_unique,Time.point %in% c(9,16))
+
+#check how many clones in day 2 have sisters in week 1 and week 2
+meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership %>% sum()
+#1222
+
+#only retain the day 2 cells which has a clonal sister in week 1 and 2
+meta_data_d2 <- meta_data_d2[meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership,]
+
+#loop through all day 2 cells and store all terminal sister cell's annotations for each day 2 cell into a list
+sister_ident <- list()
+for (i in 1:nrow(meta_data_d2)) {
+        terminal_fate <- filter(meta_data_terminal, clone_membership == meta_data_d2$clone_membership[i]) %>% dplyr::select(Cell.type.annotation)
+        sister_ident <- append(sister_ident,terminal_fate)
+}
+
+```
+
+
+Now let's loop through the list and find the most common cell annotation for each clone identity
+1).If there is only one terminal identity, we return that identity
+2).If there are two identity, we return: ambiguous
+3).If there are > 2 identities, we find the mode
+
+```{r}
+#define a custom function to extract the most common character from a vector(equivalent of Mode() which only works for numeric values)
+calculate_mode <- function(x) {
+  uniqx <- unique(na.omit(x))
+  uniqx[which.max(tabulate(match(x, uniqx)))]
+}
+
+#create a holder data frame for day 2 cell's identity
+day2_cell_ident <- data.frame(index = seq(1:length(sister_ident)),ident = NA)
+n_day2_cells <- length(sister_ident)
+
+for (i in 1:n_day2_cells) {
+        if (length(sister_ident[[i]]) == 1) { #if only one final identity, use that identity
+          
+           day2_cell_ident[i,"ident"] <- sister_ident[[i]] 
+           
+        } else if (#if two different identity, mark as ambiguous
+          (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] != sister_ident[[i]][2])
+          ) {
+          
+                day2_cell_ident[i,"ident"] <- "ambiguous" 
+                
+        } else if (
+          (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] == sister_ident[[i]][2])
+          ) {#if two identical identity, use that identity
+          
+                day2_cell_ident[i,"ident"] <- sister_ident[[i]][1]
+                
+        } else if (
+          (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) == 0)
+          ) { #if there are more than 2 cell types, and each type has equal proportions, label as ambiguous
+          
+                day2_cell_ident[i,"ident"] <- "ambiguous"
+                
+        } else if (
+          (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) != 0)
+          ) { #if there are more than 2 cell types and the types does not have equal proportions, there will be two situations: (A,A,B,B,C), (A,A,A,B,B,C). For the 1st situation we will label as ambiguous, for the 2nd situation we will label as A
+          
+                #obtain the unique values of cell identity
+                uniqx <- unique(sister_ident[[i]])
+                #obtain the count of occurence for each unique cell identity
+                tabu <- tabulate(match(sister_ident[[i]], uniqx))
+                if (sum(duplicated(tabu)) == 0) { #if the tabulation for each cell identity is not equal, label using the mode.(eg if there are A,A,B,B,C, A dn B both appeared twice, sum(duplicated(tabu)) will be 0)
+                     day2_cell_ident[i,"ident"] <- uniqx[which.max(tabulate(match(sister_ident[[i]], uniqx)))]
+                } else { #if there are cell identities with equal number of occurence,label as ambiuguous
+                     day2_cell_ident[i,"ident"] <- "ambiguous"
+                }
+                
+        }
+}
+#check how many cells with unique terminal identity we have
+day2_cell_ident %>% filter(!(ident %in% c("ambiguous","Prog")))
+#I was able to recover 462 cells with definitive cell identity annotation
+day2_cell_ident$ident %>% table()
+
+```
+We have 636 day 2 cells with unique terminal identity, they will be used for the machine learning classifier
+
+Further data cleaning
+```{r}
+#attach the day 2 cell identity to the day 2 metadata file
+meta_data_d2 <- cbind(meta_data_d2,day2_cell_ident$ident)
+#rename the day 2 identity column
+meta_data_d2 <- dplyr::rename(meta_data_d2,final.ident = "day2_cell_ident$ident")
+
+#obtain day 2 seurat object by subsetting the cell barcode
+LT.seu.day2 <- subset(LT.seu,cells = rownames(meta_data_d2))
+LT.seu.day2@meta.data <- meta_data_d2
+
+
+#get rid of the ambiguous cells and the cells that are still labeled as Prog or undifferentiated in week 1 and 2
+#obtain cell barcode of cells labeled as ambiguous and Prog
+ambi_cells <- LT.seu.day2@meta.data %>% filter(final.ident %in% c("Prog","ambiguous","Undifferentiated")) %>% rownames()
+#obtain cells with unique final identities
+unique_cells <- rownames(LT.seu.day2@meta.data)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
+#subset day 2 Seurat object to only retain the cells with unique identities
+LT.seu.day2 <- subset(LT.seu.day2,cells = unique_cells)
+#there are still two cells labeled as "Undifferentiated", let's getb rid of them too
+
+table(LT.seu.day2@meta.data$final.ident)
+
+#dimension reduction
+LT.seu.day2 <- FindVariableFeatures(LT.seu.day2, selection.method = "vst", nfeatures = 2000)
+#scale the data for PCA
+all.genes <- rownames(LT.seu.day2)
+LT.seu.day2 <- ScaleData(LT.seu.day2, features = all.genes)
+#run PCA
+LT.seu.day2 <- RunPCA(LT.seu.day2, features = VariableFeatures(object = LT.seu.day2))
+#UMAP
+LT.seu.day2 <- RunUMAP(LT.seu.day2, dims = 1:30)
+
+DimPlot(LT.seu.day2, group.by = "final.ident",reduction = "pca")
+
+```
+
+
+Also there are some rare final cell identities, let's combine them
+```{r}
+Idents(LT.seu.day2) <- "final.ident"
+#delete the NK cell, since there is only one
+LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
+#merge Baso, DC Mono and Neu into a single cluster My
+LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>% mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
+                                                                    final.ident == "DC" ~ "My",
+                                                                    final.ident == "Mono" ~ "My",
+                                                                    final.ident == "Neu" ~ "My",
+                                                                    final.ident == "B" ~ "B",
+                                                                    final.ident == "Ery" ~ "Ery"))
+```
+Now our final.ident column just contains three classes of cell identities: B, Ery and My
+
+
+
+Save the day 2 Seurat object, this will be the object we will pull the training data from
+```{r}
+saveRDS(LT.seu.day2, file = "/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/LT_seu_day2_ML_source_data.rds")
+```
+
+
+
+Read in and preparing the training data, export to your desktop and we will implement ML classifier in python in sklearn
+
+Controls:
+Neg control: randomly sampled 1000 genes from day 2 Seurat object
+```{r}
+day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data) 
+#randomly sample 1000 genes
+day2.count.neg.ctrl <- filter(day2.count.neg.ctrl,rownames(day2.count.neg.ctrl) %in% sample(rownames(day2.count.neg.ctrl),1000))
+day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
+#attach the final identity(label) to the data
+day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
+
+day2.count.neg.ctrl
+#export the df
+write.table(day2.count.neg.ctrl,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
+
+```
+
+Positive control Top 3000 most variable genes
+```{r}
+day2.count.var.3000 <- as.data.frame(LT.seu.day2@assays$RNA@data)
+day2.count.var.3000 <- filter(day2.count.var.3000,rownames(day2.count.var.3000) %in% kon1@assays$SCT@var.features)
+day2.count.var.3000 <- t(day2.count.var.3000) %>% as.data.frame()
+day2.count.var.3000$final.ident <- LT.seu.day2@meta.data$final.ident
+
+day2.count.var.3000
+
+#export the df
+write.table(day2.count.neg.ctrl,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/var_3000_pos_ctrl.txt")
+```
+
+
+Experimental gene sets:
+1.All cux1 binding genes from Jeff. One caveat is that all the Cux1 binding targets are derived from a Cut and Run experiment in human CD34, but we are testing the ML classifier in mouse
+```{r}
+Cux1_binding_sites_df <- read.table("/Users/weihan/Desktop/Research/lab_data/CUX1_target_genes_Jeff_CUT_Run_human_CD34/20210530-public-4.0.4-rlNUuD-hg19-all-region.txt",sep = "\t")
+
+#data cleaning
+#parse the column into correct format
+Cux1_binding_sites_df <- separate(Cux1_binding_sites_df, V2, into = c("C1","C2","C3","C4","C5","C6","C7","C8"), sep = " ")
+#obtain the gene list from the parsed columns 
+Cux1_binding_genes <- c(Cux1_binding_sites_df$C1,Cux1_binding_sites_df$C3,Cux1_binding_sites_df$C5,Cux1_binding_sites_df$C7)
+#remove duplicates
+Cux1_binding_genes <- unique(Cux1_binding_genes)
+#convert to mouse gene symbol
+library(HumanMouseConvert)
+Cux1_binding_genes <- human_mouse_convert(Cux1_binding_genes,"human")
+
+#obtain traning data from the day 2 Seurat object
+day2.count.cux1.bound.genes <- as.data.frame(LT.seu.day2@assays$RNA@data) 
+day2.count.cux1.bound.genes <- filter(day2.count.cux1.bound.genes,rownames(day2.count.cux1.bound.genes) %in% Cux1_binding_genes)
+day2.count.cux1.bound.genes <- t(day2.count.cux1.bound.genes) %>% as.data.frame()
+#attach the final identity(label) to the data
+day2.count.cux1.bound.genes$final.ident <- LT.seu.day2@meta.data$final.ident
+
+day2.count.cux1.bound.genes
+
+#this is the data for ML classifier for all Cux1 binding genes, let's export it
+write.table(day2.count.cux1.bound.genes,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/all_cux1_bound_genes.txt")
+```
+
+2).Intersect of  Cux1 binding genes(jeff's cut and Run) and DEGs after Cux1 KD in mouse LSK HSPC(from Molly's bulk RNA seq)
+Molly's bulk RNA seq: shCux1 vs Ren(Ren being the base), so the DEGs up in this imported file are up in shCux1 sample, DEGs down in this file in down in shCux1 sample likewise
+```{r}
+library(readxl)
+#read in Molly's bulk RNA seq results
+mouse_LSK_bulk_RNA_df <- read_excel("/Users/weihan/Desktop/Research/lab_data/Bulk_RNA_seq_mouse_LSK_shCux1_Molly/HSC_tophat_20190213_B.xlsx")
+#filter the df based on FDR
+bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, FDR <= 0.1) 
+#filter based on LFC
+bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, abs(logFC) >= 0.8) 
+#sort the DEG table for LFC
+bulk_RNA_sig_genes <- bulk_RNA_sig_genes[order(bulk_RNA_sig_genes$logFC,decreasing = TRUE),]
+
+#intersect
+day2.count.cux1.bound.DEG <- day2.count.cux1.bound.genes[,colnames(day2.count.cux1.bound.genes) %in% c(bulk_RNA_sig_genes$genes,"final.ident")]
+
+day2.count.cux1.bound.DEG
+
+#export the data
+write.table(day2.count.cux1.bound.DEG,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/all_cux1_bound_DEG.txt")
+```
+
+
+3).Cux1 signature(DEGs comparing Cux1 + and Cux1- cells)
+This table is from 5_DE_pathway_analysis and conrains the DEGs both up and down regulated in Cux1 + cells vs Cux1 - cells
+```{r,fig.width=10,fig.height=6}
+kon1 <- readRDS(file = "/Users/weihan/Desktop/Research/single_cell_project/code/seurat_object_ln12_comb_cell_cycle_regress/kon1_3_slingshot_TI.rds")
+
+Idents(kon1) <- "cux1_status"
+#perform DE analysis, the result contains DEGs both up and down regulated in Cux1+ cells
+Cux1_signature <- FindMarkers(kon1, ident.1 = "positive", ident.2 = "negative",test.use = "MAST")
+#sort the result table based on log2 Fold change from high to low
+Cux1_signature <- Cux1_signature[order(Cux1_signature$avg_log2FC,decreasing = TRUE),]
+
+DimPlot(kon.comb, split.by = "orig.ident", group.by = "final.ident.2",label = TRUE, repel = TRUE)
+```
+
+
+
+
+
+Implement Machine learning
+
+We will try algorithm below
+1).Random Forest
+2).Adaboost
+3).DNN
+
+Load relevant packages
+```{r}
+library(tidymodels)
+library(tidyverse)
+library(workflows)
+library(tune)
+```
+
+
+Create bootstrapped samples
+```{r}
+#controls
+day2.count.neg.ctrl.bs <- bootstraps(day2.count.neg.ctrl)
+day2.count.var.3000.bs <- bootstraps(day2.count.var.3000)
+
+#treatment
+day2.count.cux1.bound.DEG.bs <- bootstraps(day2.count.cux1.bound.DEG)
+day2.count.cux1.bound.genes.bs <- bootstraps(day2.count.cux1.bound.genes)
+
+```
+
+
+Cux1 bound DEGs
+```{r}
+library(themis)
+
+day2.count.cux1.bound.DEG_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.DEG) 
+
+day2.count.cux1.bound.DEG_prep <- prep(day2.count.cux1.bound.DEG_rec)
+juice(day2.count.cux1.bound.DEG_prep)
+```
+
+Define workflow
+```{r}
+rf_spec.Cux1.bound.DEG <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+cux1.bound.DEG.wf <- workflow() %>%
+  add_recipe(day2.count.cux1.bound.DEG_rec) %>%
+  add_model(rf_spec.Cux1.bound.DEG)
+
+cux1.bound.DEG.wf
+```
+
+Fit the workflow to bootstrapped samples
+```{r}
+cux1.bound.DEG.res <- fit_resamples(
+  cux1.bound.DEG.wf,
+  resamples = day2.count.cux1.bound.DEG.bs,
+  control = control_resamples(save_pred = TRUE)
+)
+```
+
+Examine performance
+```{r}
+cux1.bound.DEG.res %>%
+  collect_metrics()
+```
+
+
+Examine variable importance
+```{r}
+library(vip)
+
+rf_spec %>%
+  set_engine("ranger", importance = "permutation") %>%
+  fit(
+    volcano_type ~ .,
+    data = juice(volcano_prep) %>%
+      select(-volcano_number) %>%
+      janitor::clean_names()
+  ) %>%
+  vip(geom = "point")
+```
+
+
+All Cux1 bound genes
+```{r}
+day2.count.cux1.bound.genes_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.genes) 
+
+day2.count.cux1.bound.genes_prep <- prep(day2.count.cux1.bound.genes_rec)
+juice(day2.count.cux1.bound.genes_prep)
+
+rf_spec.cux1.bound.genes <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+day2.count.cux1.bound.genes.wf <- workflow() %>%
+  add_recipe(day2.count.cux1.bound.genes_rec) %>%
+  add_model(rf_spec.cux1.bound.genes)
+
+day2.count.cux1.bound.genes.res <- fit_resamples(
+  day2.count.cux1.bound.genes.wf,
+  resamples = day2.count.cux1.bound.genes.bs,
+  control = control_resamples(save_pred = TRUE)
+)
+
+day2.count.cux1.bound.genes.res %>%
+  collect_metrics()
+```
+
+
+Neg control
+```{r}
+day2.count.neg.ctrl_rec <- recipe(final.ident ~ ., data = day2.count.neg.ctrl) 
+
+day2.count.neg.ctrl_prep <- prep(day2.count.neg.ctrl_rec)
+juice(day2.count.neg.ctrl_prep)
+
+rf_spec <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+day2.count.neg.ctrl.wf <- workflow() %>%
+  add_recipe(day2.count.neg.ctrl_rec) %>%
+  add_model(rf_spec)
+
+day2.count.neg.ctrl.res <- fit_resamples(
+  day2.count.neg.ctrl.wf,
+  resamples = day2.count.neg.ctrl.bs,
+  control = control_resamples(save_pred = TRUE)
+)
+
+day2.count.neg.ctrl.res %>%
+  collect_metrics()
+```
+
+
+Positive control, top 3000 most variable genes
+```{r}
+day2.count.var.3000_rec <- recipe(final.ident ~ ., data = day2.count.var.3000) 
+
+day2.count.var.3000_prep <- prep(day2.count.var.3000_rec)
+juice(day2.count.var.3000_prep)
+
+rf_spec <- rand_forest(trees = 1000) %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+day2.count.var.3000.wf <- workflow() %>%
+  add_recipe(day2.count.var.3000_rec) %>%
+  add_model(rf_spec)
+
+day2.count.var.3000.res <- fit_resamples(
+  day2.count.var.3000.wf,
+  resamples = day2.count.var.3000.bs,
+  control = control_resamples(save_pred = TRUE)
+)
+
+day2.count.var.3000.res  %>%
+  collect_metrics()
+
+```
+
