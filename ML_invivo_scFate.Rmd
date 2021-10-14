@@ -4,7 +4,7 @@ author: "Weihan Liu"
 date: "12/08/2021"
 output: html_document
 ---
-Use a Mchine learning model on Weinreb_2020 data to test if
+Use a Machine learning model on Weinreb_2020 data to test if
 
 Treatment
 1).Cux1 binding genes(from Jeff's Cut and Run on human CD34 HSPC)
@@ -35,73 +35,86 @@ library(ggplot2)
 library(Matrix)
 ```
 
-
 Read in the data from Weinreb 2020 and perform data cleaning
 
-Prepare the count matrix(only need to run this once, already done)
+Prepare the count matrix (only need to run this once, already done)
 ```{r}
-# # #load the L1 normalized count matrix
-# count_mtx = readMM("/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/matrix.mtx")
-# # #Read10X() expect gene-by-cell-matrix, so we need to transpose and export 
-# count_mtx <- t(count_mtx)
-# writeMM(count_mtx, "/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/input_matrix_for_Seurat/matrix.mtx")
+# If the transposed normed counts matrix file doesn't exist yet, create it
+if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx")) {
+  # Load the L1 normalized count matrix
+  setwd(getwd())
+  count_mtx = readMM("./data/normed_counts.mtx")
+  
+  # Read10X() expect gene-by-cell-matrix, so we need to transpose and export 
+  count_mtx <- t(count_mtx)
+  if (!dir.exists("./data/input_matrix_for_Seurat/")) {
+    dir.create("./data/input_matrix_for_Seurat/")
+  }
+  file.create("./data/input_matrix_for_Seurat/matrix.mtx")
+  writeMM(count_mtx, "./data/input_matrix_for_Seurat/matrix.mtx")
+}
 ```
 
-load metadata
+Load metadata
 ```{r}
-meta_data <- read.delim("/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/GSM4185643_stateFate_inVivo_metadata.txt",header = TRUE)
-
+meta_data <- read.delim("./data/metadata.txt", header = TRUE)
 ```
 
 We have 182173 cells in total for the in vivo experiment, next we need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells
 Read in the clone membership metadata
 ```{r}
-#read in the clonal membership matrix
-clone_meta_data <- readMM("/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/GSM4185643_stateFate_inVivo_clone_matrix.mtx")
-#convert to dataframe
+# Read in the clonal membership matrix
+clone_meta_data <- readMM("./data/clone_matrix.mtx")
+# Convert to dataframe
 clone_meta_data_df <- clone_meta_data %>% as.data.frame(col.names = TRUE)
-#examine the dataframe
+rm(clone_meta_data)
+# Examine the dataframe
 dim(clone_meta_data_df)
 head(clone_meta_data_df)
 ```
 
-This dataframe's row are 23241 clone membership IDs, and row are all 182173 cells. For each cell(each column), if it belong to a clone(a row), the value in the matrix is 1, if it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell
+This dataframe's row are 23241 clone membership IDs, and columns are all 182173 cells. For each cell (each column), if it belong to a clone (a row), the value in the matrix is 1, if it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell
 ```{r}
-#use match function to find the row number where the 1 occurs(indicating this cell below to this clone), and store the location of 1 for all cells into a vector
-clone_membership <- lapply(clone_meta_data_df,function(x) match(1,x))
+# Use match function to find the row number where the 1 occurs (indicating this cell below to this clone), and store the location of 1 for all cells into a vector
+t_clone_meta_data_df <- t(clone_meta_data_df)
+clone_membership <- lapply(t_clone_meta_data_df, function(x) match(1,x))
+rm(t_clone_meta_data_df)
+# clone_membership
 clone_membership <- unlist(clone_membership)
-length(clone_membership)
-#now clone membership is a vector of length 181173 that contains the clonal ID for each cell, the order should be the same as in the count matrix and metadata
+# Now clone membership is a vector of length 181173 that contains the clonal ID for each cell, the order should be the same as in the count matrix and metadata
 
-#attach the clonal membership vector to the metadata
+# Attach the clonal membership vector to the metadata
 meta_data$clone_membership <- clone_membership
+rm(clone_membership)
 ```
 
 
 Further data cleaning
 ```{r}
 library(stringr)
-#create a new cell barcode column wich incorporate library ID
+#create a new cell barcode column which incorporate library ID
 meta_data$cell <- str_c(meta_data$Cell.barcode,"-",meta_data$Library)
 #there are still some duplicated cell barcode within each library even if we attach the library name after cell barcode, so let's add a general number to the very end of the barcode, to make every cell barcode unique
-meta_data$index <- seq(1,182173)
+meta_data$index <- 1:nrow(meta_data)
 meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
-meta_data <- column_to_rownames(meta_data,var = "cell")
+meta_data <- column_to_rownames(meta_data, var="cell")
 ```
 
 we need to use the new unique cell barcode to remake the barcode.tsv file for reading in seurat object(only need to do this once, already done)
 ```{r}
-# barcode <- as.data.frame(rownames(meta_data),col.names = NULL)
-# 
-# #export the new cell barcode tsv file
-# write.table(barcode, file='/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/barcodes_unique.tsv', quote=FALSE, sep='\t', col.names = FALSE,row.names = FALSE)
+if (!file.exists("./data/barcodes_unique.tsv")) {
+  barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
+  
+  # Export the new cell barcode tsv file
+  write.table(barcode, file='./data/barcodes_unique.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
+}
 ```
 
 Now read in the Seurat object
 ```{r}
-LT.data <- Read10X(data.dir = "/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/input_matrix_for_Seurat",gene.column = 1)
+LT.data <- Read10X(data.dir="./data/input_matrix_for_Seurat", gene.column=1)
 # Initialize the Seurat object with the raw (non-normalized data).
-LT.seu <- CreateSeuratObject(counts = LT.data, project = "Lineage_Tracing")
+LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
 ```
 
 
@@ -127,8 +140,8 @@ meta_data_d2 <- meta_data_d2[meta_data_d2$clone_membership %in% meta_data_termin
 #loop through all day 2 cells and store all terminal sister cell's annotations for each day 2 cell into a list
 sister_ident <- list()
 for (i in 1:nrow(meta_data_d2)) {
-        terminal_fate <- filter(meta_data_terminal, clone_membership == meta_data_d2$clone_membership[i]) %>% dplyr::select(Cell.type.annotation)
-        sister_ident <- append(sister_ident,terminal_fate)
+  terminal_fate <- filter(meta_data_terminal, clone_membership == meta_data_d2$clone_membership[i]) %>% dplyr::select(Cell.type.annotation)
+  sister_ident <- append(sister_ident,terminal_fate)
 }
 
 ```
@@ -151,43 +164,43 @@ day2_cell_ident <- data.frame(index = seq(1:length(sister_ident)),ident = NA)
 n_day2_cells <- length(sister_ident)
 
 for (i in 1:n_day2_cells) {
-        if (length(sister_ident[[i]]) == 1) { #if only one final identity, use that identity
-          
-           day2_cell_ident[i,"ident"] <- sister_ident[[i]] 
-           
-        } else if (#if two different identity, mark as ambiguous
-          (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] != sister_ident[[i]][2])
-          ) {
-          
-                day2_cell_ident[i,"ident"] <- "ambiguous" 
-                
-        } else if (
-          (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] == sister_ident[[i]][2])
-          ) {#if two identical identity, use that identity
-          
-                day2_cell_ident[i,"ident"] <- sister_ident[[i]][1]
-                
-        } else if (
-          (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) == 0)
-          ) { #if there are more than 2 cell types, and each type has equal proportions, label as ambiguous
-          
-                day2_cell_ident[i,"ident"] <- "ambiguous"
-                
-        } else if (
-          (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) != 0)
-          ) { #if there are more than 2 cell types and the types does not have equal proportions, there will be two situations: (A,A,B,B,C), (A,A,A,B,B,C). For the 1st situation we will label as ambiguous, for the 2nd situation we will label as A
-          
-                #obtain the unique values of cell identity
-                uniqx <- unique(sister_ident[[i]])
-                #obtain the count of occurence for each unique cell identity
-                tabu <- tabulate(match(sister_ident[[i]], uniqx))
-                if (sum(duplicated(tabu)) == 0) { #if the tabulation for each cell identity is not equal, label using the mode.(eg if there are A,A,B,B,C, A dn B both appeared twice, sum(duplicated(tabu)) will be 0)
-                     day2_cell_ident[i,"ident"] <- uniqx[which.max(tabulate(match(sister_ident[[i]], uniqx)))]
-                } else { #if there are cell identities with equal number of occurence,label as ambiuguous
-                     day2_cell_ident[i,"ident"] <- "ambiguous"
-                }
-                
-        }
+  if (length(sister_ident[[i]]) == 1) { #if only one final identity, use that identity
+    
+    day2_cell_ident[i,"ident"] <- sister_ident[[i]] 
+    
+  } else if (#if two different identity, mark as ambiguous
+    (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] != sister_ident[[i]][2])
+  ) {
+    
+    day2_cell_ident[i,"ident"] <- "ambiguous" 
+    
+  } else if (
+    (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] == sister_ident[[i]][2])
+  ) {#if two identical identity, use that identity
+    
+    day2_cell_ident[i,"ident"] <- sister_ident[[i]][1]
+    
+  } else if (
+    (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) == 0)
+  ) { #if there are more than 2 cell types, and each type has equal proportions, label as ambiguous
+    
+    day2_cell_ident[i,"ident"] <- "ambiguous"
+    
+  } else if (
+    (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) != 0)
+  ) { #if there are more than 2 cell types and the types does not have equal proportions, there will be two situations: (A,A,B,B,C), (A,A,A,B,B,C). For the 1st situation we will label as ambiguous, for the 2nd situation we will label as A
+    
+    #obtain the unique values of cell identity
+    uniqx <- unique(sister_ident[[i]])
+    #obtain the count of occurence for each unique cell identity
+    tabu <- tabulate(match(sister_ident[[i]], uniqx))
+    if (sum(duplicated(tabu)) == 0) { #if the tabulation for each cell identity is not equal, label using the mode.(eg if there are A,A,B,B,C, A dn B both appeared twice, sum(duplicated(tabu)) will be 0)
+      day2_cell_ident[i,"ident"] <- uniqx[which.max(tabulate(match(sister_ident[[i]], uniqx)))]
+    } else { #if there are cell identities with equal number of occurence,label as ambiuguous
+      day2_cell_ident[i,"ident"] <- "ambiguous"
+    }
+    
+  }
 }
 #check how many cells with unique terminal identity we have
 day2_cell_ident %>% filter(!(ident %in% c("ambiguous","Prog")))
@@ -231,7 +244,6 @@ LT.seu.day2 <- RunPCA(LT.seu.day2, features = VariableFeatures(object = LT.seu.d
 LT.seu.day2 <- RunUMAP(LT.seu.day2, dims = 1:30)
 
 DimPlot(LT.seu.day2, group.by = "final.ident",reduction = "pca")
-
 ```
 
 
@@ -242,11 +254,11 @@ Idents(LT.seu.day2) <- "final.ident"
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
 #merge Baso, DC Mono and Neu into a single cluster My
 LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>% mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
-                                                                    final.ident == "DC" ~ "My",
-                                                                    final.ident == "Mono" ~ "My",
-                                                                    final.ident == "Neu" ~ "My",
-                                                                    final.ident == "B" ~ "B",
-                                                                    final.ident == "Ery" ~ "Ery"))
+                                                                                  final.ident == "DC" ~ "My",
+                                                                                  final.ident == "Mono" ~ "My",
+                                                                                  final.ident == "Neu" ~ "My",
+                                                                                  final.ident == "B" ~ "B",
+                                                                                  final.ident == "Ery" ~ "Ery"))
 ```
 Now our final.ident column just contains three classes of cell identities: B, Ery and My
 
@@ -254,7 +266,7 @@ Now our final.ident column just contains three classes of cell identities: B, Er
 
 Save the day 2 Seurat object, this will be the object we will pull the training data from
 ```{r}
-saveRDS(LT.seu.day2, file = "/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/LT_seu_day2_ML_source_data.rds")
+saveRDS(LT.seu.day2, file = "./data/LT_seu_day2_ML_source_data.rds")
 ```
 
 
@@ -273,7 +285,7 @@ day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
 
 day2.count.neg.ctrl
 #export the df
-write.table(day2.count.neg.ctrl,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
+write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
 
 ```
 
@@ -287,14 +299,14 @@ day2.count.var.3000$final.ident <- LT.seu.day2@meta.data$final.ident
 day2.count.var.3000
 
 #export the df
-write.table(day2.count.neg.ctrl,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/var_3000_pos_ctrl.txt")
+write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/var_3000_pos_ctrl.txt")
 ```
 
 
 Experimental gene sets:
 1.All cux1 binding genes from Jeff. One caveat is that all the Cux1 binding targets are derived from a Cut and Run experiment in human CD34, but we are testing the ML classifier in mouse
 ```{r}
-Cux1_binding_sites_df <- read.table("/Users/weihan/Desktop/Research/lab_data/CUX1_target_genes_Jeff_CUT_Run_human_CD34/20210530-public-4.0.4-rlNUuD-hg19-all-region.txt",sep = "\t")
+Cux1_binding_sites_df <- read.table("./data/lab_data/CUX1_target_genes_Jeff_CUT_Run_human_CD34/20210530-public-4.0.4-rlNUuD-hg19-all-region.txt",sep = "\t")
 
 #data cleaning
 #parse the column into correct format
@@ -317,15 +329,15 @@ day2.count.cux1.bound.genes$final.ident <- LT.seu.day2@meta.data$final.ident
 day2.count.cux1.bound.genes
 
 #this is the data for ML classifier for all Cux1 binding genes, let's export it
-write.table(day2.count.cux1.bound.genes,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/all_cux1_bound_genes.txt")
+write.table(day2.count.cux1.bound.genes,"./data/ML_classifier/input_data/all_cux1_bound_genes.txt")
 ```
 
-2).Intersect of  Cux1 binding genes(jeff's cut and Run) and DEGs after Cux1 KD in mouse LSK HSPC(from Molly's bulk RNA seq)
+2).Intersect of Cux1 binding genes(jeff's cut and Run) and DEGs after Cux1 KD in mouse LSK HSPC(from Molly's bulk RNA seq)
 Molly's bulk RNA seq: shCux1 vs Ren(Ren being the base), so the DEGs up in this imported file are up in shCux1 sample, DEGs down in this file in down in shCux1 sample likewise
 ```{r}
 library(readxl)
 #read in Molly's bulk RNA seq results
-mouse_LSK_bulk_RNA_df <- read_excel("/Users/weihan/Desktop/Research/lab_data/Bulk_RNA_seq_mouse_LSK_shCux1_Molly/HSC_tophat_20190213_B.xlsx")
+mouse_LSK_bulk_RNA_df <- read_excel("./data/lab_data/Bulk_RNA_seq_mouse_LSK_shCux1_Molly/HSC_tophat_20190213_B.xlsx")
 #filter the df based on FDR
 bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, FDR <= 0.1) 
 #filter based on LFC
@@ -339,14 +351,14 @@ day2.count.cux1.bound.DEG <- day2.count.cux1.bound.genes[,colnames(day2.count.cu
 day2.count.cux1.bound.DEG
 
 #export the data
-write.table(day2.count.cux1.bound.DEG,"/Users/weihan/Desktop/Research/single_cell_project/data/WL002_Weinreb_2020_Mouse_lineage_tracing/ML_classifier/input_data/all_cux1_bound_DEG.txt")
+write.table(day2.count.cux1.bound.DEG,"./data/ML_classifier/input_data/all_cux1_bound_DEG.txt")
 ```
 
 
 3).Cux1 signature(DEGs comparing Cux1 + and Cux1- cells)
-This table is from 5_DE_pathway_analysis and conrains the DEGs both up and down regulated in Cux1 + cells vs Cux1 - cells
+This table is from 5_DE_pathway_analysis and contains the DEGs both up and down regulated in Cux1 + cells vs Cux1 - cells
 ```{r,fig.width=10,fig.height=6}
-kon1 <- readRDS(file = "/Users/weihan/Desktop/Research/single_cell_project/code/seurat_object_ln12_comb_cell_cycle_regress/kon1_3_slingshot_TI.rds")
+kon1 <- readRDS(file = "./data/single_cell_project/code/seurat_object_ln12_comb_cell_cycle_regress/kon1_3_slingshot_TI.rds")
 
 Idents(kon1) <- "cux1_status"
 #perform DE analysis, the result contains DEGs both up and down regulated in Cux1+ cells
@@ -520,6 +532,4 @@ day2.count.var.3000.res <- fit_resamples(
 
 day2.count.var.3000.res  %>%
   collect_metrics()
-
 ```
-

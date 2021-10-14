@@ -1,6 +1,9 @@
 # macOS system files
 .DS_Store
 
+# Data files (to big to track with git - should be copied by each user)
+data/*
+
 # History files
 .Rhistory
 .Rapp.history
