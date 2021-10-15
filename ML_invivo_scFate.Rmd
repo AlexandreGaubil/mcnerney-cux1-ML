@@ -33,6 +33,14 @@ library(Seurat)
 library(tidyverse)
 library(ggplot2)
 library(Matrix)
+
+setwd(getwd())
+
+# If current directory is not valid, stop execution
+if (!dir.exists("./data/")) {
+  print("It seems that the current working directory is not correct, you should check that.")
+  stop()
+}
 ```
 
 Read in the data from Weinreb 2020 and perform data cleaning
@@ -42,7 +50,6 @@ Prepare the count matrix (only need to run this once, already done)
 # If the transposed normed counts matrix file doesn't exist yet, create it
 if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx")) {
   # Load the L1 normalized count matrix
-  setwd(getwd())
   count_mtx = readMM("./data/normed_counts.mtx")
   
   # Read10X() expect gene-by-cell-matrix, so we need to transpose and export 
@@ -63,11 +70,22 @@ meta_data <- read.delim("./data/metadata.txt", header = TRUE)
 We have 182173 cells in total for the in vivo experiment, next we need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells
 Read in the clone membership metadata
 ```{r}
-# Read in the clonal membership matrix
-clone_meta_data <- readMM("./data/clone_matrix.mtx")
-# Convert to dataframe
-clone_meta_data_df <- clone_meta_data %>% as.data.frame(col.names = TRUE)
-rm(clone_meta_data)
+if (!file.exists("./data/output/t_clone_matrix.mtx")) {
+  clone_matrix <- readMM("./data/clone_matrix.mtx")
+  t_clone_matrix <- t(clone_matrix)
+  if (!dir.exists("./output/")) {
+    dir.create("./data/output/")
+  }
+  file.create("./data/output/t_clone_matrix.mtx")
+  writeMM(t_clone_matrix, "./output/t_clone_matrix.mtx")
+  rm(clone_matrix)
+  rm(t_clone_matrix)
+}
+
+# Read in the clonal membership matrix & convert to dataframe
+t_clone_matrix <- readMM("./output/t_clone_matrix.mtx")
+clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
+
 # Examine the dataframe
 dim(clone_meta_data_df)
 head(clone_meta_data_df)

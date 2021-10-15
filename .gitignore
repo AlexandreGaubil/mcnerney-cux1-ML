@@ -4,7 +4,7 @@
 # Data files (too big to track with git - should be copied by each user)
 data/*.gz
 data/normed_counts.mtx
-Data/input_matrix_for_Seurat/*
+data/input_matrix_for_Seurat/*
 
 # History files
 .Rhistory
