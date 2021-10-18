@@ -29,10 +29,12 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Load relevant libraries
 ```{r}
+options(max.print=100)
 library(Seurat)
 library(tidyverse)
 library(ggplot2)
 library(Matrix)
+library(stringr)
 
 setwd(getwd())
 
@@ -51,8 +53,8 @@ Prepare the count matrix (only need to run this once, already done)
 if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx")) {
   # Load the L1 normalized count matrix
   count_mtx = readMM("./data/normed_counts.mtx")
-  
-  # Read10X() expect gene-by-cell-matrix, so we need to transpose and export 
+
+  # Read10X() expect gene-by-cell-matrix, so we need to transpose and export
   count_mtx <- t(count_mtx)
   if (!dir.exists("./data/input_matrix_for_Seurat/")) {
     dir.create("./data/input_matrix_for_Seurat/")
@@ -70,13 +72,13 @@ meta_data <- read.delim("./data/metadata.txt", header = TRUE)
 We have 182173 cells in total for the in vivo experiment, next we need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells
 Read in the clone membership metadata
 ```{r}
-if (!file.exists("./data/output/t_clone_matrix.mtx")) {
+if (!file.exists("./output/t_clone_matrix.mtx")) {
   clone_matrix <- readMM("./data/clone_matrix.mtx")
   t_clone_matrix <- t(clone_matrix)
   if (!dir.exists("./output/")) {
-    dir.create("./data/output/")
+    dir.create("./output/")
   }
-  file.create("./data/output/t_clone_matrix.mtx")
+  file.create("./output/t_clone_matrix.mtx")
   writeMM(t_clone_matrix, "./output/t_clone_matrix.mtx")
   rm(clone_matrix)
   rm(t_clone_matrix)
@@ -85,6 +87,7 @@ if (!file.exists("./data/output/t_clone_matrix.mtx")) {
 # Read in the clonal membership matrix & convert to dataframe
 t_clone_matrix <- readMM("./output/t_clone_matrix.mtx")
 clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
+rm(t_clone_matrix)
 
 # Examine the dataframe
 dim(clone_meta_data_df)
@@ -94,9 +97,8 @@ head(clone_meta_data_df)
 This dataframe's row are 23241 clone membership IDs, and columns are all 182173 cells. For each cell (each column), if it belong to a clone (a row), the value in the matrix is 1, if it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell
 ```{r}
 # Use match function to find the row number where the 1 occurs (indicating this cell below to this clone), and store the location of 1 for all cells into a vector
-t_clone_meta_data_df <- t(clone_meta_data_df)
-clone_membership <- lapply(t_clone_meta_data_df, function(x) match(1,x))
-rm(t_clone_meta_data_df)
+clone_membership <- lapply(clone_meta_data_df, function(x) match(1,x))
+rm(clone_meta_data_df)
 # clone_membership
 clone_membership <- unlist(clone_membership)
 # Now clone membership is a vector of length 181173 that contains the clonal ID for each cell, the order should be the same as in the count matrix and metadata
@@ -109,20 +111,25 @@ rm(clone_membership)
 
 Further data cleaning
 ```{r}
-library(stringr)
-#create a new cell barcode column which incorporate library ID
+# Create a new cell barcode column which incorporate library ID. This is used to link cells between day 2 & (9 and 16)
 meta_data$cell <- str_c(meta_data$Cell.barcode,"-",meta_data$Library)
-#there are still some duplicated cell barcode within each library even if we attach the library name after cell barcode, so let's add a general number to the very end of the barcode, to make every cell barcode unique
-meta_data$index <- 1:nrow(meta_data)
-meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
+# Check if there are any duplicate values
+if (length(unique(meta_data$cell)) != dim(meta_data)[1]) {
+  warning("Duplicate values in meta_data$cell, used as ID column")
+  # There are still some duplicated cell barcode within each library even if we attach the library name after cell barcode, so let's add a general number to the very end of the barcode, to make every cell barcode unique
+  # meta_data$index <- 1:nrow(meta_data)
+  # meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
+}
+
 meta_data <- column_to_rownames(meta_data, var="cell")
 ```
 
 we need to use the new unique cell barcode to remake the barcode.tsv file for reading in seurat object(only need to do this once, already done)
 ```{r}
+# TODO: check if it matches index order
 if (!file.exists("./data/barcodes_unique.tsv")) {
   barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
-  
+
   # Export the new cell barcode tsv file
   write.table(barcode, file='./data/barcodes_unique.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
 }
@@ -183,31 +190,31 @@ n_day2_cells <- length(sister_ident)
 
 for (i in 1:n_day2_cells) {
   if (length(sister_ident[[i]]) == 1) { #if only one final identity, use that identity
-    
-    day2_cell_ident[i,"ident"] <- sister_ident[[i]] 
-    
+
+    day2_cell_ident[i,"ident"] <- sister_ident[[i]]
+
   } else if (#if two different identity, mark as ambiguous
     (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] != sister_ident[[i]][2])
   ) {
-    
-    day2_cell_ident[i,"ident"] <- "ambiguous" 
-    
+
+    day2_cell_ident[i,"ident"] <- "ambiguous"
+
   } else if (
     (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] == sister_ident[[i]][2])
   ) {#if two identical identity, use that identity
-    
+
     day2_cell_ident[i,"ident"] <- sister_ident[[i]][1]
-    
+
   } else if (
     (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) == 0)
   ) { #if there are more than 2 cell types, and each type has equal proportions, label as ambiguous
-    
+
     day2_cell_ident[i,"ident"] <- "ambiguous"
-    
+
   } else if (
     (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) != 0)
   ) { #if there are more than 2 cell types and the types does not have equal proportions, there will be two situations: (A,A,B,B,C), (A,A,A,B,B,C). For the 1st situation we will label as ambiguous, for the 2nd situation we will label as A
-    
+
     #obtain the unique values of cell identity
     uniqx <- unique(sister_ident[[i]])
     #obtain the count of occurence for each unique cell identity
@@ -217,7 +224,7 @@ for (i in 1:n_day2_cells) {
     } else { #if there are cell identities with equal number of occurence,label as ambiuguous
       day2_cell_ident[i,"ident"] <- "ambiguous"
     }
-    
+
   }
 }
 #check how many cells with unique terminal identity we have
@@ -294,7 +301,7 @@ Read in and preparing the training data, export to your desktop and we will impl
 Controls:
 Neg control: randomly sampled 1000 genes from day 2 Seurat object
 ```{r}
-day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data) 
+day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
 #randomly sample 1000 genes
 day2.count.neg.ctrl <- filter(day2.count.neg.ctrl,rownames(day2.count.neg.ctrl) %in% sample(rownames(day2.count.neg.ctrl),1000))
 day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
@@ -329,7 +336,7 @@ Cux1_binding_sites_df <- read.table("./data/lab_data/CUX1_target_genes_Jeff_CUT_
 #data cleaning
 #parse the column into correct format
 Cux1_binding_sites_df <- separate(Cux1_binding_sites_df, V2, into = c("C1","C2","C3","C4","C5","C6","C7","C8"), sep = " ")
-#obtain the gene list from the parsed columns 
+#obtain the gene list from the parsed columns
 Cux1_binding_genes <- c(Cux1_binding_sites_df$C1,Cux1_binding_sites_df$C3,Cux1_binding_sites_df$C5,Cux1_binding_sites_df$C7)
 #remove duplicates
 Cux1_binding_genes <- unique(Cux1_binding_genes)
@@ -338,7 +345,7 @@ library(HumanMouseConvert)
 Cux1_binding_genes <- human_mouse_convert(Cux1_binding_genes,"human")
 
 #obtain traning data from the day 2 Seurat object
-day2.count.cux1.bound.genes <- as.data.frame(LT.seu.day2@assays$RNA@data) 
+day2.count.cux1.bound.genes <- as.data.frame(LT.seu.day2@assays$RNA@data)
 day2.count.cux1.bound.genes <- filter(day2.count.cux1.bound.genes,rownames(day2.count.cux1.bound.genes) %in% Cux1_binding_genes)
 day2.count.cux1.bound.genes <- t(day2.count.cux1.bound.genes) %>% as.data.frame()
 #attach the final identity(label) to the data
@@ -357,9 +364,9 @@ library(readxl)
 #read in Molly's bulk RNA seq results
 mouse_LSK_bulk_RNA_df <- read_excel("./data/lab_data/Bulk_RNA_seq_mouse_LSK_shCux1_Molly/HSC_tophat_20190213_B.xlsx")
 #filter the df based on FDR
-bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, FDR <= 0.1) 
+bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, FDR <= 0.1)
 #filter based on LFC
-bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, abs(logFC) >= 0.8) 
+bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, abs(logFC) >= 0.8)
 #sort the DEG table for LFC
 bulk_RNA_sig_genes <- bulk_RNA_sig_genes[order(bulk_RNA_sig_genes$logFC,decreasing = TRUE),]
 
@@ -424,7 +431,7 @@ Cux1 bound DEGs
 ```{r}
 library(themis)
 
-day2.count.cux1.bound.DEG_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.DEG) 
+day2.count.cux1.bound.DEG_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.DEG)
 
 day2.count.cux1.bound.DEG_prep <- prep(day2.count.cux1.bound.DEG_rec)
 juice(day2.count.cux1.bound.DEG_prep)
@@ -477,7 +484,7 @@ rf_spec %>%
 
 All Cux1 bound genes
 ```{r}
-day2.count.cux1.bound.genes_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.genes) 
+day2.count.cux1.bound.genes_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.genes)
 
 day2.count.cux1.bound.genes_prep <- prep(day2.count.cux1.bound.genes_rec)
 juice(day2.count.cux1.bound.genes_prep)
@@ -503,7 +510,7 @@ day2.count.cux1.bound.genes.res %>%
 
 Neg control
 ```{r}
-day2.count.neg.ctrl_rec <- recipe(final.ident ~ ., data = day2.count.neg.ctrl) 
+day2.count.neg.ctrl_rec <- recipe(final.ident ~ ., data = day2.count.neg.ctrl)
 
 day2.count.neg.ctrl_prep <- prep(day2.count.neg.ctrl_rec)
 juice(day2.count.neg.ctrl_prep)
@@ -529,7 +536,7 @@ day2.count.neg.ctrl.res %>%
 
 Positive control, top 3000 most variable genes
 ```{r}
-day2.count.var.3000_rec <- recipe(final.ident ~ ., data = day2.count.var.3000) 
+day2.count.var.3000_rec <- recipe(final.ident ~ ., data = day2.count.var.3000)
 
 day2.count.var.3000_prep <- prep(day2.count.var.3000_rec)
 juice(day2.count.var.3000_prep)
