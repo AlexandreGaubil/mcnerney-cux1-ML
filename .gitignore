@@ -1,6 +1,9 @@
 # macOS system files
 .DS_Store
 
+# VSCode
+.vscode/*
+
 # Data files (too big to track with git - should be copied by each user)
 data/*.gz
 data/normed_counts.mtx
