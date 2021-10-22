@@ -26,31 +26,39 @@ I want to test if the treatment groups are more accurate to predict HSPC cell fa
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+# Setup
 
 Load relevant libraries
 ```{r}
-options(max.print=100)
+options(max.print=20)
 library(Seurat)
 library(tidyverse)
 library(ggplot2)
 library(Matrix)
 library(stringr)
+library("R.utils")
+library(hash)
 
 setwd(getwd())
 
 # If current directory is not valid, stop execution
 if (!dir.exists("./data/")) {
-  print("It seems that the current working directory is not correct, you should check that.")
-  stop()
+  stop("It seems that the current working directory is not correct (doesn't contain `data/`), you should check that.")
+}
+if (!dir.exists("./output/")) {
+  warning("No `.output/` directory found, creating one now...")
+  dir.create("./output/")
 }
 ```
 
-Read in the data from Weinreb 2020 and perform data cleaning
+# Data cleaning & setup
 
-Prepare the count matrix (only need to run this once, already done)
+Read in the data from Weinreb 2020 and perform data cleaning.
+
+Prepare the count matrix if the file doesn't exist yet.
 ```{r}
 # If the transposed normed counts matrix file doesn't exist yet, create it
-if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx")) {
+if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx.gz")) {
   # Load the L1 normalized count matrix
   count_mtx = readMM("./data/normed_counts.mtx")
 
@@ -61,6 +69,8 @@ if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx")) {
   }
   file.create("./data/input_matrix_for_Seurat/matrix.mtx")
   writeMM(count_mtx, "./data/input_matrix_for_Seurat/matrix.mtx")
+  gzip("./data/input_matrix_for_Seurat/matrix.mtx")
+  file.remove("./data/input_matrix_for_Seurat/matrix.mtx")
 }
 ```
 
@@ -69,15 +79,14 @@ Load metadata
 meta_data <- read.delim("./data/metadata.txt", header = TRUE)
 ```
 
-We have 182173 cells in total for the in vivo experiment, next we need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells
+We need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells.
+
 Read in the clone membership metadata
 ```{r}
 if (!file.exists("./output/t_clone_matrix.mtx")) {
   clone_matrix <- readMM("./data/clone_matrix.mtx")
   t_clone_matrix <- t(clone_matrix)
-  if (!dir.exists("./output/")) {
-    dir.create("./output/")
-  }
+
   file.create("./output/t_clone_matrix.mtx")
   writeMM(t_clone_matrix, "./output/t_clone_matrix.mtx")
   rm(clone_matrix)
@@ -90,18 +99,18 @@ clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
 rm(t_clone_matrix)
 
 # Examine the dataframe
-dim(clone_meta_data_df)
-head(clone_meta_data_df)
+# dim(clone_meta_data_df)
+# head(clone_meta_data_df)
 ```
 
-This dataframe's row are 23241 clone membership IDs, and columns are all 182173 cells. For each cell (each column), if it belong to a clone (a row), the value in the matrix is 1, if it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell
+The `clone_meta_data_fr`'s row are clone membership IDs, and columns are all cells. For each cell / column, if it belong to a clone / row, the value in the matrix is 1. If it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell.
 ```{r}
 # Use match function to find the row number where the 1 occurs (indicating this cell below to this clone), and store the location of 1 for all cells into a vector
 clone_membership <- lapply(clone_meta_data_df, function(x) match(1,x))
 rm(clone_meta_data_df)
-# clone_membership
+
 clone_membership <- unlist(clone_membership)
-# Now clone membership is a vector of length 181173 that contains the clonal ID for each cell, the order should be the same as in the count matrix and metadata
+# Now clone membership is a vector that contains the clonal ID for each cell. The order should be the same as in the count matrix and metadata
 
 # Attach the clonal membership vector to the metadata
 meta_data$clone_membership <- clone_membership
@@ -109,7 +118,7 @@ rm(clone_membership)
 ```
 
 
-Further data cleaning
+Set the row name of the `meta_data` dataframe.
 ```{r}
 # Create a new cell barcode column which incorporate library ID. This is used to link cells between day 2 & (9 and 16)
 meta_data$cell <- str_c(meta_data$Cell.barcode,"-",meta_data$Library)
@@ -121,23 +130,27 @@ if (length(unique(meta_data$cell)) != dim(meta_data)[1]) {
   # meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
 }
 
-meta_data <- column_to_rownames(meta_data, var="cell")
+# TODO: add this later on. `filter()` drops row names
+# meta_data <- column_to_rownames(meta_data, var="cell")
 ```
 
-we need to use the new unique cell barcode to remake the barcode.tsv file for reading in seurat object(only need to do this once, already done)
+We use the new unique cell barcode to remake the `barcode.tsv` file for reading in Seurat object.
+
 ```{r}
-# TODO: check if it matches index order
-if (!file.exists("./data/barcodes_unique.tsv")) {
+if (!file.exists("./data/input_matrix_for_Seurat/barcodes.tsv.gz")) {
   barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
 
   # Export the new cell barcode tsv file
-  write.table(barcode, file='./data/barcodes_unique.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
+  write.table(barcode, file='./data/input_matrix_for_Seurat/barcodes.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
+  gzip("./data/input_matrix_for_Seurat/barcodes.tsv")
+  file.remove("./data/input_matrix_for_Seurat/barcodes.tsv")
 }
 ```
 
 Now read in the Seurat object
 ```{r}
-LT.data <- Read10X(data.dir="./data/input_matrix_for_Seurat", gene.column=1)
+LT.data <- Read10X(data.dir="./data/input_matrix_for_Seurat", gene.column=1, cell.column = 1)
+# FIXME: can we delete LT.data after creating LT.seu? The `.` is part of the var name
 # Initialize the Seurat object with the raw (non-normalized data).
 LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
 ```
@@ -145,24 +158,32 @@ LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
 
 Next, find the destiny fate of each day 2 cell by uniting with the clonal membership of week1 and week2 cells
 ```{r}
-#get rid of the cells that don't belong to any clones
-meta_data_unique <- meta_data[!is.na(meta_data$clone_membership),]
-#only retain the useful columns
-meta_data_unique <- dplyr::select(meta_data_unique,c("Time.point","Cell.type.annotation","clone_membership"))
+# Get rid of the cells that don't belong to any clones (i.e., column `clone_membership` is null or empty string)
+meta_data_unique <- meta_data[!((is.na(meta_data$clone_membership)) |
+                                (meta_data$clone_membership == "")), ]
 
-#select day 2 cells
-meta_data_d2 <- filter(meta_data_unique,Time.point == 2)
-#select terminal cells
-meta_data_terminal <- filter(meta_data_unique,Time.point %in% c(9,16))
+# Only retain the useful columns
+meta_data_unique <- dplyr::select(meta_data_unique, 
+                                  c("Time.point",
+                                    "Cell.type.annotation",
+                                    "clone_membership",
+                                    "cell"))
 
-#check how many clones in day 2 have sisters in week 1 and week 2
+# Select day 2 cells
+meta_data_d2 <- filter(meta_data_unique, Time.point == 2)
+
+# Select terminal cells (4 & 6 for in vitro, 9 & 16 for in vivo)
+meta_data_terminal <- filter(meta_data_unique, Time.point %in% c(4,6,9,16))
+
+# FIXME: can we get rid of `meta_data`?
+
+# Check how many clones in day 2 have sisters in week 1 and week 2
 meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership %>% sum()
-#1222
 
-#only retain the day 2 cells which has a clonal sister in week 1 and 2
+# Only retain the day 2 cells which has a clonal sister in week 1 and 2
 meta_data_d2 <- meta_data_d2[meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership,]
 
-#loop through all day 2 cells and store all terminal sister cell's annotations for each day 2 cell into a list
+# Loop through all day 2 cells and store all terminal sister cell's annotations for each day 2 cell into a list
 sister_ident <- list()
 for (i in 1:nrow(meta_data_d2)) {
   terminal_fate <- filter(meta_data_terminal, clone_membership == meta_data_d2$clone_membership[i]) %>% dplyr::select(Cell.type.annotation)
@@ -173,65 +194,56 @@ for (i in 1:nrow(meta_data_d2)) {
 
 
 Now let's loop through the list and find the most common cell annotation for each clone identity
-1).If there is only one terminal identity, we return that identity
-2).If there are two identity, we return: ambiguous
-3).If there are > 2 identities, we find the mode
+1) If there is only one terminal identity, we return that identity
+2) If there are two identities, we return ambiguous
+3) If there are > 2 identities, we find the mode
 
 ```{r}
-#define a custom function to extract the most common character from a vector(equivalent of Mode() which only works for numeric values)
-calculate_mode <- function(x) {
-  uniqx <- unique(na.omit(x))
-  uniqx[which.max(tabulate(match(x, uniqx)))]
+# Returns the most common identifier amongst those given. If there is a tie or no identifier, returns "ambiguous"
+count_and_sort_identifiers <- function(ids) {
+  ids_count <- hash()
+  
+  # Count every occurrence of every string in the identifiers
+  for (i in 1:length(ids)) {
+    if (is.null(ids_count[[ids[[i]]]])) {
+      ids_count[[ids[[i]]]] <- 1
+    } else {
+      ids_count[[ids[[i]]]] <- ids_count[[ids[[i]]]] + 1
+    }
+  }
+  
+  # Find identifier with most counts & identifier with second most count
+  m <- 0
+  m_prev <- 0
+  m_key <- ""
+  for (key in names(unlist(ids_count))) {
+    if (ids_count[[key]] >= m) {
+      m_prev <- m
+      m <- ids_count[[key]]
+      m_key <- key
+    }
+  }
+  
+  # Return the identifier with the most occurrences or the "ambiguous" if there is a tie
+  if (m == 0) { return("ambiguous") }
+  if (m > m_prev) { return(m_key) }
+  if (m == m_prev) { return ("ambiguous") }
+
+  stop("`count_and_sort_identifiers()` has a bug")
 }
 
-#create a holder data frame for day 2 cell's identity
+# Create a holder data frame for day 2 cell's identity
 day2_cell_ident <- data.frame(index = seq(1:length(sister_ident)),ident = NA)
 n_day2_cells <- length(sister_ident)
 
 for (i in 1:n_day2_cells) {
-  if (length(sister_ident[[i]]) == 1) { #if only one final identity, use that identity
-
-    day2_cell_ident[i,"ident"] <- sister_ident[[i]]
-
-  } else if (#if two different identity, mark as ambiguous
-    (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] != sister_ident[[i]][2])
-  ) {
-
-    day2_cell_ident[i,"ident"] <- "ambiguous"
-
-  } else if (
-    (length(sister_ident[[i]]) == 2) & (sister_ident[[i]][1] == sister_ident[[i]][2])
-  ) {#if two identical identity, use that identity
-
-    day2_cell_ident[i,"ident"] <- sister_ident[[i]][1]
-
-  } else if (
-    (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) == 0)
-  ) { #if there are more than 2 cell types, and each type has equal proportions, label as ambiguous
-
-    day2_cell_ident[i,"ident"] <- "ambiguous"
-
-  } else if (
-    (length(sister_ident[[i]]) > 2) & (sum(diff(table(sister_ident[[i]])/length(sister_ident[[i]]) %>% as.numeric())) != 0)
-  ) { #if there are more than 2 cell types and the types does not have equal proportions, there will be two situations: (A,A,B,B,C), (A,A,A,B,B,C). For the 1st situation we will label as ambiguous, for the 2nd situation we will label as A
-
-    #obtain the unique values of cell identity
-    uniqx <- unique(sister_ident[[i]])
-    #obtain the count of occurence for each unique cell identity
-    tabu <- tabulate(match(sister_ident[[i]], uniqx))
-    if (sum(duplicated(tabu)) == 0) { #if the tabulation for each cell identity is not equal, label using the mode.(eg if there are A,A,B,B,C, A dn B both appeared twice, sum(duplicated(tabu)) will be 0)
-      day2_cell_ident[i,"ident"] <- uniqx[which.max(tabulate(match(sister_ident[[i]], uniqx)))]
-    } else { #if there are cell identities with equal number of occurence,label as ambiuguous
-      day2_cell_ident[i,"ident"] <- "ambiguous"
-    }
-
-  }
+  day2_cell_ident[i,"ident"] <- count_and_sort_identifiers(sister_ident[[i]])
 }
-#check how many cells with unique terminal identity we have
-day2_cell_ident %>% filter(!(ident %in% c("ambiguous","Prog")))
-#I was able to recover 462 cells with definitive cell identity annotation
-day2_cell_ident$ident %>% table()
 
+# Check how many cells with unique terminal identity we have
+day2_cell_ident_determined <- filter(day2_cell_ident,
+                                     !(ident %in% c("ambiguous","Prog", "Undifferentiated")))
+day2_cell_ident_determined$ident %>% table()
 ```
 We have 636 day 2 cells with unique terminal identity, they will be used for the machine learning classifier
 
@@ -398,7 +410,7 @@ DimPlot(kon.comb, split.by = "orig.ident", group.by = "final.ident.2",label = TR
 
 
 
-Implement Machine learning
+# Machine learning
 
 We will try algorithm below
 1).Random Forest
@@ -533,6 +545,16 @@ day2.count.neg.ctrl.res %>%
   collect_metrics()
 ```
 
+
+### Negative control testing using logistic regression
+
+```{r}
+# TODO: implement negative control testing using logistic regression. Should get ~40% prediction accuracy
+
+# Do for 50 sets of 1,000 genes
+
+# sklearn.linear_model.LogisticRegression(penalty=‘l2’, dual=False, tol=0.0001, C=[0.008 in vitro; 0.004 in vivo], fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=‘warn’, max_iter=100, multi_class=‘warn’, verbose=0, warm_start=False, n_jobs=None)
+```
 
 Positive control, top 3000 most variable genes
 ```{r}
