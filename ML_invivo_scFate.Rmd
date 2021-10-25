@@ -151,6 +151,7 @@ Now read in the Seurat object
 ```{r}
 LT.data <- Read10X(data.dir="./data/input_matrix_for_Seurat", gene.column=1, cell.column = 1)
 # FIXME: can we delete LT.data after creating LT.seu? The `.` is part of the var name
+rm(LT.data)
 # Initialize the Seurat object with the raw (non-normalized data).
 LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
 ```
@@ -162,8 +163,10 @@ Next, find the destiny fate of each day 2 cell by uniting with the clonal member
 meta_data_unique <- meta_data[!((is.na(meta_data$clone_membership)) |
                                 (meta_data$clone_membership == "")), ]
 
+rm(meta_data)
+
 # Only retain the useful columns
-meta_data_unique <- dplyr::select(meta_data_unique, 
+meta_data_unique <- dplyr::select(meta_data_unique,
                                   c("Time.point",
                                     "Cell.type.annotation",
                                     "clone_membership",
@@ -174,8 +177,6 @@ meta_data_d2 <- filter(meta_data_unique, Time.point == 2)
 
 # Select terminal cells (4 & 6 for in vitro, 9 & 16 for in vivo)
 meta_data_terminal <- filter(meta_data_unique, Time.point %in% c(4,6,9,16))
-
-# FIXME: can we get rid of `meta_data`?
 
 # Check how many clones in day 2 have sisters in week 1 and week 2
 meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership %>% sum()
@@ -190,19 +191,18 @@ for (i in 1:nrow(meta_data_d2)) {
   sister_ident <- append(sister_ident,terminal_fate)
 }
 
+# FIXME: can we get rid of more kinds of metadata?
+
 ```
 
 
-Now let's loop through the list and find the most common cell annotation for each clone identity
-1) If there is only one terminal identity, we return that identity
-2) If there are two identities, we return ambiguous
-3) If there are > 2 identities, we find the mode
+Now let's loop through the list and find the most common cell annotation for each clone identity. We return the terminal identity with the most occurrences. If there is a tie for the most occurrences, we return ambiguous. If there is no identity provided at all (shouldn't happen), we return ambiguous.
 
 ```{r}
-# Returns the most common identifier amongst those given. If there is a tie or no identifier, returns "ambiguous"
+# Returns the most common identifier among those given. If there is a tie or no identifier, returns "ambiguous"
 count_and_sort_identifiers <- function(ids) {
   ids_count <- hash()
-  
+
   # Count every occurrence of every string in the identifiers
   for (i in 1:length(ids)) {
     if (is.null(ids_count[[ids[[i]]]])) {
@@ -211,7 +211,7 @@ count_and_sort_identifiers <- function(ids) {
       ids_count[[ids[[i]]]] <- ids_count[[ids[[i]]]] + 1
     }
   }
-  
+
   # Find identifier with most counts & identifier with second most count
   m <- 0
   m_prev <- 0
@@ -223,7 +223,7 @@ count_and_sort_identifiers <- function(ids) {
       m_key <- key
     }
   }
-  
+
   # Return the identifier with the most occurrences or the "ambiguous" if there is a tie
   if (m == 0) { return("ambiguous") }
   if (m > m_prev) { return(m_key) }
@@ -236,6 +236,7 @@ count_and_sort_identifiers <- function(ids) {
 day2_cell_ident <- data.frame(index = seq(1:length(sister_ident)),ident = NA)
 n_day2_cells <- length(sister_ident)
 
+# TODO: use lapply() / parapply() to make it faster
 for (i in 1:n_day2_cells) {
   day2_cell_ident[i,"ident"] <- count_and_sort_identifiers(sister_ident[[i]])
 }
@@ -244,60 +245,80 @@ for (i in 1:n_day2_cells) {
 day2_cell_ident_determined <- filter(day2_cell_ident,
                                      !(ident %in% c("ambiguous","Prog", "Undifferentiated")))
 day2_cell_ident_determined$ident %>% table()
+
+# FIXME: why not use day2_cell_ident_determined from now on instead of day2_cell_ident? We should also delete one of the two dataframes
 ```
-We have 636 day 2 cells with unique terminal identity, they will be used for the machine learning classifier
+_In vitro_: We have 1,523 cells with unique terminal identity. They will be used for the machine learning classifier.
 
-Further data cleaning
+## Further data cleaning
 ```{r}
-#attach the day 2 cell identity to the day 2 metadata file
-meta_data_d2 <- cbind(meta_data_d2,day2_cell_ident$ident)
-#rename the day 2 identity column
-meta_data_d2 <- dplyr::rename(meta_data_d2,final.ident = "day2_cell_ident$ident")
+# Attach the day 2 cell identity to the day 2 metadata file
+meta_data_d2 <- cbind(meta_data_d2, day2_cell_ident$ident)
+# Rename the day 2 identity column
+meta_data_d2 <- dplyr::rename(meta_data_d2, final.ident = "day2_cell_ident$ident")
 
-#obtain day 2 seurat object by subsetting the cell barcode
-LT.seu.day2 <- subset(LT.seu,cells = rownames(meta_data_d2))
+# Obtain day 2 Seurat object by subsetting the cell barcode
+LT.seu.day2 <- subset(LT.seu, cells = rownames(meta_data_d2))
+# FIXME: can we delete LT.seu?
+rm(LT.seu)
 LT.seu.day2@meta.data <- meta_data_d2
 
 
-#get rid of the ambiguous cells and the cells that are still labeled as Prog or undifferentiated in week 1 and 2
-#obtain cell barcode of cells labeled as ambiguous and Prog
+# Get rid of the ambiguous cells and the cells that are still labeled as Prog or undifferentiated in week 1 and 2
+# Obtain cell barcode of cells labeled as ambiguous, Prog, and Undifferenciated
 ambi_cells <- LT.seu.day2@meta.data %>% filter(final.ident %in% c("Prog","ambiguous","Undifferentiated")) %>% rownames()
-#obtain cells with unique final identities
+
+# Obtain cells with unique final identities
 unique_cells <- rownames(LT.seu.day2@meta.data)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
-#subset day 2 Seurat object to only retain the cells with unique identities
+# Confirmed this gives us 1,523 cells, just as above. Above procedure is probably the fastest
+
+# Subset day 2 Seurat object to only retain the cells with unique identities
 LT.seu.day2 <- subset(LT.seu.day2,cells = unique_cells)
-#there are still two cells labeled as "Undifferentiated", let's getb rid of them too
 
 table(LT.seu.day2@meta.data$final.ident)
+# Confirmed this produces the same proportions of cells as well
+# FIXME: remove all above code and replace with the previous section
 
-#dimension reduction
+# Dimension reduction
 LT.seu.day2 <- FindVariableFeatures(LT.seu.day2, selection.method = "vst", nfeatures = 2000)
-#scale the data for PCA
+# Scale the data for PCA
 all.genes <- rownames(LT.seu.day2)
 LT.seu.day2 <- ScaleData(LT.seu.day2, features = all.genes)
-#run PCA
+# Run PCA
 LT.seu.day2 <- RunPCA(LT.seu.day2, features = VariableFeatures(object = LT.seu.day2))
-#UMAP
+# UMAP
 LT.seu.day2 <- RunUMAP(LT.seu.day2, dims = 1:30)
 
-DimPlot(LT.seu.day2, group.by = "final.ident",reduction = "pca")
+DimPlot(LT.seu.day2, group.by = "final.ident", reduction = "pca")
 ```
 
 
 Also there are some rare final cell identities, let's combine them
 ```{r}
 Idents(LT.seu.day2) <- "final.ident"
-#delete the NK cell, since there is only one
+# Delete the NK cell, since there is only one in vitro
+# In vivo: there is no NK cell
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
-#merge Baso, DC Mono and Neu into a single cluster My
-LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>% mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
-                                                                                  final.ident == "DC" ~ "My",
-                                                                                  final.ident == "Mono" ~ "My",
-                                                                                  final.ident == "Neu" ~ "My",
-                                                                                  final.ident == "B" ~ "B",
-                                                                                  final.ident == "Ery" ~ "Ery"))
+
+# Merge Baso, DC, Mono and Neu into a single cluster My
+LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>% 
+  mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
+                                 final.ident == "DC" ~ "My",
+                                 final.ident == "pDC" ~ "My",
+                                 final.ident == "Ccr7_DC" ~ "My",
+                                 final.ident == "Mono" ~ "My",
+                                 final.ident == "Monocyte" ~ "My",
+                                 final.ident == "Neu" ~ "My",
+                                 final.ident == "Neutrophil" ~ "My",
+                                 final.ident == "B" ~ "B",
+                                 final.ident == "Ery" ~ "Ery",
+                                 TRUE ~ final.ident))
+
+# FIXME: In vivo: only NA & My
+unique(LT.seu.day2@meta.data$final.ident)
+LT.seu.day2@meta.data %>% group_by(final.ident) %>% summarize(count=n())
 ```
-Now our final.ident column just contains three classes of cell identities: B, Ery and My
+Now our `final.ident` column just contains three classes of cell identities: B, Ery and My.
 
 
 
@@ -314,14 +335,14 @@ Controls:
 Neg control: randomly sampled 1000 genes from day 2 Seurat object
 ```{r}
 day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
-#randomly sample 1000 genes
+# Randomly sample 1000 genes
 day2.count.neg.ctrl <- filter(day2.count.neg.ctrl,rownames(day2.count.neg.ctrl) %in% sample(rownames(day2.count.neg.ctrl),1000))
 day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
-#attach the final identity(label) to the data
+# Attach the final identity (label) to the data
 day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
 
 day2.count.neg.ctrl
-#export the df
+# Export the df
 write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
 
 ```
