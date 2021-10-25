@@ -317,7 +317,7 @@ Now our `final.ident` column just contains three classes of cell identities: B, 
 
 Save the day 2 Seurat object, this will be the object we will pull the training data from
 ```{r}
-saveRDS(LT.seu.day2, file = "./data/LT_seu_day2_ML_source_data.rds")
+saveRDS(LT.seu.day2, file = "./data/LT_seu_day2_ML_source_data_alternative-cell-classification.rds")
 ```
 
 
@@ -336,7 +336,7 @@ day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
 
 day2.count.neg.ctrl
 # Export the df
-write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
+write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/rand_genes_neg_ctrl_alternative-cell-classification.txt")
 
 ```
 
