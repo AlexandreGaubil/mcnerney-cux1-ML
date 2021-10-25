@@ -300,19 +300,12 @@ Idents(LT.seu.day2) <- "final.ident"
 # In vivo: there is no NK cell
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
 
-# Merge Baso, DC, Mono and Neu into a single cluster My
+# Remove all cells whose identity is not Baso, Mono, or Neu
 LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>% 
-  mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
-                                 final.ident == "DC" ~ "My",
-                                 final.ident == "pDC" ~ "My",
-                                 final.ident == "Ccr7_DC" ~ "My",
-                                 final.ident == "Mono" ~ "My",
-                                 final.ident == "Monocyte" ~ "My",
-                                 final.ident == "Neu" ~ "My",
-                                 final.ident == "Neutrophil" ~ "My",
-                                 final.ident == "B" ~ "B",
-                                 final.ident == "Ery" ~ "Ery",
-                                 TRUE ~ final.ident))
+  mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
+                                 final.ident == "Monocyte" ~ "Monocyte",
+                                 final.ident == "Neutrophil" ~ "Neutrophil"))
+LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")
 
 # FIXME: In vivo: only NA & My
 unique(LT.seu.day2@meta.data$final.ident)
