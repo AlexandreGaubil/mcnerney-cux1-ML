@@ -8,6 +8,7 @@
 data/*.gz
 data/normed_counts.mtx
 data/input_matrix_for_Seurat/*
+*.rds
 
 # History files
 .Rhistory
