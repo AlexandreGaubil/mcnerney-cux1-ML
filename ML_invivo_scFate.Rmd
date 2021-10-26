@@ -22,14 +22,14 @@ Controls:
 I want to test if the treatment groups are more accurate to predict HSPC cell fate than background(randomly sampled genes)
 
 
+# Setup
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-# Setup
-
-Load relevant libraries
-```{r}
+## Load relevant libraries
+```{r, message = FALSE, warning = FALSE}
 options(max.print=20)
 library(Seurat)
 library(tidyverse)
@@ -38,13 +38,12 @@ library(Matrix)
 library(stringr)
 library("R.utils")
 library(hash)
-<<<<<<< Updated upstream
-=======
 library(mltools)
 ```
 
->>>>>>> Stashed changes
 
+## Check directory & specify kind of data analysis
+```{r}
 setwd(getwd())
 
 # If current directory is not valid, stop execution
@@ -57,11 +56,23 @@ if (!dir.exists("./output/")) {
 }
 ```
 
-# Data cleaning & setup
+## Set options for code
+```{r}
+# Define type of data transformation to apply, depending on the dataset we are working with
+settings.dataset <- "in_vitro"
+# settings.dataset <- "in_vivo"
+
+# If TRUE, will remove variables as they are no longer needed. Keep FALSE while developing to facilitate debugging
+settings.remove_unused <- TRUE
+```
+
+
+
+# Data loading & cleaning
 
 Read in the data from Weinreb 2020 and perform data cleaning.
 
-Prepare the count matrix if the file doesn't exist yet.
+## Create Count Matrix (`matrix.mtx.gz`)
 ```{r}
 # If the transposed normed counts matrix file doesn't exist yet, create it
 if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx.gz")) {
@@ -80,14 +91,14 @@ if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx.gz")) {
 }
 ```
 
-Load metadata
+## Load `metadata.txt`
 ```{r}
 meta_data <- read.delim("./data/metadata.txt", header = TRUE)
 ```
 
 We need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells.
 
-Read in the clone membership metadata
+## Read in the clone membership metadata
 ```{r}
 if (!file.exists("./output/t_clone_matrix.mtx")) {
   clone_matrix <- readMM("./data/clone_matrix.mtx")
@@ -95,19 +106,21 @@ if (!file.exists("./output/t_clone_matrix.mtx")) {
 
   file.create("./output/t_clone_matrix.mtx")
   writeMM(t_clone_matrix, "./output/t_clone_matrix.mtx")
-  rm(clone_matrix)
-  rm(t_clone_matrix)
+
+  if (settings.remove_unused) {
+    rm(clone_matrix)
+    rm(t_clone_matrix)
+  }
 }
 
 # Read in the clonal membership matrix & convert to dataframe
 t_clone_matrix <- readMM("./output/t_clone_matrix.mtx")
 clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
-rm(t_clone_matrix)
 
-# Examine the dataframe
-# dim(clone_meta_data_df)
-# head(clone_meta_data_df)
+if (settings.remove_unused) { rm(t_clone_matrix) }
 ```
+
+## Extract Clonal Identity
 
 The `clone_meta_data_fr`'s row are clone membership IDs, and columns are all cells. For each cell / column, if it belong to a clone / row, the value in the matrix is 1. If it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell.
 ```{r}
@@ -120,7 +133,8 @@ clone_membership <- unlist(clone_membership)
 
 # Attach the clonal membership vector to the metadata
 meta_data$clone_membership <- clone_membership
-rm(clone_membership)
+
+if (settings.remove_unused) { rm(clone_membership) }
 ```
 
 
@@ -132,16 +146,18 @@ meta_data$cell <- str_c(meta_data$Cell.barcode,"-",meta_data$Library)
 if (length(unique(meta_data$cell)) != dim(meta_data)[1]) {
   warning("Duplicate values in meta_data$cell, used as ID column")
   # There are still some duplicated cell barcode within each library even if we attach the library name after cell barcode, so let's add a general number to the very end of the barcode, to make every cell barcode unique
-  # meta_data$index <- 1:nrow(meta_data)
-  # meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
+  meta_data$index <- 1:nrow(meta_data)
+  meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
 }
 
 # TODO: add this later on. `filter()` drops row names
-# meta_data <- column_to_rownames(meta_data, var="cell")
+meta_data$cell.rowname <- meta_data$cell
+meta_data <- column_to_rownames(meta_data, var="cell.rowname")
 ```
 
-We use the new unique cell barcode to remake the `barcode.tsv` file for reading in Seurat object.
+## Create `barcode.tsv` file
 
+We use the new unique cell barcode to remake the `barcode.tsv` file for reading in Seurat object.
 ```{r}
 if (!file.exists("./data/input_matrix_for_Seurat/barcodes.tsv.gz")) {
   barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
@@ -153,15 +169,17 @@ if (!file.exists("./data/input_matrix_for_Seurat/barcodes.tsv.gz")) {
 }
 ```
 
-Now read in the Seurat object
+## Read in the Seurat object
 ```{r}
 LT.data <- Read10X(data.dir="./data/input_matrix_for_Seurat", gene.column=1, cell.column = 1)
-# FIXME: can we delete LT.data after creating LT.seu? The `.` is part of the var name
-rm(LT.data)
+
 # Initialize the Seurat object with the raw (non-normalized data).
 LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
+
+if (settings.remove_unused) { rm(LT.data) }
 ```
 
+## Find destiny of the cell
 
 Next, find the destiny fate of each day 2 cell by uniting with the clonal membership of week1 and week2 cells
 ```{r}
@@ -169,7 +187,7 @@ Next, find the destiny fate of each day 2 cell by uniting with the clonal member
 meta_data_unique <- meta_data[!((is.na(meta_data$clone_membership)) |
                                 (meta_data$clone_membership == "")), ]
 
-rm(meta_data)
+if (settings.remove_unused) { rm(meta_data) }
 
 # Only retain the useful columns
 meta_data_unique <- dplyr::select(meta_data_unique,
@@ -198,12 +216,9 @@ for (i in 1:nrow(meta_data_d2)) {
 }
 
 # FIXME: can we get rid of more kinds of metadata?
-
 ```
 
-
 Now let's loop through the list and find the most common cell annotation for each clone identity. We return the terminal identity with the most occurrences. If there is a tie for the most occurrences, we return ambiguous. If there is no identity provided at all (shouldn't happen), we return ambiguous.
-
 ```{r}
 # Returns the most common identifier among those given. If there is a tie or no identifier, returns "ambiguous"
 count_and_sort_identifiers <- function(ids) {
@@ -247,43 +262,44 @@ for (i in 1:n_day2_cells) {
   day2_cell_ident[i,"ident"] <- count_and_sort_identifiers(sister_ident[[i]])
 }
 
-# Check how many cells with unique terminal identity we have
-day2_cell_ident_determined <- filter(day2_cell_ident,
-                                     !(ident %in% c("ambiguous","Prog", "Undifferentiated")))
-day2_cell_ident_determined$ident %>% table()
-
-# FIXME: why not use day2_cell_ident_determined from now on instead of day2_cell_ident? We should also delete one of the two dataframes
+if (settings.remove_unused) {
+  rm(i)
+  rm(count_and_sort_identifiers)
+  rm(n_day2_cells)
+}
 ```
 _In vitro_: We have 1,523 cells with unique terminal identity. They will be used for the machine learning classifier.
 
-## Further data cleaning
+## Select cells with appropriate cell fate by removing those with prog, ambiguous, or undifferentiated states
 ```{r}
 # Attach the day 2 cell identity to the day 2 metadata file
 meta_data_d2 <- cbind(meta_data_d2, day2_cell_ident$ident)
+
 # Rename the day 2 identity column
 meta_data_d2 <- dplyr::rename(meta_data_d2, final.ident = "day2_cell_ident$ident")
 
 # Obtain day 2 Seurat object by subsetting the cell barcode
-LT.seu.day2 <- subset(LT.seu, cells = rownames(meta_data_d2))
-# FIXME: can we delete LT.seu?
-rm(LT.seu)
+LT.seu.day2 <- subset(LT.seu, cells = meta_data_d2$cell)
 LT.seu.day2@meta.data <- meta_data_d2
 
+if (settings.remove_unused) {
+  rm(day2_cell_ident)
+  rm(LT.seu)
+  rm(meta_data_d2)
+}
 
-# Get rid of the ambiguous cells and the cells that are still labeled as Prog or undifferentiated in week 1 and 2
 # Obtain cell barcode of cells labeled as ambiguous, Prog, and Undifferenciated
-ambi_cells <- LT.seu.day2@meta.data %>% filter(final.ident %in% c("Prog","ambiguous","Undifferentiated")) %>% rownames()
+ambi_cells <- LT.seu.day2@meta.data %>%
+  filter(final.ident %in% c("Prog","ambiguous","Undifferentiated")) %>%
+  rownames()
 
 # Obtain cells with unique final identities
-unique_cells <- rownames(LT.seu.day2@meta.data)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
-# Confirmed this gives us 1,523 cells, just as above. Above procedure is probably the fastest
+unique_cells <- (LT.seu.day2@meta.data$cell)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
 
 # Subset day 2 Seurat object to only retain the cells with unique identities
-LT.seu.day2 <- subset(LT.seu.day2,cells = unique_cells)
+LT.seu.day2 <- subset(LT.seu.day2, cells = unique_cells)
 
 table(LT.seu.day2@meta.data$final.ident)
-# Confirmed this produces the same proportions of cells as well
-# FIXME: remove all above code and replace with the previous section
 
 # Dimension reduction
 LT.seu.day2 <- FindVariableFeatures(LT.seu.day2, selection.method = "vst", nfeatures = 2000)
@@ -299,32 +315,36 @@ DimPlot(LT.seu.day2, group.by = "final.ident", reduction = "pca")
 ```
 
 
-Also there are some rare final cell identities, let's combine them
+## Combine cell final identities for rare cells and remove the ones that are very rare
 ```{r}
 Idents(LT.seu.day2) <- "final.ident"
 # Delete the NK cell, since there is only one in vitro
 # In vivo: there is no NK cell
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
 
-# Merge Baso, DC, Mono and Neu into a single cluster My
-LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>% 
-  mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
-                                 final.ident == "DC" ~ "My",
-                                 final.ident == "pDC" ~ "My",
-                                 final.ident == "Ccr7_DC" ~ "My",
-                                 final.ident == "Mono" ~ "My",
-                                 final.ident == "Monocyte" ~ "My",
-                                 final.ident == "Neu" ~ "My",
-                                 final.ident == "Neutrophil" ~ "My",
-                                 final.ident == "B" ~ "B",
-                                 final.ident == "Ery" ~ "Ery",
-                                 TRUE ~ final.ident))
+if (settings.dataset == "in_vitro") {
+  LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
+    mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
+                                   final.ident == "Monocyte" ~ "Monocyte",
+                                   final.ident == "Neutrophil" ~ "Neutrophil"))
+} else if (settings.dataset == "in_vivo") {
+  LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
+    mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
+                                   final.ident == "DC" ~ "My",
+                                   final.ident == "Mono" ~ "My",
+                                   final.ident == "Neu" ~ "My",
+                                   final.ident == "B" ~ "B",
+                                   final.ident == "Ery" ~ "Ery"))
+} else {
+  stop("Unrecognized value for `settings.dataset`")
+}
 
-# FIXME: In vivo: only NA & My
-unique(LT.seu.day2@meta.data$final.ident)
-LT.seu.day2@meta.data %>% group_by(final.ident) %>% summarize(count=n())
+LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")
+
+LT.seu.day2@meta.data %>%
+  group_by(final.ident) %>%
+  summarize(count=n())
 ```
-Now our `final.ident` column just contains three classes of cell identities: B, Ery and My.
 
 
 
@@ -334,53 +354,39 @@ saveRDS(LT.seu.day2, file = "./data/LT_seu_day2_ML_source_data.rds")
 ```
 
 
-# Export data
+# Export Data
 
 Read in and preparing the training data, export to your desktop and we will implement ML classifier in python in `sklearn`.
 
 ## Controls
 
-### Negative control
+### Negative Control
 
-Randomly sampled 1000 genes from day 2 Seurat object
+Randomly sampled 1000 genes from day 2 Seurat object (will be randomly sampled in Python)
 ```{r}
 day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
-# Randomly sample 1000 genes
-# day2.count.neg.ctrl <- filter(day2.count.neg.ctrl,rownames(day2.count.neg.ctrl) %in% sample(rownames(day2.count.neg.ctrl),1000))
 day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
 # Attach the final identity (label) to the data
 day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
 
-<<<<<<< Updated upstream
-day2.count.neg.ctrl
-# Export the df
-write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
-
-=======
 day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
 day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
 
-# day2.count.neg.ctrl.feature.one_hot_encoding <- one_hot(day2.count.neg.ctrl.feature)
-
 # Export the df
-write.table(day2.count.neg.ctrl.data, 
-            row.names = FALSE, 
+day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
+day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
+
+write.table(day2.count.neg.ctrl.data,
+            row.names = FALSE,
             col.names = FALSE,
             "./data/ML_classifier/input_data/rand_genes_neg_ctrl_data.txt")
-
-write.table(day2.count.neg.ctrl.feature, 
-            row.names = FALSE, 
+write.table(day2.count.neg.ctrl.feature,
+            row.names = FALSE,
             col.names = FALSE,
             "./data/ML_classifier/input_data/rand_genes_neg_ctrl_feature.txt")
-
-#write.table(day2.count.neg.ctrl.feature, 
-#            row.names = FALSE, 
-#            col.names = FALSE,
-#            "./data/ML_classifier/input_data/rand_genes_neg_ctrl_feature_one_hot.txt")
->>>>>>> Stashed changes
 ```
 
-### Positive control 
+### Positive Control
 
 Top 3000 most variable genes
 ```{r}
