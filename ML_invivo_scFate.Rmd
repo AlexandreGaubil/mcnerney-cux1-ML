@@ -62,7 +62,7 @@ settings.dataset <- "in_vitro"
 # settings.dataset <- "in_vivo"
 
 # If TRUE, will remove variables as they are no longer needed. Keep FALSE while developing to facilitate debugging
-settings.remove_unused <- FALSE
+settings.remove_unused <- TRUE
 ```
 
 
@@ -150,7 +150,8 @@ if (length(unique(meta_data$cell)) != dim(meta_data)[1]) {
 }
 
 # TODO: add this later on. `filter()` drops row names
-# meta_data <- column_to_rownames(meta_data, var="cell")
+meta_data$cell.rowname <- meta_data$cell
+meta_data <- column_to_rownames(meta_data, var="cell.rowname")
 ```
 
 ## Create `barcode.tsv` file
@@ -260,7 +261,11 @@ for (i in 1:n_day2_cells) {
   day2_cell_ident[i,"ident"] <- count_and_sort_identifiers(sister_ident[[i]])
 }
 
-if (settings.remove_unused) { rm(n_day2_cells) }
+if (settings.remove_unused) { 
+  rm(i)
+  rm(count_and_sort_identifiers)
+  rm(n_day2_cells) 
+}
 ```
 _In vitro_: We have 1,523 cells with unique terminal identity. They will be used for the machine learning classifier.
 
@@ -273,7 +278,7 @@ meta_data_d2 <- cbind(meta_data_d2, day2_cell_ident$ident)
 meta_data_d2 <- dplyr::rename(meta_data_d2, final.ident = "day2_cell_ident$ident")
 
 # Obtain day 2 Seurat object by subsetting the cell barcode
-LT.seu.day2 <- subset(LT.seu, cells = rownames(meta_data_d2))
+LT.seu.day2 <- subset(LT.seu, cells = meta_data_d2$cell)
 LT.seu.day2@meta.data <- meta_data_d2
 
 if (settings.remove_unused) { 
@@ -288,7 +293,7 @@ ambi_cells <- LT.seu.day2@meta.data %>%
   rownames()
 
 # Obtain cells with unique final identities
-unique_cells <- rownames(LT.seu.day2@meta.data)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
+unique_cells <- (LT.seu.day2@meta.data$cell)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
 
 # Subset day 2 Seurat object to only retain the cells with unique identities
 LT.seu.day2 <- subset(LT.seu.day2, cells = unique_cells)
@@ -316,27 +321,24 @@ Idents(LT.seu.day2) <- "final.ident"
 # In vivo: there is no NK cell
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
 
-mutator <- case_when(final.ident == "NA" ~ "NA")
-
 if (settings.dataset == "in_vitro") {
-  mutator <- case_when(final.ident == "Baso" ~ "Baso",
-                       final.ident == "Monocyte" ~ "Monocyte",
-                       final.ident == "Neutrophil" ~ "Neutrophil")
+  LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
+    mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
+                                   final.ident == "Monocyte" ~ "Monocyte",
+                                   final.ident == "Neutrophil" ~ "Neutrophil"))
 } else if (settings.dataset == "in_vivo") {
-  mutator <- case_when(final.ident == "Baso" ~ "My",
-                       final.ident == "DC" ~ "My",
-                       final.ident == "Mono" ~ "My",
-                       final.ident == "Neu" ~ "My",
-                       final.ident == "B" ~ "B",
-                       final.ident == "Ery" ~ "Ery")
+  LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
+    mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
+                                   final.ident == "DC" ~ "My",
+                                   final.ident == "Mono" ~ "My",
+                                   final.ident == "Neu" ~ "My",
+                                   final.ident == "B" ~ "B",
+                                   final.ident == "Ery" ~ "Ery"))
 } else {
   stop("Unrecognized value for `settings.dataset`")
 }
 
-LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%mutate(final.ident = mutator)
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")
-
-if (settings.remove_unused) { rm(mutator) }
 
 LT.seu.day2@meta.data %>% 
   group_by(final.ident) %>% 
