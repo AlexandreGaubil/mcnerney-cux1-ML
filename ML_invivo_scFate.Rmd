@@ -386,6 +386,11 @@ day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.iden
 day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
 day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
 
+if (!dir.exists("./data/output/neg_control/")) {
+  warning("No `data/output/neg_control` directory found, creating one now...")
+  dir.create("./data/output/neg_control")
+}
+
 write.table(day2.count.neg.ctrl.data,
             row.names = FALSE,
             col.names = FALSE,
@@ -406,6 +411,11 @@ day2.count.var.3000 <- t(day2.count.var.3000) %>% as.data.frame()
 day2.count.var.3000$final.ident <- LT.seu.day2@meta.data$final.ident
 
 day2.count.var.3000
+
+if (!dir.exists("./data/output/pos_control/")) {
+  warning("No `data/output/pos_control` directory found, creating one now...")
+  dir.create("./data/output/pos_control")
+}
 
 #export the df
 write.table(day2.count.neg.ctrl,"./data/output/ML_classifier/pos_control/var_3000_pos_ctrl.txt")
