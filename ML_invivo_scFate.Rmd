@@ -38,6 +38,12 @@ library(Matrix)
 library(stringr)
 library("R.utils")
 library(hash)
+<<<<<<< Updated upstream
+=======
+library(mltools)
+```
+
+>>>>>>> Stashed changes
 
 setwd(getwd())
 
@@ -328,26 +334,55 @@ saveRDS(LT.seu.day2, file = "./data/LT_seu_day2_ML_source_data.rds")
 ```
 
 
+# Export data
 
-Read in and preparing the training data, export to your desktop and we will implement ML classifier in python in sklearn
+Read in and preparing the training data, export to your desktop and we will implement ML classifier in python in `sklearn`.
 
-Controls:
-Neg control: randomly sampled 1000 genes from day 2 Seurat object
+## Controls
+
+### Negative control
+
+Randomly sampled 1000 genes from day 2 Seurat object
 ```{r}
 day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
 # Randomly sample 1000 genes
-day2.count.neg.ctrl <- filter(day2.count.neg.ctrl,rownames(day2.count.neg.ctrl) %in% sample(rownames(day2.count.neg.ctrl),1000))
+# day2.count.neg.ctrl <- filter(day2.count.neg.ctrl,rownames(day2.count.neg.ctrl) %in% sample(rownames(day2.count.neg.ctrl),1000))
 day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
 # Attach the final identity (label) to the data
 day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
 
+<<<<<<< Updated upstream
 day2.count.neg.ctrl
 # Export the df
 write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/rand_genes_neg_ctrl.txt")
 
+=======
+day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
+day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
+
+# day2.count.neg.ctrl.feature.one_hot_encoding <- one_hot(day2.count.neg.ctrl.feature)
+
+# Export the df
+write.table(day2.count.neg.ctrl.data, 
+            row.names = FALSE, 
+            col.names = FALSE,
+            "./data/ML_classifier/input_data/rand_genes_neg_ctrl_data.txt")
+
+write.table(day2.count.neg.ctrl.feature, 
+            row.names = FALSE, 
+            col.names = FALSE,
+            "./data/ML_classifier/input_data/rand_genes_neg_ctrl_feature.txt")
+
+#write.table(day2.count.neg.ctrl.feature, 
+#            row.names = FALSE, 
+#            col.names = FALSE,
+#            "./data/ML_classifier/input_data/rand_genes_neg_ctrl_feature_one_hot.txt")
+>>>>>>> Stashed changes
 ```
 
-Positive control Top 3000 most variable genes
+### Positive control 
+
+Top 3000 most variable genes
 ```{r}
 day2.count.var.3000 <- as.data.frame(LT.seu.day2@assays$RNA@data)
 day2.count.var.3000 <- filter(day2.count.var.3000,rownames(day2.count.var.3000) %in% kon1@assays$SCT@var.features)
