@@ -5,10 +5,7 @@
 .vscode/*
 
 # Data files (too big to track with git - should be copied by each user)
-data/*.gz
-data/normed_counts.mtx
-data/input_matrix_for_Seurat/*
-data/ML_classifier/*
+data/*
 *.rds
 
 # History files

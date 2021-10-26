@@ -42,8 +42,8 @@ lr = LogisticRegression(penalty = 'l2',
 
 # ---- IMPORT DATA ----
 
-data_matrix = np.loadtxt('./data/ML_classifier/input_data/rand_genes_neg_ctrl_data.txt')
-feature_array = np.genfromtxt('./data/ML_classifier/input_data/rand_genes_neg_ctrl_feature.txt',
+data_matrix = np.loadtxt('./output/neg_control/rand_genes_neg_ctrl_data.txt')
+feature_array = np.genfromtxt('./output/neg_control/rand_genes_neg_ctrl_feature.txt',
                               dtype = 'str')
 
 df = pd.DataFrame(data_matrix)

@@ -50,9 +50,16 @@ setwd(getwd())
 if (!dir.exists("./data/")) {
   stop("It seems that the current working directory is not correct (doesn't contain `data/`), you should check that.")
 }
-if (!dir.exists("./output/")) {
-  warning("No `.output/` directory found, creating one now...")
-  dir.create("./output/")
+if (!dir.exists("./data/output/")) {
+  warning("No `data/output/` directory found, creating one now...")
+  dir.create("./data/output/")
+}
+if (!dir.exists("./data/input/")) {
+  stop("No `data/input/` directory found.")
+}
+if (!dir.exists("./data/cache/")) {
+  warning("No `data/cache/` directory found, creating one now...")
+  dir.create("./data/cache/")
 }
 ```
 
@@ -75,37 +82,39 @@ Read in the data from Weinreb 2020 and perform data cleaning.
 ## Create Count Matrix (`matrix.mtx.gz`)
 ```{r}
 # If the transposed normed counts matrix file doesn't exist yet, create it
-if (!file.exists("./data/input_matrix_for_Seurat/matrix.mtx.gz")) {
+if (!file.exists("./data/cache/input_for_Seurat/matrix.mtx.gz")) {
+  print("Creating `matrix.mtx.gz`...")
   # Load the L1 normalized count matrix
-  count_mtx = readMM("./data/normed_counts.mtx")
+  count_mtx = readMM("./data/input/normed_counts.mtx")
 
   # Read10X() expect gene-by-cell-matrix, so we need to transpose and export
   count_mtx <- t(count_mtx)
-  if (!dir.exists("./data/input_matrix_for_Seurat/")) {
-    dir.create("./data/input_matrix_for_Seurat/")
+  if (!dir.exists("./data/cache/input_for_Seurat/")) {
+    dir.create("./data/cache/input_for_Seurat/")
   }
-  file.create("./data/input_matrix_for_Seurat/matrix.mtx")
-  writeMM(count_mtx, "./data/input_matrix_for_Seurat/matrix.mtx")
-  gzip("./data/input_matrix_for_Seurat/matrix.mtx")
-  file.remove("./data/input_matrix_for_Seurat/matrix.mtx")
+  file.create("./data/cache/input_for_Seurat/matrix.mtx")
+  writeMM(count_mtx, "./data/cache/input_for_Seurat/matrix.mtx")
+  gzip("./data/cache/input_for_Seurat/matrix.mtx")
+  file.remove("./data/cache/input_for_Seurat/matrix.mtx")
 }
 ```
 
 ## Load `metadata.txt`
 ```{r}
-meta_data <- read.delim("./data/metadata.txt", header = TRUE)
+meta_data <- read.delim("./data/input/metadata.txt", header = TRUE)
 ```
 
 We need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells.
 
 ## Read in the clone membership metadata
 ```{r}
-if (!file.exists("./output/t_clone_matrix.mtx")) {
-  clone_matrix <- readMM("./data/clone_matrix.mtx")
+if (!file.exists("./data/cache/t_clone_matrix.mtx")) {
+  print("Creating `t_clone_matrix.mtx`...")
+  clone_matrix <- readMM("./data/input/clone_matrix.mtx")
   t_clone_matrix <- t(clone_matrix)
 
-  file.create("./output/t_clone_matrix.mtx")
-  writeMM(t_clone_matrix, "./output/t_clone_matrix.mtx")
+  file.create("./data/cache/t_clone_matrix.mtx")
+  writeMM(t_clone_matrix, "./data/cache/t_clone_matrix.mtx")
 
   if (settings.remove_unused) {
     rm(clone_matrix)
@@ -114,7 +123,7 @@ if (!file.exists("./output/t_clone_matrix.mtx")) {
 }
 
 # Read in the clonal membership matrix & convert to dataframe
-t_clone_matrix <- readMM("./output/t_clone_matrix.mtx")
+t_clone_matrix <- readMM("./data/cache/t_clone_matrix.mtx")
 clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
 
 if (settings.remove_unused) { rm(t_clone_matrix) }
@@ -159,19 +168,20 @@ meta_data <- column_to_rownames(meta_data, var="cell.rowname")
 
 We use the new unique cell barcode to remake the `barcode.tsv` file for reading in Seurat object.
 ```{r}
-if (!file.exists("./data/input_matrix_for_Seurat/barcodes.tsv.gz")) {
+if (!file.exists("./data/cache/input_for_Seurat/barcodes.tsv.gz")) {
+  print("Creating `barcode.tsv.gz`...")
   barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
 
   # Export the new cell barcode tsv file
-  write.table(barcode, file='./data/input_matrix_for_Seurat/barcodes.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
-  gzip("./data/input_matrix_for_Seurat/barcodes.tsv")
-  file.remove("./data/input_matrix_for_Seurat/barcodes.tsv")
+  write.table(barcode, file='./data/cache/input_for_Seurat/barcodes.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
+  gzip("./data/cache/input_for_Seurat/barcodes.tsv")
+  file.remove("./data/cache/input_for_Seurat/barcodes.tsv")
 }
 ```
 
 ## Read in the Seurat object
 ```{r}
-LT.data <- Read10X(data.dir="./data/input_matrix_for_Seurat", gene.column=1, cell.column = 1)
+LT.data <- Read10X(data.dir="./data/cache/input_for_Seurat", gene.column=1, cell.column = 1)
 
 # Initialize the Seurat object with the raw (non-normalized data).
 LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
@@ -350,7 +360,7 @@ LT.seu.day2@meta.data %>%
 
 Save the day 2 Seurat object, this will be the object we will pull the training data from
 ```{r}
-saveRDS(LT.seu.day2, file = "./data/LT_seu_day2_ML_source_data.rds")
+saveRDS(LT.seu.day2, file = "./data/cache/LT_seu_day2_ML_source_data.rds")
 ```
 
 
@@ -379,11 +389,11 @@ day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.iden
 write.table(day2.count.neg.ctrl.data,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/ML_classifier/input_data/rand_genes_neg_ctrl_data.txt")
+            "./data/output/neg_control/rand_genes_neg_ctrl_data.txt")
 write.table(day2.count.neg.ctrl.feature,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/ML_classifier/input_data/rand_genes_neg_ctrl_feature.txt")
+            "./data/output/neg_control/rand_genes_neg_ctrl_feature.txt")
 ```
 
 ### Positive Control
@@ -398,7 +408,7 @@ day2.count.var.3000$final.ident <- LT.seu.day2@meta.data$final.ident
 day2.count.var.3000
 
 #export the df
-write.table(day2.count.neg.ctrl,"./data/ML_classifier/input_data/var_3000_pos_ctrl.txt")
+write.table(day2.count.neg.ctrl,"./data/output/ML_classifier/pos_control/var_3000_pos_ctrl.txt")
 ```
 
 
