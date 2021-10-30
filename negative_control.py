@@ -14,6 +14,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 
 # ---- MODEL ----
@@ -32,9 +33,9 @@ lr = LogisticRegression(penalty = 'l2',
                         # solver = 'warn',
                         solver = 'saga',
                         # max_iter = 100,
-                        max_iter = 500,
+                        max_iter = 1000,
                         # multi_class = 'warn',
-                        multi_class = 'auto',
+                        multi_class = 'multinomial',
                         verbose = 0,
                         warm_start = False,
                         n_jobs = None)
@@ -42,8 +43,8 @@ lr = LogisticRegression(penalty = 'l2',
 
 # ---- IMPORT DATA ----
 
-data_matrix = np.loadtxt('./output/neg_control/rand_genes_neg_ctrl_data.txt')
-feature_array = np.genfromtxt('./output/neg_control/rand_genes_neg_ctrl_feature.txt',
+data_matrix = np.loadtxt('./data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt')
+feature_array = np.genfromtxt('./data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt',
                               dtype = 'str')
 
 df = pd.DataFrame(data_matrix)
@@ -64,9 +65,7 @@ print("Total number of genes from which to poll: {}".format(len(data_matrix[0]))
 accuracy_array = []
 
 # Create 50 models of 1000 random genes each and calculate each model's accuracy
-print("\n")
-for i in range(1, 50):
-    print("Iteration {}".format(i))
+for i in tqdm(range(1, 50)):
     df_sample = df.sample(n = 1000,
                           replace = False,
                           axis = 1)
@@ -89,4 +88,18 @@ print(accuracy_array)
 print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
 print("Standard deviation: {}".format(np.std(accuracy_array)))
 
-# Results: Average accuracy: 0.633, Standard deviation: 0.032
+# Results for 3 cell types:
+# Average accuracy: 0.633
+# Standard deviation: 0.032
+
+# Results for 6 cell types with max_iter = 500 (11 failures to converge):
+# Average accuracy: 0.562
+# Standard deviation: 0.030
+
+# Results for 6 cell types with max_iter = 1,000:
+# Average accuracy: 0.566
+# Standard deviation: 0.030
+
+# Results for all cell types with max_iter = 1,000:
+# Average accuracy: 0.498
+# Standard deviation: 0.026

@@ -325,9 +325,18 @@ DimPlot(LT.seu.day2, group.by = "final.ident", reduction = "pca")
 ```
 
 
+```{r, include = FALSE, eval = FALSE}
+# Save LT.seu.day2 to not have to redo all previous calculations every time
+saveRDS(LT.seu.day2, file = "./data/cache/LT_seu_day2_before_filtering.rds")
+
+# Load LT.seu.day2 from file
+LT.seu.day2 <- readRDS(file = "./data/cache/LT_seu_day2_before_filtering.rds")
+```
+
 ## Combine cell final identities for rare cells and remove the ones that are very rare
 ```{r}
 Idents(LT.seu.day2) <- "final.ident"
+
 # Delete the NK cell, since there is only one in vitro
 # In vivo: there is no NK cell
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
@@ -336,7 +345,11 @@ if (settings.dataset == "in_vitro") {
   LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
     mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
                                    final.ident == "Monocyte" ~ "Monocyte",
-                                   final.ident == "Neutrophil" ~ "Neutrophil"))
+                                   final.ident == "Neutrophil" ~ "Neutrophil",
+                                   # Remove below for only three cells analysis
+                                   final.ident == "Meg" ~ "Meg",
+                                   final.ident == "Lymphoid" ~ "Lymphoid",
+                                   final.ident == "Mast" ~ "Mast",))
 } else if (settings.dataset == "in_vivo") {
   LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
     mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
@@ -394,11 +407,11 @@ if (!dir.exists("./data/output/neg_control/")) {
 write.table(day2.count.neg.ctrl.data,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/output/neg_control/rand_genes_neg_ctrl_data.txt")
+            "./data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt")
 write.table(day2.count.neg.ctrl.feature,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/output/neg_control/rand_genes_neg_ctrl_feature.txt")
+            "./data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt")
 ```
 
 ### Positive Control
