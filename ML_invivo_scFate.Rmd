@@ -349,7 +349,11 @@ if (settings.dataset == "in_vitro") {
                                    # Remove below for only three cells analysis
                                    final.ident == "Meg" ~ "Meg",
                                    final.ident == "Lymphoid" ~ "Lymphoid",
-                                   final.ident == "Mast" ~ "Mast",))
+                                   final.ident == "Mast" ~ "Mast"))
+                                   # final.ident == "Ccr7_DC" ~ "Ccr7DC",
+                                   # final.ident == "Eos" ~ "Eos",
+                                   # final.ident == "Erythroid" ~ "Erythroid",
+                                   # final.ident == "pDC" ~ "pDC"))
 } else if (settings.dataset == "in_vivo") {
   LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
     mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
@@ -386,7 +390,7 @@ Read in and preparing the training data, export to your desktop and we will impl
 ### Negative Control
 
 Randomly sampled 1000 genes from day 2 Seurat object (will be randomly sampled in Python)
-```{r}
+```{r} 
 day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
 day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
 # Attach the final identity (label) to the data
@@ -418,20 +422,38 @@ write.table(day2.count.neg.ctrl.feature,
 
 Top 3000 most variable genes
 ```{r}
-day2.count.var.3000 <- as.data.frame(LT.seu.day2@assays$RNA@data)
-day2.count.var.3000 <- filter(day2.count.var.3000,rownames(day2.count.var.3000) %in% kon1@assays$SCT@var.features)
-day2.count.var.3000 <- t(day2.count.var.3000) %>% as.data.frame()
-day2.count.var.3000$final.ident <- LT.seu.day2@meta.data$final.ident
+LT.seu.day2@assays$RNA@var.features
+day2.count.var.2000 <- as.data.frame(LT.seu.day2@assays$RNA@data)
 
-day2.count.var.3000
+day2.count.var.2000 <- filter(day2.count.var.2000,rownames(day2.count.var.2000) %in% LT.seu.day2@assays$RNA@var.features)
+
+day2.count.var.2000 <- t(day2.count.var.2000) %>% as.data.frame()
+day2.count.var.2000$final.ident <- LT.seu.day2@meta.data$final.ident
+
+day2.count.var.2000
 
 if (!dir.exists("./data/output/pos_control/")) {
   warning("No `data/output/pos_control` directory found, creating one now...")
   dir.create("./data/output/pos_control")
 }
 
-#export the df
-write.table(day2.count.neg.ctrl,"./data/output/ML_classifier/pos_control/var_3000_pos_ctrl.txt")
+# Export the df
+day2.count.var.2000.data <- subset(day2.count.var.2000, select = -c(final.ident))
+day2.count.var.2000.feature <- subset(day2.count.var.2000, select = c(final.ident))
+
+if (!dir.exists("./data/output/neg_control/")) {
+  warning("No `data/output/neg_control` directory found, creating one now...")
+  dir.create("./data/output/neg_control")
+}
+
+write.table(day2.count.var.2000.data,
+            row.names = FALSE,
+            col.names = FALSE,
+            "./data/output/pos_control/var_2000_pos_ctrl_data.txt")
+write.table(day2.count.var.2000.feature,
+            row.names = FALSE,
+            col.names = FALSE,
+            "./data/output/pos_control/var_2000_pos_ctrl_feature.txt")
 ```
 
 
