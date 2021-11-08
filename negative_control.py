@@ -5,8 +5,6 @@
 # using the same parameters used by Weinreb (2020)
 #
 
-# Should get ~40% prediction accuracy
-
 # ---- LIBRARIES ----
 
 import numpy as np

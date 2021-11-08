@@ -1,11 +1,10 @@
 #
-# Negative control testing using logistic regression.
+# Positive control testing using logistic regression.
 #
-# Use 50 random pools of 1,000 genes each and apply logistic regression to it
-# using the same parameters used by Weinreb (2020)
+# Use 50 random pools of 1,000 genes each taken from 2,000 most variable genes
+# and apply logistic regression to it using the same parameters used by
+# Weinreb (2020)
 #
-
-# Should get ~40% prediction accuracy
 
 # ---- LIBRARIES ----
 
