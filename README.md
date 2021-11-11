@@ -8,6 +8,8 @@ This algorithm is based on [Weinreb's 2020 paper](https://www.science.org/doi/10
 
 # Setup
 
+[Link](https://uchicago.box.com/s/gxou9c02swwj56jlamklj7c32ygmzte8) to the `data` folder backup on Box.
+
 ## Data organisation
 
 The `data/` folder contains any and all data files. It has three subfolders:
