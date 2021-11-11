@@ -42,11 +42,16 @@ Seu.day2 <- SetIdent(object = Seu.day2,
                      value = "Neu")
 rm(cells.neu)
 
-# Find most variable markers for erythroid and neutrophil cells
-Ery.markers <- FindMarkers(Seu.day2, 
-                           ident.1 = "Ery", 
-                           ident.2 = "Neu", 
+# Find most variable markers for erythroid vs neutrophil cells
+Ery.markers <- FindMarkers(Seu.day2,
+                           ident.1 = "Ery",
+                           ident.2 = "Neu",
                            only.pos = TRUE)
+
+# Find most variable markers for erythroid cells
+Ery_only.markers <- FindMarkers(Seu.day2,
+                                ident.1 = "Ery",
+                                only.pos = TRUE)
 ```
 
 
