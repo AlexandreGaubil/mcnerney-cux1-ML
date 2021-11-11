@@ -298,7 +298,7 @@ if (settings.remove_unused) {
   rm(meta_data_d2)
 }
 
-# Obtain cell barcode of cells labeled as ambiguous, Prog, and Undifferenciated
+# Obtain cell barcode of cells labeled as ambiguous, Prog, and Undifferentiated
 ambi_cells <- LT.seu.day2@meta.data %>%
   filter(final.ident %in% c("Prog","ambiguous","Undifferentiated")) %>%
   rownames()

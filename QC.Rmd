@@ -1,0 +1,64 @@
+---
+title: "Quality Control for Data Pre-Processing"
+author: "Alexandre Gaubil"
+date: "10/11/2021"
+output: html_document
+---
+
+
+# Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(max.print=20)
+```
+
+```{r, message = FALSE, warning = FALSE}
+library(Seurat)
+library(tidyverse)
+```
+
+
+# Data Analysis
+```{r}
+# Load Seurat object from file
+Seu.day2 <- readRDS(file = "./data/cache/LT_seu_day2_before_filtering.rds")
+
+# Add final identity to identity
+Idents(Seu.day2) <- "final.ident"
+
+# Replace identity for Erythroid cells
+cells.ery <- WhichCells(object = Seu.day2,
+                        idents = "Erythroid")
+Seu.day2 <- SetIdent(object = Seu.day2,
+                     cells = cells.ery,
+                     value = "Ery")
+rm(cells.ery)
+
+# Replace identity for Neutrophil cells
+cells.neu <- WhichCells(object = Seu.day2,
+                        idents = "Neutrophil")
+Seu.day2 <- SetIdent(object = Seu.day2,
+                     cells = cells.neu,
+                     value = "Neu")
+rm(cells.neu)
+
+# Find most variable markers for erythroid and neutrophil cells
+Ery.markers <- FindMarkers(Seu.day2, 
+                           ident.1 = "Ery", 
+                           ident.2 = "Neu", 
+                           only.pos = TRUE)
+```
+
+
+# Output
+```{r}
+if (!dir.exists("./data/output/quality_control/")) {
+  warning("No `data/output/quality_control` directory found, creating one now...")
+  dir.create("./data/output/quality_control")
+}
+
+write.table(Ery.markers,
+            row.names = TRUE,
+            col.names = TRUE,
+            "./data/output/quality_control/ery_vs_neu_markers_quality_control.txt")
+```
