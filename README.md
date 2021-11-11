@@ -1,6 +1,9 @@
 # mcnerney-cux1-ML
-_Cux 1 ML algorithm for McNerney Lab @ UChicago_
+_CUX1 ML algorithm for [McNerney Lab](https://voices.uchicago.edu/mcnerneylab/) @ UChicago_
 
+# About
+
+This algorithm is based on [Weinreb's 2020 paper](https://www.science.org/doi/10.1126/science.aaw3381) _Lineage tracing on transcriptional landscapes links state to fate during differentiation_ dataset. We reproduced the data analysis they performed and implemented further methods for determining cell fate based on Cux1 related genes.
 
 
 # Setup
