@@ -43,10 +43,10 @@ Seu.day2 <- SetIdent(object = Seu.day2,
 rm(cells.neu)
 
 # Find most variable markers for erythroid vs neutrophil cells
-Ery.markers <- FindMarkers(Seu.day2,
-                           ident.1 = "Ery",
-                           ident.2 = "Neu",
-                           only.pos = TRUE)
+Ery_vs_neu.markers <- FindMarkers(Seu.day2,
+                                  ident.1 = "Ery",
+                                  ident.2 = "Neu",
+                                  only.pos = TRUE)
 
 # Find most variable markers for erythroid cells
 Ery_only.markers <- FindMarkers(Seu.day2,
@@ -62,8 +62,13 @@ if (!dir.exists("./data/output/quality_control/")) {
   dir.create("./data/output/quality_control")
 }
 
-write.table(Ery.markers,
+write.table(Ery_vs_neu.markers,
             row.names = TRUE,
             col.names = TRUE,
             "./data/output/quality_control/ery_vs_neu_markers_quality_control.txt")
+
+write.table(Ery_only.markers,
+            row.names = TRUE,
+            col.names = TRUE,
+            "./data/output/quality_control/ery_only_markers_quality_control.txt")
 ```
