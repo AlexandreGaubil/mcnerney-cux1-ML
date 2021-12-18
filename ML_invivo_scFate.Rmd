@@ -26,6 +26,8 @@ I want to test if the treatment groups are more accurate to predict HSPC cell fa
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+#set up working directory, this will vary from desktop top desktop
+knitr::opts_knit$set(root.dir = "/Users/weihan/Box\ Sync/McNerney\ Lab\ Bioinformatics/Alexandre\ Gaubil/mcnerney-cux1-ML")
 ```
 
 ## Load relevant libraries
@@ -47,7 +49,7 @@ library(mltools)
 setwd(getwd())
 
 # If current directory is not valid, stop execution
-if (!dir.exists("./data/")) {
+if (!dir.exists("./data1")) {
   stop("It seems that the current working directory is not correct (doesn't contain `data/`), you should check that.")
 }
 if (!dir.exists("./data/output/")) {
