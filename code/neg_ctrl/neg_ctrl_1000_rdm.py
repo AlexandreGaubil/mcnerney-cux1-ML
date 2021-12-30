@@ -13,6 +13,9 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+import os
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 # ---- MODEL ----
@@ -41,8 +44,8 @@ lr = LogisticRegression(penalty = 'l2',
 
 # ---- IMPORT DATA ----
 
-data_matrix = np.loadtxt('./data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt')
-feature_array = np.genfromtxt('./data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt',
+data_matrix = np.loadtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt')
+feature_array = np.genfromtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt',
                               dtype = 'str')
 
 df = pd.DataFrame(data_matrix)
