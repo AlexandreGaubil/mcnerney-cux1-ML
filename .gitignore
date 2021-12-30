@@ -3,6 +3,7 @@
 
 # VSCode
 .vscode/*
+.autohidefiles
 
 # Data files (too big to track with git - should be copied by each user)
 data/*
