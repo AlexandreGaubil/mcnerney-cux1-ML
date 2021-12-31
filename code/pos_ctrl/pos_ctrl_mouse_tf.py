@@ -46,14 +46,16 @@ lr = LogisticRegression(penalty = 'l2',
 
 # ---- IMPORT DATA ----
 
-TF = pd.read_csv('./../../data/input/pos_ctrl/pos_ctrl_mus_musculus_TF_animal_TFDB.txt', sep = "\t")
-TF['Ensembl'].tolist()
+mouse_tf_df = pd.read_csv('./../../data/input/pos_ctrl/pos_ctrl_mus_musculus_TF_animal_TFDB.txt', sep = '\t')
 
-data_matrix = np.loadtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt')
-feature_array = np.genfromtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt',
-                              dtype = 'str')
+# List of transcriptor factors
+tfs = mouse_tf_df['Symbol'].tolist()
 
-df = pd.DataFrame(data_matrix)
+data_matrix = pd.read_csv('./../../data/output/pos_control/var_2000_pos_ctrl_data_headers.txt', sep = ' ')
+feature_array = np.genfromtxt('./../../data/output/pos_control/var_2000_pos_ctrl_feature.txt', dtype = 'str')
+
+# Keep only genes that are mouse transcription factors
+df = data_matrix[data_matrix.columns[data_matrix.columns.isin(tfs)]]
 
 # One-hot encoding of feature_array
 lb = LabelBinarizer()
@@ -63,8 +65,6 @@ feature_one_hot = lb.transform(feature_array)
 # To recover labels from one hot encoding
 # lb.inverse_transform(feature_one_hot)
 
-print("Total number of genes from which to poll: {}".format(len(data_matrix[0])))
-
 
 # ---- MODEL & SCORING ----
 
@@ -72,14 +72,9 @@ accuracy_array = []
 
 # Create 50 models of 1000 random genes each and calculate each model's accuracy
 for i in tqdm(range(1, 50)):
-    df_sample = df.sample(n = 1000,
-                          replace = False,
-                          axis = 1)
-
-    x_train, x_test, y_train, y_test = train_test_split(df_sample,
+    x_train, x_test, y_train, y_test = train_test_split(df,
                                                         feature_array,
-                                                        test_size=0.25,
-                                                        random_state=0)
+                                                        test_size=0.25)
 
     # Fit the model to the data
     model = lr.fit(x_train, y_train)
@@ -94,12 +89,6 @@ print(accuracy_array)
 print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
 print("Standard deviation: {}".format(np.std(accuracy_array)))
 
-# Results for 3 cell types:
-
-# Results for 6 cell types with max_iter = 500 (xx failures to converge):
-
-# Results for 6 cell types with max_iter = 1,000:
-
-# Results for all cell types with random 1,000 genes:
-# Average accuracy: 0.559
+# Results for all cell types:
+# Average accuracy: 0.590
 # Standard deviation: 0.026
