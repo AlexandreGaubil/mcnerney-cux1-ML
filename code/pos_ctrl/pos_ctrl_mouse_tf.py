@@ -1,5 +1,5 @@
 #
-# Negative control testing using logistic regression over TF List
+# Positive control testing using logistic regression over TF List
 #
 # Use the TF list provided by AnimalTFDB3.0
 # (http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/download)
