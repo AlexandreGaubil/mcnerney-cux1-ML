@@ -49,7 +49,7 @@ library(mltools)
 setwd(getwd())
 
 # If current directory is not valid, stop execution
-if (!dir.exists("./data1")) {
+if (!dir.exists("./data")) {
   stop("It seems that the current working directory is not correct (doesn't contain `data/`), you should check that.")
 }
 if (!dir.exists("./data/output/")) {
@@ -422,7 +422,7 @@ write.table(day2.count.neg.ctrl.feature,
 
 ### Positive Control
 
-Top 3000 most variable genes
+Top 2000 most variable genes
 ```{r}
 LT.seu.day2@assays$RNA@var.features
 day2.count.var.2000 <- as.data.frame(LT.seu.day2@assays$RNA@data)
@@ -443,11 +443,6 @@ if (!dir.exists("./data/output/pos_control/")) {
 day2.count.var.2000.data <- subset(day2.count.var.2000, select = -c(final.ident))
 day2.count.var.2000.feature <- subset(day2.count.var.2000, select = c(final.ident))
 
-if (!dir.exists("./data/output/neg_control/")) {
-  warning("No `data/output/neg_control` directory found, creating one now...")
-  dir.create("./data/output/neg_control")
-}
-
 write.table(day2.count.var.2000.data,
             row.names = FALSE,
             col.names = FALSE,
@@ -456,6 +451,15 @@ write.table(day2.count.var.2000.feature,
             row.names = FALSE,
             col.names = FALSE,
             "./data/output/pos_control/var_2000_pos_ctrl_feature.txt")
+
+write.table(day2.count.var.2000.data,
+            row.names = TRUE,
+            col.names = TRUE,
+            "./data/output/pos_control/var_2000_pos_ctrl_data_headers.txt")
+write.table(day2.count.var.2000.feature,
+            row.names = TRUE,
+            col.names = TRUE,
+            "./data/output/pos_control/var_2000_pos_ctrl_feature_headers.txt")
 ```
 
 
