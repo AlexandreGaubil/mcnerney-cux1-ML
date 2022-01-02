@@ -39,3 +39,7 @@ Standard deviation: 0.014
 **Results for all cell types:**
 Average accuracy: 0.618
 Standard deviation: 0.022
+
+### Progenitor Gene Sets (`pos_ctrl_prog.py`)
+
+See `pos_ctrl_prog_result.txt`.
