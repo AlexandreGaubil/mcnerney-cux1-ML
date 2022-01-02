@@ -51,8 +51,8 @@ mouse_tf_df = pd.read_csv('./../../data/input/pos_ctrl/pos_ctrl_mus_musculus_TF_
 # List of transcriptor factors
 tfs = mouse_tf_df['Symbol'].tolist()
 
-data_matrix = pd.read_csv('./../../data/output/pos_control/var_2000_pos_ctrl_data_headers.txt', sep = ' ')
-feature_array = np.genfromtxt('./../../data/output/pos_control/var_2000_pos_ctrl_feature.txt', dtype = 'str')
+data_matrix = pd.read_csv('./../../data/output/export_script/all_cells_all_genes_data_headers.txt', sep = ' ')
+feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_all_genes_features.txt', dtype = 'str')
 
 # Keep only genes that are mouse transcription factors
 df = data_matrix[data_matrix.columns[data_matrix.columns.isin(tfs)]]
@@ -70,7 +70,7 @@ feature_one_hot = lb.transform(feature_array)
 
 accuracy_array = []
 
-# Create 50 models of 1000 random genes each and calculate each model's accuracy
+# Create 50 models and calculate each model's accuracy
 for i in tqdm(range(1, 50)):
     x_train, x_test, y_train, y_test = train_test_split(df,
                                                         feature_array,
@@ -90,5 +90,5 @@ print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
 print("Standard deviation: {}".format(np.std(accuracy_array)))
 
 # Results for all cell types:
-# Average accuracy: 0.590
-# Standard deviation: 0.026
+# Average accuracy: 0.618
+# Standard deviation: 0.022

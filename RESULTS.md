@@ -37,5 +37,5 @@ Standard deviation: 0.014
 ### Mouse Transcription Factors (`pos_ctrl_mouse_tf.py`)
 
 **Results for all cell types:**
-Average accuracy: 0.590
-Standard deviation: 0.026
+Average accuracy: 0.618
+Standard deviation: 0.022
