@@ -12,7 +12,8 @@ import pandas as pd
 from itertools import chain
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import logistic_regression, fitting, dnn
+import fitting
+import logistic_regression, dnn
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,7 +42,7 @@ print("Standard deviation: {}".format(np.std(accuracy_array)))
 # Average accuracy: 0.561
 # Standard deviation: 0.040
 
-# Results for 6 cell types with neural network:
+# Results for 6 cell types with neural network (p_mdl):
 # Average accuracy: 0.529
 # Standard deviation: 0.036
-# Had 27 errors where lbfgs failed to converge
+# Had 27 errors where lbfgs failed to converge on 500
