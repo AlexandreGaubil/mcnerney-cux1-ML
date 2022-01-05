@@ -10,39 +10,19 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import LabelBinarizer
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 # from tqdm import tqdm
-import os
+import os, sys
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import logistic_regression, fitting
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 # ---- MODEL ----
 
-# Construct the model using the same parameters as Weinreb (2020). Some
-# parameters had to be changed: solver, multi_class, & max_iter.
-lr = LogisticRegression(penalty = 'l2',
-                        dual = False,
-                        tol = 0.0001,
-                        # C = [0.008 in vitro; 0.004 in vivo]
-                        C = 0.008,
-                        fit_intercept = True,
-                        intercept_scaling = 1,
-                        class_weight = None,
-                        random_state = None,
-                        # solver = 'warn',
-                        solver = 'saga',
-                        # max_iter = 100,
-                        max_iter = 1000,
-                        # multi_class = 'warn',
-                        multi_class = 'multinomial',
-                        verbose = 0,
-                        warm_start = False,
-                        n_jobs = None)
-
+lr = logistic_regression.model
 
 # ---- IMPORT DATA ----
 
@@ -61,14 +41,6 @@ for input_file in os.listdir(input_dir):
 
         # Keep only genes that are signature genes
         df = data_matrix[data_matrix.columns[data_matrix.columns.isin(sign_genes)]]
-
-        # One-hot encoding of feature_array
-        lb = LabelBinarizer()
-        lb.fit(feature_array)
-        feature_one_hot = lb.transform(feature_array)
-
-        # To recover labels from one hot encoding
-        # lb.inverse_transform(feature_one_hot)
 
 
         # ---- MODEL & SCORING ----
