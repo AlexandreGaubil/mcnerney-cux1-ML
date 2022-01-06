@@ -13,7 +13,7 @@ import pandas as pd
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from fitting_filter_genes import fit_model_filter_genes
-import logistic_regression, dnn, fitting
+from logistic_regression import model
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,7 +21,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # ---- MODELS ----
 
 # Cux1 Biding sites (Jeff Kurkewich)
-fit_model_filter_genes(model = logistic_regression.model,
+fit_model_filter_genes(model = model,
                        genes_of_interest_files = ['./../../data/input/experiment_datasets/Exp_Cux1_binding_targets_CD34_Jeff_Cut_Run_clean_version.txt'],
                        genes_of_interest_column_names = ['mouse'],
                        genes_of_interest_column_seps = [' '],
@@ -35,7 +35,7 @@ fit_model_filter_genes(model = logistic_regression.model,
 
 
 # Cux1 Biding sites (Jeff Kurkewich) x DEGs after Cux1 KD (Molly Imgruet)
-fit_model_filter_genes(model = logistic_regression.model,
+fit_model_filter_genes(model = model,
                        genes_of_interest_files = ['./../../data/input/experiment_datasets/Exp_Cux1_binding_targets_CD34_Jeff_Cut_Run_clean_version.txt', './../../data/input/experiment_datasets/molly_shCux1_bulkRNA_DEG_n_CD34_Cux1_binding_intersect.txt'],
                        genes_of_interest_column_names = ['mouse', 'mouse'],
                        genes_of_interest_column_seps = [' ', ' '],
@@ -49,7 +49,7 @@ fit_model_filter_genes(model = logistic_regression.model,
 
 
 # Cux1 Biding sites (Jeff Kurkewich) x DEGs after Cux1 KD (Weihan Liu)
-fit_model_filter_genes(model = logistic_regression.model,
+fit_model_filter_genes(model = model,
                        genes_of_interest_files = ['./../../data/input/experiment_datasets/Exp_Cux1_binding_targets_CD34_Jeff_Cut_Run_clean_version.txt', './../../data/input/experiment_datasets/wl001_scRNA_LowRen_pseudobulk_allCells_DEG_n_CD34_Cux1_binding_intersect.txt'],
                        genes_of_interest_column_names = ['mouse', 'mouse'],
                        genes_of_interest_column_seps = [' ', ' '],
