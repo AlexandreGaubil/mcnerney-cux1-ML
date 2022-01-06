@@ -5,8 +5,6 @@
 # dataset for our models (both linear regression & dnn).
 #
 
-# Exp_Cux1_binding_targets_CD34_Jeff_Cut_Run_clean_version.txt
-
 
 # ---- LIBRARIES ----
 

@@ -43,3 +43,29 @@ Standard deviation: 0.022
 ### Progenitor Gene Sets (`pos_ctrl_prog.py`)
 
 See `pos_ctrl_prog_result.txt`.
+
+
+
+
+## Cux1 Gene Sets (`cux1/cux1_jeff_molly_weihan.py`)
+
+
+### Cux1 Biding sites by Jeff Kurkewich
+
+**Results for all cell types:**
+Average accuracy: 0.672
+Standard deviation: 0.023
+
+
+### Cux1 Biding sites by Jeff Kurkewich x DEGs after Cux1 KD by Molly Imgruet
+
+**Results for all cell types:**
+Average accuracy: 0.667
+Standard deviation: 0.026
+
+
+### Cux1 Biding sites by Jeff Kurkewich x DEGs after Cux1 KD by Weihan Liu
+
+**Results for all cell types:**
+Average accuracy: 0.690
+Standard deviation: 0.027

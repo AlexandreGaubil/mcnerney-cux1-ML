@@ -5,8 +5,6 @@
 # dataset for our models (both linear regression & dnn).
 #
 
-# Exp_Cux1_binding_targets_CD34_Jeff_Cut_Run_clean_version.txt
-
 
 # ---- LIBRARIES ----
 
@@ -20,6 +18,7 @@ import logistic_regression, dnn, fitting
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+# ---- MODELS ----
 
 # Cux1 Biding sites (Jeff Kurkewich)
 fit_model_filter_genes(model = logistic_regression.model,
