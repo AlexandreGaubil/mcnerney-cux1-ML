@@ -24,7 +24,7 @@ def fit_model_filter_genes(model,
 
     # List of transcriptor factors
     for i in range(len(genes_of_interest_files)):
-        genes_of_interest_np = np.loadtxt(genes_of_interest_files[i])
+        genes_of_interest_np = np.genfromtxt(genes_of_interest_files[i], dtype = 'str')
         goi_multi_array.append(genes_of_interest_np)
 
     for i in range(len(goi_multi_array)):
