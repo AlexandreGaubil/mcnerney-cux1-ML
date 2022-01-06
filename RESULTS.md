@@ -4,6 +4,8 @@
 
 ### 1,000 Random Genes (`neg_ctrl_1000_rdm.py`)
 
+#### Linear Regression
+
 **Results for 3 cell types:**
 Average accuracy: 0.633
 Standard deviation: 0.032
@@ -20,6 +22,17 @@ Standard deviation: 0.030
 Average accuracy: 0.498
 Standard deviation: 0.026
 
+#### Neural Network
+
+**Results for 6 cell types with neural network (p_mdl):**
+Average accuracy: 0.529
+Standard deviation: 0.036
+Had 27 errors where lbfgs failed to converge on 500
+
+**Results for 6 cell types with neural network (model):**
+Average accuracy: 0.551
+Standard deviation: 0.029
+Had 27 errors where lbfgs failed to converge on 500
 
 
 ## Positive Control (`pos_ctrl/`)

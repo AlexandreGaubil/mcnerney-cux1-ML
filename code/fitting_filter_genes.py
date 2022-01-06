@@ -19,21 +19,19 @@ def fit_model_filter_genes(model,
                            genes_of_interest_column_seps,
                            data_matrix_file,
                            data_matrix_column_sep,
-                           features_array_file):
+                           features_array_file,
+                           n_models = 50,
+                           hyper_param_tuning = False):
     genes_of_interest_multi_array = []
 
     # List of transcriptor factors
     for i in range(len(genes_of_interest_files)):
-        print(genes_of_interest_files[i])
         genes_of_interest_df = pd.read_csv(genes_of_interest_files[i],
                                            sep = genes_of_interest_column_seps[i])
         genes_of_interest_multi_array.append(genes_of_interest_df[genes_of_interest_column_names[i]].tolist())
-    print("After loop 1")
 
     for i in range(len(genes_of_interest_multi_array)):
-        print(i)
         genes_of_interest_multi_array[0] = [val for val in genes_of_interest_multi_array[0] if val in genes_of_interest_multi_array[i]]
-    print("After loop 2")
 
     genes_of_interest = genes_of_interest_multi_array[0]
 
@@ -43,8 +41,13 @@ def fit_model_filter_genes(model,
     # Keep only genes that are genes of interest
     df = data_matrix[data_matrix.columns[data_matrix.columns.isin(genes_of_interest)]]
 
-    accuracy_array = fitting.fit_model(df, features_array, model, 50)
+    accuracy_array = fitting.fit_model(df, features_array, model, n_models)
 
-    print(accuracy_array)
-    print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
-    print("Standard deviation: {}".format(np.std(accuracy_array)))
+    if not hyper_param_tuning:
+        print(accuracy_array)
+        print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
+        print("Standard deviation: {}".format(np.std(accuracy_array)))
+    else:
+       print(model.cv_results_)
+       print(model.best_estimator_)
+       print(model.best_params_)
