@@ -13,14 +13,14 @@ from itertools import chain
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import fitting
-import logistic_regression, dnn
+import models
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # ---- MODEL ----
 
-# model = logistic_regression.model
-model = dnn.model
+# model = models.log_reg
+model = models.neural_network
 
 data_matrix = np.loadtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt')
 feature_array = np.genfromtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt',

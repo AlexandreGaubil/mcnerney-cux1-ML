@@ -15,25 +15,22 @@ import fitting
 # ---- MODEL ----
 def fit_model_filter_genes(model,
                            genes_of_interest_files,
-                           genes_of_interest_column_names,
-                           genes_of_interest_column_seps,
                            data_matrix_file,
                            data_matrix_column_sep,
                            features_array_file,
                            n_models = 50,
                            hyper_param_tuning = False):
-    genes_of_interest_multi_array = []
+    goi_multi_array = []
 
     # List of transcriptor factors
     for i in range(len(genes_of_interest_files)):
-        genes_of_interest_df = pd.read_csv(genes_of_interest_files[i],
-                                           sep = genes_of_interest_column_seps[i])
-        genes_of_interest_multi_array.append(genes_of_interest_df[genes_of_interest_column_names[i]].tolist())
+        genes_of_interest_np = np.loadtxt(genes_of_interest_files[i])
+        goi_multi_array.append(genes_of_interest_np)
 
-    for i in range(len(genes_of_interest_multi_array)):
-        genes_of_interest_multi_array[0] = [val for val in genes_of_interest_multi_array[0] if val in genes_of_interest_multi_array[i]]
+    for i in range(len(goi_multi_array)):
+        goi_multi_array[0] = [val for val in goi_multi_array[0] if val in goi_multi_array[i]]
 
-    genes_of_interest = genes_of_interest_multi_array[0]
+    genes_of_interest = goi_multi_array[0]
 
     data_matrix = pd.read_csv(data_matrix_file, sep = data_matrix_column_sep)
     features_array = np.genfromtxt(features_array_file, dtype = 'str')
