@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=hyper_param_tuning_dnn
-#SBATCH --output=hyper_param_tuning_dnn.out
-#SBATCH --error=hyper_param_tuning_dnn.err
+#SBATCH --job-name=cux1
+#SBATCH --output=cux1.out
+#SBATCH --error=cux1.err
 #SBATCH --time=24:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
@@ -14,4 +14,4 @@ module load python
 # python neg_ctrl/neg_ctrl_1000_rdm.py
 
 # HYPER-PARAM TUNING DNN
-python cux1/cux1_hyper_param_tuning.py
+python cux1/cux1.py
