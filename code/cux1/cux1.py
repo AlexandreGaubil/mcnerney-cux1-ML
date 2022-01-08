@@ -5,8 +5,6 @@
 # dataset for our models (both linear regression & dnn).
 #
 
-import numpy as np
-import pandas as pd
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from fitting_filter_genes import fit_model_filter_genes
@@ -14,9 +12,12 @@ import models
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-models_list = [models.log_reg, models.neural_network, models.hyper_param]
-n_models_list = [50, 50, 1]
-hyper_param_tuning_list = [False, False, True]
+# models_list = [models.log_reg, models.neural_network, models.hyper_param]
+# n_models_list = [50, 50, 1]
+# hyper_param_tuning_list = [False, False, True]
+models_list = [models.neural_network]
+n_models_list = [50]
+hyper_param_tuning_list = [False]
 
 gene_files = [
     ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt'],
