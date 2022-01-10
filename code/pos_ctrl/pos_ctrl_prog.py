@@ -50,12 +50,12 @@ for model in [models.log_reg, models.neural_network]:
                                                                     test_size=0.25)
 
                 # Fit the model to the data
-                model = lr.fit(x_train, y_train)
+                model_l = model.fit(x_train, y_train)
 
                 # Score the model accuracy
-                accuracy_array.append(model.score(x_test, y_test))
+                accuracy_array.append(model_l.score(x_test, y_test))
 
-                y_pred = model.predict(x_test)
+                y_pred = model_l.predict(x_test)
                 print(classification_report(y_test, y_pred))
 
 
