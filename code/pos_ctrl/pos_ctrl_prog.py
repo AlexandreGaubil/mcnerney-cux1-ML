@@ -15,58 +15,53 @@ from sklearn.metrics import classification_report
 # from tqdm import tqdm
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import logistic_regression, fitting
+import models, fitting
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-
-# ---- MODEL ----
-
-lr = logistic_regression.model
-
 # ---- IMPORT DATA ----
+for model in [models.log_reg, models.neural_network]:
+    input_dir_str = './../../data/input/pos_ctrl/pos_ctrl_progenitor_signature_genes/'
+    input_dir = os.fsencode(input_dir_str)
 
-input_dir_str = './../../data/input/pos_ctrl/pos_ctrl_progenitor_signature_genes/'
-input_dir = os.fsencode(input_dir_str)
+    for input_file in os.listdir(input_dir):
+        filename = os.fsdecode(input_file)
+        if filename.endswith('.csv'):
+            print(filename)
+            sign_gene_df = pd.read_csv(os.path.join(input_dir_str, filename))
+            sign_genes = sign_gene_df['Symbol'].tolist()
 
-for input_file in os.listdir(input_dir):
-    filename = os.fsdecode(input_file)
-    if filename.endswith('.csv'):
-        print(filename)
-        sign_gene_df = pd.read_csv(os.path.join(input_dir_str, filename))
-        sign_genes = sign_gene_df['Symbol'].tolist()
+            data_matrix = pd.read_csv('./../../data/output/export_script/all_cells_all_genes_data_headers.txt', sep = ' ')
+            feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_all_genes_features.txt', dtype = 'str')
 
-        data_matrix = pd.read_csv('./../../data/output/export_script/all_cells_all_genes_data_headers.txt', sep = ' ')
-        feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_all_genes_features.txt', dtype = 'str')
-
-        # Keep only genes that are signature genes
-        df = data_matrix[data_matrix.columns[data_matrix.columns.isin(sign_genes)]]
-
-
-        # ---- MODEL & SCORING ----
-
-        accuracy_array = []
-
-        # Create 5 models and calculate each model's accuracy
-        for i in range(1, 5):
-            x_train, x_test, y_train, y_test = train_test_split(df,
-                                                                feature_array,
-                                                                test_size=0.25)
-
-            # Fit the model to the data
-            model = lr.fit(x_train, y_train)
-
-            # Score the model accuracy
-            accuracy_array.append(model.score(x_test, y_test))
-
-            y_pred = model.predict(x_test)
-            print(classification_report(y_test, y_pred))
+            # Keep only genes that are signature genes
+            df = data_matrix[data_matrix.columns[data_matrix.columns.isin(sign_genes)]]
 
 
-        # ---- OUTPUT ----
+            # ---- MODEL & SCORING ----
 
-        print(accuracy_array)
-        print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
-        print("Standard deviation: {}".format(np.std(accuracy_array)))
+            accuracy_array = []
+
+            # Create 5 models and calculate each model's accuracy
+            for i in range(1, 50):
+                x_train, x_test, y_train, y_test = train_test_split(df,
+                                                                    feature_array,
+                                                                    test_size=0.25)
+
+                # Fit the model to the data
+                model = lr.fit(x_train, y_train)
+
+                # Score the model accuracy
+                accuracy_array.append(model.score(x_test, y_test))
+
+                y_pred = model.predict(x_test)
+                print(classification_report(y_test, y_pred))
+
+
+            # ---- OUTPUT ----
+            print()
+            print("Average accuracy: {}".format(np.mean(accuracy_array)))
+            print("Standard deviation: {}".format(np.std(accuracy_array)))
+            print('\n\n')
 
 # Results: see `pos_ctrl_prog_result.txt`
