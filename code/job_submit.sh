@@ -2,7 +2,7 @@
 #SBATCH --job-name=pos_ctrl_prog
 #SBATCH --output=pos_ctrl_prog_nn_and_lr.out
 #SBATCH --error=pos_ctrl_prog_nn_and_lr.err
-#SBATCH --time=4:00:00
+#SBATCH --time=8:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
