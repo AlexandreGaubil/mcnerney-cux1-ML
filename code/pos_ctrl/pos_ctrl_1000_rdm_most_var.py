@@ -23,8 +23,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 print('POSITIVE CONTROL: 1,000 GENES OUT OF 2,000 MOST VARIABLE GENES\n\n\n')
 
 for model in [models.log_reg, models.neural_network]:
-    data_matrix = np.loadtxt('./../../data/input/pos_control/pos_ctrl_var_2000_pos_ctrl_data.txt')
-    feature_array = np.genfromtxt('./../../data/input/pos_control/pos_ctrl_var_2000_pos_ctrl_feature.txt',
+    data_matrix = np.loadtxt('./../../data/input/pos_ctrl/pos_ctrl_var_2000_pos_ctrl_data.txt')
+    feature_array = np.genfromtxt('./../../data/input/pos_ctrl/pos_ctrl_var_2000_pos_ctrl_feature.txt',
                                 dtype = 'str')
     df = pd.DataFrame(data_matrix)
 
@@ -34,7 +34,7 @@ for model in [models.log_reg, models.neural_network]:
 
     # ---- OUTPUT ----
 
-    print('./../../data/input/pos_control/pos_ctrl_var_2000_pos_ctrl_data.txt')
+    print('./../../data/input/pos_ctrl/pos_ctrl_var_2000_pos_ctrl_data.txt')
     print(model)
     print("Average accuracy: {}".format(np.mean(accuracy_array)))
     print("Standard deviation: {}".format(np.std(accuracy_array)))
