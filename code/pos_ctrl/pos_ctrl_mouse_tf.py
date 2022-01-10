@@ -17,7 +17,7 @@ import models, fitting
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-print('POSITIVE CONTROL MOUSE TFS')
+print('POSITIVE CONTROL MOUSE TFS\n\n\n')
 
 # ---- MODEL ----
 for model in [models.log_reg, models.neural_network]:
@@ -35,5 +35,8 @@ for model in [models.log_reg, models.neural_network]:
     accuracy_array = fitting.fit_model(df, feature_array, model, 50)
 
     # ---- OUTPUT ----
+    print('./../../data/output/export_script/all_cells_all_genes_data_headers.txt')
+    print(model)
     print("Average accuracy: {}".format(np.mean(accuracy_array)))
     print("Standard deviation: {}".format(np.std(accuracy_array)))
+    print('\n\n')
