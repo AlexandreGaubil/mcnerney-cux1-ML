@@ -33,9 +33,7 @@ accuracy_array = list(chain.from_iterable(accuracy_mtx))
 
 
 # ---- OUTPUT ----
-
-print(accuracy_array)
-print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
+print("Average accuracy: {}".format(np.mean(accuracy_array)))
 print("Standard deviation: {}".format(np.std(accuracy_array)))
 
 # Results for 6 cell types with logistic regression:
