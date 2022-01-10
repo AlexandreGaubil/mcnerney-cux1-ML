@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=cux1
-#SBATCH --output=neg_ctrl_nn.out
-#SBATCH --error=neg_ctrl_nn.err
-#SBATCH --time=3:00:00
+#SBATCH --job-name=pos_ctrl_1000
+#SBATCH --output=pos_ctrl_1000_nn_and_lr.out
+#SBATCH --error=pos_ctrl_1000_nn_and_lr.err
+#SBATCH --time=4:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
