@@ -1,0 +1,19 @@
+POSITIVE CONTROL MOUSE TFS
+
+
+
+./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial',
+                   solver='saga')
+Average accuracy: 0.6200671140939598
+Standard deviation: 0.02908674039378996
+
+
+
+./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 100), max_iter=1000)
+Average accuracy: 0.5990604026845637
+Standard deviation: 0.02921768741638108
+
+
+
