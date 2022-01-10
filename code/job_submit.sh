@@ -17,4 +17,4 @@ module load python
 python neg_ctrl/neg_ctrl_1000_rdm.py
 
 # HYPER-PARAM TUNING DNN
-python cux1/cux1.py
+# python cux1/cux1.py
