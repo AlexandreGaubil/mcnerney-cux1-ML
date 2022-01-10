@@ -41,6 +41,7 @@ Had 27 errors where lbfgs failed to converge on 500
 
 **Results for 6 cell types with all genes:**
 Average accuracy: 0.737
+#FIXME: bootstrapping
 
 **Results for 6 cell types with random 1,000 genes:**
 Average accuracy: 0.711
