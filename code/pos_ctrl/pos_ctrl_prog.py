@@ -19,6 +19,8 @@ import models, fitting
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+print('POS CTRL PROGENITOR CELL\n\n\n')
+
 # ---- IMPORT DATA ----
 for model in [models.log_reg, models.neural_network]:
     input_dir_str = './../../data/input/pos_ctrl/pos_ctrl_progenitor_signature_genes/'
@@ -27,6 +29,7 @@ for model in [models.log_reg, models.neural_network]:
     for input_file in os.listdir(input_dir):
         filename = os.fsdecode(input_file)
         if filename.endswith('.csv'):
+            print(model)
             print(filename)
             sign_gene_df = pd.read_csv(os.path.join(input_dir_str, filename))
             sign_genes = sign_gene_df['Symbol'].tolist()
@@ -37,9 +40,7 @@ for model in [models.log_reg, models.neural_network]:
             # Keep only genes that are signature genes
             df = data_matrix[data_matrix.columns[data_matrix.columns.isin(sign_genes)]]
 
-
             # ---- MODEL & SCORING ----
-
             accuracy_array = []
 
             # Create 5 models and calculate each model's accuracy
@@ -59,7 +60,6 @@ for model in [models.log_reg, models.neural_network]:
 
 
             # ---- OUTPUT ----
-            print()
             print("Average accuracy: {}".format(np.mean(accuracy_array)))
             print("Standard deviation: {}".format(np.std(accuracy_array)))
             print('\n\n')
