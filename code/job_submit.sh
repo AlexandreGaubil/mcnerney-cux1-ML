@@ -2,7 +2,7 @@
 #SBATCH --job-name=cux1
 #SBATCH --output=neg_ctrl_nn.out
 #SBATCH --error=neg_ctrl_nn.err
-#SBATCH --time=8:00:00
+#SBATCH --time=3:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
@@ -14,7 +14,10 @@
 module load python
 
 # NEG CTRL
-python neg_ctrl/neg_ctrl_1000_rdm.py
+# python neg_ctrl/neg_ctrl_1000_rdm.py
+
+# POS CTRL
+python pos_ctrl/pos_ctrl_1000_rdm_most_var.py
 
 # HYPER-PARAM TUNING DNN
 # python cux1/cux1.py
