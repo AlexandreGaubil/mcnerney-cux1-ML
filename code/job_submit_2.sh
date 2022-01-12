@@ -21,4 +21,4 @@ module load python
 python pos_ctrl/pos_ctrl_mouse_tf.py
 
 # HYPER-PARAM TUNING DNN
-# python cux1/cux1.py
+python cux1/cux1.py

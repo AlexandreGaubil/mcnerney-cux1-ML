@@ -14,12 +14,12 @@
 module load python
 
 # NEG CTRL
-# python neg_ctrl/neg_ctrl_1000_rdm.py
+python neg_ctrl/neg_ctrl_1000_rdm.py
 
 # POS CTRL
-# python pos_ctrl/pos_ctrl_1000_rdm_most_var.py
-# python pos_ctrl/pos_ctrl_mouse_tf.p
-python pos_ctrl/pos_ctrl_prog.py
+python pos_ctrl/pos_ctrl_1000_rdm_most_var.py
+# python pos_ctrl/pos_ctrl_mouse_tf.py
+# python pos_ctrl/pos_ctrl_prog.py
 
 # HYPER-PARAM TUNING DNN
 # python cux1/cux1.py

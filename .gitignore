@@ -10,6 +10,8 @@ code/__pycache__/
 
 # Data files (too big to track with git - should be copied by each user)
 data/*
+data_in_vitro/*
+data_in_vivo/*
 *.rds
 
 # History files
