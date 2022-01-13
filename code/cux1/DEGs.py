@@ -15,7 +15,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # models_list = [models.log_reg, models.neural_network, models.hyper_param]
 # n_models_list = [50, 50, 1]
 # hyper_param_tuning_list = [False, False, True]
-models_list = [models.neural_network]
+models_list = [models.log_reg]
 n_models_list = [50]
 hyper_param_tuning_list = [False]
 
