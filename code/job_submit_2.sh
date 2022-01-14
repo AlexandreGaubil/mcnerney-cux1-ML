@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=mouse_tf
-#SBATCH --output=pos_ctrl_mouse_tf.out
-#SBATCH --error=pos_ctrl_mouse_tf.err
-#SBATCH --time=3:00:00
+#SBATCH --job-name=DEGs_lr
+#SBATCH --output=DEGs_lr.out
+#SBATCH --error=DEGs_lr.err
+#SBATCH --time=5:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
@@ -18,7 +18,8 @@ module load python
 
 # POS CTRL
 # python pos_ctrl/pos_ctrl_1000_rdm_most_var.py
-python pos_ctrl/pos_ctrl_mouse_tf.py
+# python pos_ctrl/pos_ctrl_mouse_tf.py
 
 # HYPER-PARAM TUNING DNN
-python cux1/cux1.py
+# python cux1/cux1.py
+python cux1/DEGs.py

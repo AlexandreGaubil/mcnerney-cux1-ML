@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=pos_ctrl_prog
-#SBATCH --output=pos_ctrl_prog_nn_and_lr.out
-#SBATCH --error=pos_ctrl_prog_nn_and_lr.err
+#SBATCH --job-name=pos_1000
+#SBATCH --output=pos_ctrl_rerun_1000_var.out
+#SBATCH --error=pos_ctrl_rerun_1000_var.err
 #SBATCH --time=8:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
@@ -14,7 +14,7 @@
 module load python
 
 # NEG CTRL
-python neg_ctrl/neg_ctrl_1000_rdm.py
+# python neg_ctrl/neg_ctrl_1000_rdm.py
 
 # POS CTRL
 python pos_ctrl/pos_ctrl_1000_rdm_most_var.py

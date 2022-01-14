@@ -1,0 +1,19 @@
+POSITIVE CONTROL: 1,000 GENES OUT OF 2,000 MOST VARIABLE GENES
+
+
+
+./../../data/output/export_script/all_cells_2000_var_data.txt
+LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial',
+                   solver='saga')
+Average accuracy: 0.7135369127516779
+Standard deviation: 0.023604715723498763
+
+
+
+./../../data/output/export_script/all_cells_2000_var_data.txt
+MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 100), max_iter=1000)
+Average accuracy: 0.689986577181208
+Standard deviation: 0.033343032986600844
+
+
+
