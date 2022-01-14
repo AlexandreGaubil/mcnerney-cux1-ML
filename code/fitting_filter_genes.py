@@ -11,6 +11,7 @@
 import numpy as np
 import pandas as pd
 import fitting
+from itertools import chain
 
 # ---- MODEL ----
 def fit_model_filter_genes(model,
@@ -38,7 +39,16 @@ def fit_model_filter_genes(model,
     # Keep only genes that are genes of interest
     df = data_matrix[data_matrix.columns[data_matrix.columns.isin(genes_of_interest)]]
 
-    accuracy_array = fitting.fit_model(df, features_array, model, n_models)
+    accuracy_matrix = []
+
+    for _ in (range(1, 10)):
+        df_sample = df.sample(n = 1000,
+                                   replace = False,
+                                   axis = 1)
+
+        accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models))
+
+    accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
     if not hyper_param_tuning:
         print(accuracy_array)
