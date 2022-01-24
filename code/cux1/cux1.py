@@ -20,9 +20,9 @@ n_models_list = [50]
 hyper_param_tuning_list = [False]
 
 gene_files = [
-    ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt']#,
-    #['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt', './../../data/input/gene_sets/molly_cux1_biding_intersect.txt'],
- #   ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt', './../../data/input/gene_sets/weihan_cux1_biding_intersect.txt']
+    ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt']
+    # ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt', './../../data/input/gene_sets/molly_cux1_biding_intersect.txt'],
+    # ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt', './../../data/input/gene_sets/weihan_cux1_biding_intersect.txt']
 ]
 
 data_mtr_files = [

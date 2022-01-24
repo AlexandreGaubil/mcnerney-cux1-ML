@@ -72,7 +72,7 @@ settings.dataset <- "in_vitro"
 # settings.dataset <- "in_vivo"
 
 # If TRUE, will remove variables as they are no longer needed. Keep FALSE while developing to facilitate debugging
-settings.remove_unused <- TRUE
+settings.remove_unused <- FALSE
 ```
 
 
@@ -137,7 +137,7 @@ The `clone_meta_data_fr`'s row are clone membership IDs, and columns are all cel
 ```{r}
 # Use match function to find the row number where the 1 occurs (indicating this cell below to this clone), and store the location of 1 for all cells into a vector
 clone_membership <- lapply(clone_meta_data_df, function(x) match(1,x))
-rm(clone_meta_data_df)
+if (settings.remove_unused) { rm(clone_meta_data_df) }
 
 clone_membership <- unlist(clone_membership)
 # Now clone membership is a vector that contains the clonal ID for each cell. The order should be the same as in the count matrix and metadata
