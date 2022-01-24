@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=DEGs_lr
-#SBATCH --output=DEGs_lr.out
-#SBATCH --error=DEGs_lr.err
-#SBATCH --time=5:00:00
+#SBATCH --job-name=prog_3
+#SBATCH --output=prog_3_cells.out
+#SBATCH --error=prog_3_cells.err
+#SBATCH --time=24:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
@@ -19,7 +19,8 @@ module load python
 # POS CTRL
 # python pos_ctrl/pos_ctrl_1000_rdm_most_var.py
 # python pos_ctrl/pos_ctrl_mouse_tf.py
+python pos_ctrl/pos_ctrl_prog.py
 
 # HYPER-PARAM TUNING DNN
 # python cux1/cux1.py
-python cux1/DEGs.py
+# python cux1/DEGs.py
