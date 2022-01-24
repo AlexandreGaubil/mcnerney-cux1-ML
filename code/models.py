@@ -119,9 +119,14 @@ p_mdl = MLPClassifier(solver = 'lbfgs',
 
 # HYPER PARAMETER TUNING
 
+#_parameters = {
+#    'alpha': [1e-5, 0.72, 10],
+#    'hidden_layer_sizes': [(100, 20), (250, 100), (250, 30)],
+#    'solver': ['adam', 'lbfgs']
+#}
 _parameters = {
-    'alpha': [1e-5, 0.72, 10],
-    'hidden_layer_sizes': [(100, 20), (250, 100), (250, 30)],
+    'alpha': [1e-5, 0.72, 1, 3, 5, 7, 9, 11],
+    'hidden_layer_sizes': [(100, 20), (250, 100), (250, 30), (300, 150), (300, 50)],
     'solver': ['adam', 'lbfgs']
 }
 _hyper_param_model_type = MLPClassifier()
