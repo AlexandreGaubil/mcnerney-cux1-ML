@@ -41,7 +41,7 @@ def fit_model_filter_genes(model,
 
     accuracy_matrix = []
 
-    if (df.columns > 1000):
+    if (len(df.columns) > 1000):
         for _ in (range(1, 10)):
             df_sample = df.sample(n = 1000,
                                     replace = False,
