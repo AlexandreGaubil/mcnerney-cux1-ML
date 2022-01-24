@@ -5,10 +5,9 @@ GridSearchCV(estimator=MLPClassifier(),
                          'solver': ['adam']})
 ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt']
 ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
-[0.5369127516778524, 0.587248322147651, 0.5805369127516778, 0.5570469798657718, 0.5570469798657718, 0.6006711409395973, 0.6006711409395973, 0.5704697986577181, 0.5671140939597316]
 
-Average accuracy: 0.5730797912005966
-Standard deviation: 0.02012041396455188
+Average accuracy: 0.5902311707680835
+Standard deviation: 0.02796171999888542
 GridSearchCV(estimator=MLPClassifier(),
              param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
                          'hidden_layer_sizes': [(100, 20), (250, 100),
@@ -16,3 +15,26 @@ GridSearchCV(estimator=MLPClassifier(),
                          'solver': ['adam']})
 ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt', './../../data/input/gene_sets/molly_cux1_biding_intersect.txt']
 ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+
+
+ERROR: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+
+
+
+Average accuracy: 0.6510067114093959
+Standard deviation: 0.0
+GridSearchCV(estimator=MLPClassifier(),
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt', './../../data/input/gene_sets/weihan_cux1_biding_intersect.txt']
+./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+
+
+ERROR: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+
+
+
+Average accuracy: 0.6912751677852349
+Standard deviation: 0.0
