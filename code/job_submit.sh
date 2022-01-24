@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=jeff_1000
-#SBATCH --output=jeff_1000.out
-#SBATCH --error=jeff_1000.err
-#SBATCH --time=8:00:00
+#SBATCH --job-name=hyper_param
+#SBATCH --output=further_hyper_param.out
+#SBATCH --error=further_hyper_param.err
+#SBATCH --time=30:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
