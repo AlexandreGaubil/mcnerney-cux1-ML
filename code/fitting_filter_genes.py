@@ -51,10 +51,10 @@ def fit_model_filter_genes(model,
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
     if not hyper_param_tuning:
-        print(accuracy_array)
+        # print(accuracy_array)
         print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
         print("Standard deviation: {}".format(np.std(accuracy_array)))
     else:
-       print(model.cv_results_)
+       # print(model.cv_results_)
        print(model.best_estimator_)
        print(model.best_params_)

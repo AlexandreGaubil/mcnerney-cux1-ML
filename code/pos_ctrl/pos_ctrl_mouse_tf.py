@@ -26,8 +26,11 @@ for model in [models.log_reg, models.neural_network]:
     # List of transcriptor factors
     tfs = mouse_tf_df['Symbol'].tolist()
 
-    data_matrix = pd.read_csv('./../../data/output/export_script/all_cells_all_genes_data_headers.txt', sep = ' ')
-    feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_all_genes_features.txt', dtype = 'str')
+    data_matrix = pd.read_csv('./../../data/output/export_script/three_cells_all_genes_data_headers.txt', sep = ' ')
+    feature_array = np.genfromtxt('./../../data/output/export_script/three_cells_all_genes_features.txt', dtype = 'str')
+
+    #data_matrix = pd.read_csv('./../../data/output/export_script/all_cells_all_genes_data_headers.txt', sep = ' ')
+    #feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_all_genes_features.txt', dtype = 'str')
 
     # Keep only genes that are mouse transcription factors
     df = data_matrix[data_matrix.columns[data_matrix.columns.isin(tfs)]]
@@ -35,7 +38,7 @@ for model in [models.log_reg, models.neural_network]:
     accuracy_array = fitting.fit_model(df, feature_array, model, 50)
 
     # ---- OUTPUT ----
-    print('./../../data/output/export_script/all_cells_all_genes_data_headers.txt')
+    print('./../../data/output/export_script/three_cells_all_genes_data_headers.txt')
     print(model)
     print("Average accuracy: {}".format(np.mean(accuracy_array)))
     print("Standard deviation: {}".format(np.std(accuracy_array)))
