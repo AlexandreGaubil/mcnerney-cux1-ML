@@ -41,12 +41,15 @@ def fit_model_filter_genes(model,
 
     accuracy_matrix = []
 
-    for _ in (range(1, 10)):
-        df_sample = df.sample(n = 1000,
-                                   replace = False,
-                                   axis = 1)
-
-        accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models))
+    if (df.columns > 1000):
+        for _ in (range(1, 10)):
+            df_sample = df.sample(n = 1000,
+                                    replace = False,
+                                    axis = 1)
+            accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models))
+    else:
+        print("\n\nERROR: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling\n\n")
+        accuracy_matrix.append(fitting.fit_model(df, features_array, model, n_models))
 
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
