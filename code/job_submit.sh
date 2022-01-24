@@ -7,7 +7,7 @@
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
 #SBATCH --mem-per-cpu=200
-#SBATCH --mail-user=gaubil@uchicago.edu
+#SBATCH --mail-user=agaubil@icloud.com
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
 
