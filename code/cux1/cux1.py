@@ -27,13 +27,13 @@ gene_files = [
 ]
 
 data_mtr_files = [
-    './../../data/output/export_script/all_cells_all_genes_data_headers.txt',
-    './../../data/output/export_script/three_cells_all_genes_data_headers.txt'
+    './../../data/output/export_script/all_cells_all_genes_data_headers.txt' #,
+    #'./../../data/output/export_script/three_cells_all_genes_data_headers.txt'
 ]
 
 features_files = [
-    './../../data/output/export_script/all_cells_all_genes_features.txt',
-    './../../data/output/export_script/three_cells_all_genes_features.txt'
+    './../../data/output/export_script/all_cells_all_genes_features.txt' #,
+    #'./../../data/output/export_script/three_cells_all_genes_features.txt'
 ]
 
 for i in range(len(models_list)):

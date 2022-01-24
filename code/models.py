@@ -125,9 +125,9 @@ p_mdl = MLPClassifier(solver = 'lbfgs',
 #    'solver': ['adam', 'lbfgs']
 #}
 _parameters = {
-    'alpha': [1e-5, 0.72, 1, 3, 5, 7, 9, 11],
-    'hidden_layer_sizes': [(100, 20), (250, 100), (250, 30), (300, 150), (300, 50)],
-    'solver': ['adam', 'lbfgs']
+    'alpha': [1e-5, 0.72, 1, 5, 9, 11],
+    'hidden_layer_sizes': [(100, 20), (250, 100), (250, 30), (150, 50)],
+    'solver': ['adam']
 }
 _hyper_param_model_type = MLPClassifier()
 hyper_param = GridSearchCV(_hyper_param_model_type, _parameters)
