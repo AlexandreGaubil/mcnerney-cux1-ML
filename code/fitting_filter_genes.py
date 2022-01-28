@@ -71,7 +71,7 @@ def fit_model_filter_genes(
         print("     Best estimator: {}".format(model.best_estimator_))
         print("     Best parameters: {}".format(model.best_params_))
         print("     Starting run of that model with optimal parameters...")
-        optimal_model = MLPClassifier(**model.best_params_, n_jobs = -1)
+        optimal_model = MLPClassifier(**model.best_params_)
         fit_model_filter_genes(
             optimal_model,
             genes_of_interest_files,
