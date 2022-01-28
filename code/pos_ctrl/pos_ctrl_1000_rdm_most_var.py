@@ -6,43 +6,33 @@
 # Weinreb (2020)
 #
 
-# ---- LIBRARIES ----
 
-import numpy as np
-import pandas as pd
-from itertools import chain
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import models, fitting
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+import models
+import run_model as run
 
 
-# ---- MODEL ----
+models = [models.log_reg, models.hyper_param]
+goi_files = ['./../../data/input/gene_sets/2000_most_degs.txt']
+data_mtx_files = [
+    './../../data/output/export_script/three_cells_all_genes_data_headers.txt',
+    './../../data/output/export_script/all_cells_all_genes_data_headers.txt']
+data_mtx_col_seps = [' ', ' ']
+features_array_files = [
+    './../../data/output/export_script/three_cells_all_genes_features.txt',
+    './../../data/output/export_script/all_cells_all_genes_features.txt']
+n_models = [50, 1]
+hyper_param_tuning = [False, True]
 
-print('POSITIVE CONTROL: 1,000 GENES OUT OF 2,000 MOST VARIABLE GENES\n\n\n')
 
-for model in [models.log_reg, models.neural_network]:
-    # data_matrix = np.loadtxt('./../../data/input/pos_ctrl/pos_ctrl_var_2000_pos_ctrl_data.txt')
-    # feature_array = np.genfromtxt('./../../data/input/pos_ctrl/pos_ctrl_var_2000_pos_ctrl_feature.txt',
-    #                             dtype = 'str')
-    data_matrix = np.loadtxt('./../../data/output/export_script/all_cells_2000_var_data.txt')
-    feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_2000_var_features.txt',
-                                dtype = 'str')
-    df = pd.DataFrame(data_matrix)
-
-    accuracy_mtx = fitting.fit_model_rdm_gene_sets(df, feature_array, model, 50, 10)
-
-    accuracy_array = list(chain.from_iterable(accuracy_mtx))
-
-    # ---- OUTPUT ----
-
-    print('./../../data/output/export_script/all_cells_2000_var_data.txt')
-    print(model)
-    print("Average accuracy: {}".format(np.mean(accuracy_array)))
-    print("Standard deviation: {}".format(np.std(accuracy_array)))
-    print('\n\n')
-
-# Results for 6 cell types with random 1,000 genes:
-# Average accuracy: 0.713
-# Standard deviation: 0.024
+print("\n\n\POSITIVE CONTROL: 1,000 MOST VARIABLE GENES")
+run.run_model(
+    models,
+    goi_files,
+    data_mtx_files,
+    data_mtx_col_seps,
+    features_array_files,
+    n_models,
+    hyper_param_tuning)
