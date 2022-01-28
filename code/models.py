@@ -33,7 +33,7 @@ log_reg = LogisticRegression(penalty = 'l2',
                            multi_class = 'multinomial',
                            verbose = 0,
                            warm_start = False,
-                           n_jobs = None)
+                           n_jobs = -1)
 
 
 
@@ -130,4 +130,4 @@ _parameters = {
     'solver': ['adam']
 }
 _hyper_param_model_type = MLPClassifier()
-hyper_param = GridSearchCV(_hyper_param_model_type, _parameters)
+hyper_param = GridSearchCV(_hyper_param_model_type, _parameters, n_jobs = -1)
