@@ -7,7 +7,8 @@ def run_model(
     data_mtx_col_seps,
     features_array_files,
     n_models,
-    hyper_param_tuning):
+    hyper_param_tuning,
+    f1_classification = False):
     for i in range(len(model_list)):
         for j in range(len(data_mtx_files)):
             fit.fit_model_filter_genes(
@@ -17,4 +18,5 @@ def run_model(
                 data_mtx_col_seps[j],
                 features_array_files[j],
                 n_models[i],
-                hyper_param_tuning[i])
+                hyper_param_tuning[i],
+                f1_classification)

@@ -10,6 +10,7 @@
 import pandas
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+from sklearn.metrics import classification_report
 
 
 # ---- FITTING ----
@@ -26,7 +27,7 @@ def fit_model_rdm_gene_sets(data_df, features_array, model, n_models, n_sets):
 
     return accuracy_array
 
-def fit_model(data_df, features_array, model, n_models, hyper_param_tuning = False):
+def fit_model(data_df, features_array, model, n_models, hyper_param_tuning = False, f1_classification = False):
     accuracy_array = []
 
     # Create 50 models of 1000 random genes each and calculate each model's accuracy
@@ -37,6 +38,10 @@ def fit_model(data_df, features_array, model, n_models, hyper_param_tuning = Fal
 
         # Fit the model to the data
         fitted_model = model.fit(x_train, y_train)
+
+        if f1_classification:
+            y_pred = model.predict(x_test)
+            print(classification_report(y_test, y_pred))
 
         if not hyper_param_tuning:
             # Score the model accuracy

@@ -6,67 +6,44 @@
 # using logistic regression with the same parameters used by Weinreb (2020)
 #
 
-# ---- LIBRARIES ----
 
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-# from tqdm import tqdm
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import models, fitting
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-print('POS CTRL PROGENITOR CELL\n\n\n')
-print('./../../data/output/export_script/three_cells_all_genes_data_headers.txt')
-
-# ---- IMPORT DATA ----
-#for model in [models.log_reg, models.neural_network]:
-for model in [models.log_reg]:
-    input_dir_str = './../../data/input/pos_ctrl/pos_ctrl_progenitor_signature_genes/'
-    input_dir = os.fsencode(input_dir_str)
-
-    for input_file in os.listdir(input_dir):
-        filename = os.fsdecode(input_file)
-        if filename.endswith('.csv'):
-            print(model)
-            print(filename)
-            sign_gene_df = pd.read_csv(os.path.join(input_dir_str, filename))
-            sign_genes = sign_gene_df['Symbol'].tolist()
-
-            data_matrix = pd.read_csv('./../../data/output/export_script/three_cells_all_genes_data_headers.txt', sep = ' ')
-            feature_array = np.genfromtxt('./../../data/output/export_script/three_cells_all_genes_features.txt', dtype = 'str')
-
-            # data_matrix = pd.read_csv('./../../data/output/export_script/all_cells_all_genes_data_headers.txt', sep = ' ')
-            # feature_array = np.genfromtxt('./../../data/output/export_script/all_cells_all_genes_features.txt', dtype = 'str')
-
-            # Keep only genes that are signature genes
-            df = data_matrix[data_matrix.columns[data_matrix.columns.isin(sign_genes)]]
-
-            # ---- MODEL & SCORING ----
-            accuracy_array = []
-
-            # Create 5 models and calculate each model's accuracy
-            for i in range(1, 50):
-                x_train, x_test, y_train, y_test = train_test_split(df,
-                                                                    feature_array,
-                                                                    test_size=0.25)
-
-                # Fit the model to the data
-                model_l = model.fit(x_train, y_train)
-
-                # Score the model accuracy
-                accuracy_array.append(model_l.score(x_test, y_test))
-
-                y_pred = model_l.predict(x_test)
-                print(classification_report(y_test, y_pred))
+import models
+import run_model as run
 
 
-            # ---- OUTPUT ----
-            print("Average accuracy: {}".format(np.mean(accuracy_array)))
-            print("Standard deviation: {}".format(np.std(accuracy_array)))
-            print('\n\n')
+goi_file_sets = [
+    ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_CLP_Pre-B_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_DC_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_GMP_MoDC_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_GMP_MoNeu_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_GMP_Neu_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_HSC_DEG_progenitor_markers.txt'],
+    ['./../../data/input/gene_sets/prog_genes/Ren_MEP_DEG_progenitor_markers.txt']]
+models = [models.log_reg, models.hyper_param]
+data_mtx_files = [
+    './../../data/output/export_script/three_cells_all_genes_data_headers.txt',
+    './../../data/output/export_script/all_cells_all_genes_data_headers.txt']
+data_mtx_col_seps = [' ', ' ']
+features_array_files = [
+    './../../data/output/export_script/three_cells_all_genes_features.txt',
+    './../../data/output/export_script/all_cells_all_genes_features.txt']
+n_models = [50, 1]
+hyper_param_tuning = [False, True]
 
-# Results: see `pos_ctrl_prog_result.txt`
+
+for i in range(len(goi_file_sets)):
+    print("\n\n\nPOS CTRL PROG GENES")
+    run.run_model(
+        models,
+        goi_file_sets[i],
+        data_mtx_files,
+        data_mtx_col_seps,
+        features_array_files,
+        n_models,
+        hyper_param_tuning,
+        f1_classification = True)

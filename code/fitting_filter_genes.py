@@ -22,7 +22,8 @@ def fit_model_filter_genes(
     data_mtx_col_sep,
     features_array_file,
     n_models = 50,
-    hyper_param_tuning = False):
+    hyper_param_tuning = False,
+    f1_classification = False):
     goi_multi_array = []
 
     print("\n\n\nMODEL --- {}".format(model))
@@ -56,10 +57,10 @@ def fit_model_filter_genes(
                 n = 1000,
                 replace = False,
                 axis = 1)
-            accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models))
+            accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models, f1_classification = f1_classification))
     else:
         print("\n     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling\n")
-        accuracy_matrix.append(fitting.fit_model(df, features_array, model, n_models))
+        accuracy_matrix.append(fitting.fit_model(df, features_array, model, n_models, f1_classification = f1_classification))
 
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
