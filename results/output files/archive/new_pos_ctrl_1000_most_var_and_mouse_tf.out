@@ -18,8 +18,8 @@ MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', 
                    solver='saga')
      Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
      Genes files: ['./../../data/input/gene_sets/mouse_tfs.txt']
-     Average accuracy: 0.6442340067340067
-     Standard deviation: 0.039783859985052086
+     Average accuracy: 0.6621212121212122
+     Standard deviation: 0.032926233048637475
 
 
 
@@ -27,8 +27,8 @@ MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', 
                    solver='saga')
      Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
      Genes files: ['./../../data/input/gene_sets/mouse_tfs.txt']
-     Average accuracy: 0.5902162565249813
-     Standard deviation: 0.031395718064578367
+     Average accuracy: 0.601290082028337
+     Standard deviation: 0.029800005978490363
 
 
 
@@ -39,6 +39,35 @@ MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
                          'solver': ['adam']})
      Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
      Genes files: ['./../../data/input/gene_sets/mouse_tfs.txt']
-     Best estimator: MLPClassifier(alpha=5, hidden_layer_sizes=(250, 30))
-     Best parameters: {'alpha': 5, 'hidden_layer_sizes': (250, 30), 'solver': 'adam'}
+     Best estimator: MLPClassifier(alpha=11, hidden_layer_sizes=(100, 20))
+     Best parameters: {'alpha': 11, 'hidden_layer_sizes': (100, 20), 'solver': 'adam'}
      Starting run of that model with optimal parameters...
+
+
+
+MODEL --- MLPClassifier(alpha=11, hidden_layer_sizes=(100, 20))
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/mouse_tfs.txt']
+     Average accuracy: 0.6510942760942762
+     Standard deviation: 0.035732298445776293
+
+
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/mouse_tfs.txt']
+     Best estimator: MLPClassifier(alpha=11, hidden_layer_sizes=(150, 50))
+     Best parameters: {'alpha': 11, 'hidden_layer_sizes': (150, 50), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+
+
+MODEL --- MLPClassifier(alpha=11, hidden_layer_sizes=(150, 50))
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/mouse_tfs.txt']
+     Average accuracy: 0.5779269202087994
+     Standard deviation: 0.041152907503110715
