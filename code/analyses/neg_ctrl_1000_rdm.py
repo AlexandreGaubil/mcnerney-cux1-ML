@@ -1,24 +1,20 @@
 #
 # Negative control testing using logistic regression.
 #
-# Use 50 random pools of 1,000 genes each and apply logistic regression to it
-# using the same parameters used by Weinreb (2020)
+# Use 1,000 random genes amongst the entire gene set we have sequenced and apply
+# the different models we have to them.
 #
 
-# ---- LIBRARIES ----
-import os, sys
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+#import os, sys
+#sys.path.insert(1, os.path.join(sys.path[0], '..'))
+#os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import run_model as run
-import file_strings as st
 import default_variables as df
-
-goi_files = [st.GOI_ALL_GENES]
 
 print("\n\n\nNEGATIVE CONTROL: 1,000 RDM GENES")
 run.run_model(
     df.models,
-    goi_files,
+    df.goi_all_genes,
     df.data_files,
     df.data_col_seps,
     df.features_files,

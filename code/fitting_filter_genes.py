@@ -1,20 +1,10 @@
-#
-# Cux1 binding targets in CD34 as determined by Jeff Kurkewich
-#
-# Use the Cux1 binding targets in CD34 as the list of genes to use as the
-# dataset for our models (both linear regression & dnn).
-#
-
-
-# ---- LIBRARIES ----
-
 import numpy as np
 import pandas as pd
 import fitting
 from itertools import chain
 from sklearn.neural_network import MLPClassifier
 
-# ---- MODEL ----
+
 def fit_model_filter_genes(
     model,
     genes_of_interest_files,
@@ -59,7 +49,7 @@ def fit_model_filter_genes(
                 axis = 1)
             accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models, f1_classification = f1_classification))
     else:
-        print("\n     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling\n")
+        print("     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling")
         accuracy_matrix.append(fitting.fit_model(df, features_array, model, n_models, f1_classification = f1_classification))
 
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
