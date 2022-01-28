@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=hyper_param_less
-#SBATCH --output=further_hyper_param_less.out
-#SBATCH --error=further_hyper_param_less.err
+#SBATCH --job-name=neg_ctrl
+#SBATCH --output=new_neg_ctrl.out
+#SBATCH --error=new_neg_ctrl.err
 #SBATCH --time=15:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
@@ -14,7 +14,7 @@
 module load python
 
 # NEG CTRL
-# python neg_ctrl/neg_ctrl_1000_rdm.py
+python neg_ctrl/neg_ctrl_1000_rdm.py
 
 # POS CTRL
 # python pos_ctrl/pos_ctrl_1000_rdm_most_var.py
@@ -22,5 +22,5 @@ module load python
 # python pos_ctrl/pos_ctrl_prog.py
 
 # HYPER-PARAM TUNING DNN
-python cux1/cux1.py
+# python cux1/cux1.py
 # python cux1/DEGs.py
