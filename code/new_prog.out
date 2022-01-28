@@ -1,0 +1,1204 @@
+
+
+
+POS CTRL PROG GENES
+
+
+
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+                   solver='saga')
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.93      0.67      0.78        42
+  "Monocyte"       0.67      0.75      0.71       109
+"Neutrophil"       0.71      0.70      0.70       113
+
+    accuracy                           0.72       264
+   macro avg       0.77      0.71      0.73       264
+weighted avg       0.73      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.89      0.72      0.80        47
+  "Monocyte"       0.77      0.78      0.78       106
+"Neutrophil"       0.72      0.77      0.74       111
+
+    accuracy                           0.77       264
+   macro avg       0.79      0.76      0.77       264
+weighted avg       0.77      0.77      0.77       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.68      0.72        38
+  "Monocyte"       0.70      0.70      0.70       105
+"Neutrophil"       0.69      0.70      0.69       121
+
+    accuracy                           0.70       264
+   macro avg       0.72      0.70      0.71       264
+weighted avg       0.70      0.70      0.70       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.83      0.71      0.77        35
+  "Monocyte"       0.68      0.74      0.71       100
+"Neutrophil"       0.74      0.72      0.73       129
+
+    accuracy                           0.73       264
+   macro avg       0.75      0.73      0.74       264
+weighted avg       0.73      0.73      0.73       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.78      0.69      0.73        45
+  "Monocyte"       0.69      0.77      0.73       105
+"Neutrophil"       0.71      0.67      0.69       114
+
+    accuracy                           0.71       264
+   macro avg       0.73      0.71      0.72       264
+weighted avg       0.71      0.71      0.71       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.85      0.65      0.74        52
+  "Monocyte"       0.71      0.84      0.77        95
+"Neutrophil"       0.75      0.72      0.73       117
+
+    accuracy                           0.75       264
+   macro avg       0.77      0.74      0.75       264
+weighted avg       0.76      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.80      0.65      0.72        43
+  "Monocyte"       0.73      0.77      0.75       113
+"Neutrophil"       0.70      0.71      0.71       108
+
+    accuracy                           0.73       264
+   macro avg       0.74      0.71      0.72       264
+weighted avg       0.73      0.73      0.73       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.81      0.71      0.76        42
+  "Monocyte"       0.74      0.86      0.80       102
+"Neutrophil"       0.82      0.74      0.78       120
+
+    accuracy                           0.78       264
+   macro avg       0.79      0.77      0.78       264
+weighted avg       0.79      0.78      0.78       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.82      0.66      0.73        47
+  "Monocyte"       0.77      0.80      0.78       100
+"Neutrophil"       0.75      0.78      0.76       117
+
+    accuracy                           0.77       264
+   macro avg       0.78      0.75      0.76       264
+weighted avg       0.77      0.77      0.76       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.85      0.64      0.73        45
+  "Monocyte"       0.79      0.74      0.76       111
+"Neutrophil"       0.70      0.81      0.75       108
+
+    accuracy                           0.75       264
+   macro avg       0.78      0.73      0.75       264
+weighted avg       0.76      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.73      0.74        44
+  "Monocyte"       0.72      0.76      0.74        96
+"Neutrophil"       0.75      0.73      0.74       124
+
+    accuracy                           0.74       264
+   macro avg       0.75      0.74      0.74       264
+weighted avg       0.74      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.86      0.64      0.74        50
+  "Monocyte"       0.75      0.75      0.75       110
+"Neutrophil"       0.70      0.78      0.74       104
+
+    accuracy                           0.74       264
+   macro avg       0.77      0.72      0.74       264
+weighted avg       0.75      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.86      0.67      0.75        48
+  "Monocyte"       0.77      0.75      0.76       113
+"Neutrophil"       0.66      0.74      0.69       103
+
+    accuracy                           0.73       264
+   macro avg       0.76      0.72      0.74       264
+weighted avg       0.74      0.73      0.73       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.95      0.78      0.85        45
+  "Monocyte"       0.72      0.84      0.78       109
+"Neutrophil"       0.79      0.72      0.75       110
+
+    accuracy                           0.78       264
+   macro avg       0.82      0.78      0.80       264
+weighted avg       0.79      0.78      0.78       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.88      0.66      0.75        44
+  "Monocyte"       0.68      0.75      0.71       100
+"Neutrophil"       0.73      0.73      0.73       120
+
+    accuracy                           0.73       264
+   macro avg       0.76      0.71      0.73       264
+weighted avg       0.74      0.73      0.73       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.88      0.72      0.79        50
+  "Monocyte"       0.77      0.77      0.77       114
+"Neutrophil"       0.68      0.74      0.71       100
+
+    accuracy                           0.75       264
+   macro avg       0.78      0.74      0.76       264
+weighted avg       0.76      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.79      0.79        42
+  "Monocyte"       0.72      0.72      0.72       103
+"Neutrophil"       0.71      0.71      0.71       119
+
+    accuracy                           0.72       264
+   macro avg       0.74      0.74      0.74       264
+weighted avg       0.72      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.91      0.66      0.77        47
+  "Monocyte"       0.68      0.75      0.72        97
+"Neutrophil"       0.73      0.75      0.74       120
+
+    accuracy                           0.73       264
+   macro avg       0.78      0.72      0.74       264
+weighted avg       0.75      0.73      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.85      0.51      0.64        43
+  "Monocyte"       0.69      0.72      0.70       102
+"Neutrophil"       0.66      0.73      0.69       119
+
+    accuracy                           0.69       264
+   macro avg       0.73      0.65      0.68       264
+weighted avg       0.70      0.69      0.69       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.65      0.71        48
+  "Monocyte"       0.70      0.72      0.71       105
+"Neutrophil"       0.66      0.68      0.67       111
+
+    accuracy                           0.69       264
+   macro avg       0.72      0.68      0.70       264
+weighted avg       0.70      0.69      0.69       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.81      0.63      0.71        46
+  "Monocyte"       0.66      0.71      0.69       103
+"Neutrophil"       0.69      0.70      0.70       115
+
+    accuracy                           0.69       264
+   macro avg       0.72      0.68      0.70       264
+weighted avg       0.70      0.69      0.69       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.83      0.78      0.80        45
+  "Monocyte"       0.72      0.78      0.75       103
+"Neutrophil"       0.75      0.72      0.73       116
+
+    accuracy                           0.75       264
+   macro avg       0.77      0.76      0.76       264
+weighted avg       0.75      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.81      0.71      0.76        42
+  "Monocyte"       0.74      0.80      0.77       110
+"Neutrophil"       0.73      0.71      0.72       112
+
+    accuracy                           0.75       264
+   macro avg       0.76      0.74      0.75       264
+weighted avg       0.75      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.61      0.69        44
+  "Monocyte"       0.69      0.74      0.71        92
+"Neutrophil"       0.73      0.74      0.73       128
+
+    accuracy                           0.72       264
+   macro avg       0.74      0.70      0.71       264
+weighted avg       0.72      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.81      0.74      0.77        39
+  "Monocyte"       0.77      0.76      0.77       118
+"Neutrophil"       0.72      0.75      0.73       107
+
+    accuracy                           0.75       264
+   macro avg       0.77      0.75      0.76       264
+weighted avg       0.75      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.82      0.66      0.73        47
+  "Monocyte"       0.72      0.72      0.72       103
+"Neutrophil"       0.70      0.75      0.73       114
+
+    accuracy                           0.72       264
+   macro avg       0.74      0.71      0.72       264
+weighted avg       0.73      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.87      0.71      0.78        38
+  "Monocyte"       0.71      0.76      0.73       104
+"Neutrophil"       0.74      0.74      0.74       122
+
+    accuracy                           0.74       264
+   macro avg       0.77      0.74      0.75       264
+weighted avg       0.75      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.84      0.80        44
+  "Monocyte"       0.76      0.83      0.80       108
+"Neutrophil"       0.79      0.69      0.74       112
+
+    accuracy                           0.77       264
+   macro avg       0.77      0.79      0.78       264
+weighted avg       0.77      0.77      0.77       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.68      0.70        37
+  "Monocyte"       0.74      0.67      0.70       114
+"Neutrophil"       0.66      0.74      0.70       113
+
+    accuracy                           0.70       264
+   macro avg       0.71      0.70      0.70       264
+weighted avg       0.70      0.70      0.70       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.87      0.66      0.75        50
+  "Monocyte"       0.70      0.71      0.71       104
+"Neutrophil"       0.66      0.73      0.69       110
+
+    accuracy                           0.71       264
+   macro avg       0.74      0.70      0.72       264
+weighted avg       0.72      0.71      0.71       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.89      0.76      0.82        42
+  "Monocyte"       0.71      0.81      0.76       101
+"Neutrophil"       0.77      0.72      0.74       121
+
+    accuracy                           0.76       264
+   macro avg       0.79      0.76      0.77       264
+weighted avg       0.77      0.76      0.76       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.86      0.82      0.84        44
+  "Monocyte"       0.77      0.76      0.76       100
+"Neutrophil"       0.76      0.78      0.77       120
+
+    accuracy                           0.78       264
+   macro avg       0.80      0.79      0.79       264
+weighted avg       0.78      0.78      0.78       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.77      0.64      0.70        42
+  "Monocyte"       0.74      0.76      0.75       111
+"Neutrophil"       0.69      0.72      0.70       111
+
+    accuracy                           0.72       264
+   macro avg       0.73      0.71      0.72       264
+weighted avg       0.73      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.78      0.76        40
+  "Monocyte"       0.74      0.82      0.77       103
+"Neutrophil"       0.76      0.68      0.72       121
+
+    accuracy                           0.75       264
+   macro avg       0.74      0.76      0.75       264
+weighted avg       0.75      0.75      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.84      0.60      0.70        45
+  "Monocyte"       0.71      0.74      0.72        95
+"Neutrophil"       0.74      0.79      0.76       124
+
+    accuracy                           0.74       264
+   macro avg       0.76      0.71      0.73       264
+weighted avg       0.74      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.70      0.66      0.68        29
+  "Monocyte"       0.72      0.74      0.73       116
+"Neutrophil"       0.72      0.71      0.72       119
+
+    accuracy                           0.72       264
+   macro avg       0.72      0.70      0.71       264
+weighted avg       0.72      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.84      0.77      0.80        47
+  "Monocyte"       0.66      0.78      0.71        89
+"Neutrophil"       0.80      0.73      0.76       128
+
+    accuracy                           0.75       264
+   macro avg       0.77      0.76      0.76       264
+weighted avg       0.76      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.68      0.80      0.74        35
+  "Monocyte"       0.81      0.74      0.77       118
+"Neutrophil"       0.70      0.73      0.72       111
+
+    accuracy                           0.74       264
+   macro avg       0.73      0.76      0.74       264
+weighted avg       0.75      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.84      0.73      0.78        44
+  "Monocyte"       0.71      0.66      0.68       111
+"Neutrophil"       0.62      0.70      0.66       109
+
+    accuracy                           0.69       264
+   macro avg       0.72      0.69      0.71       264
+weighted avg       0.69      0.69      0.69       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.85      0.69      0.76        48
+  "Monocyte"       0.75      0.72      0.74       119
+"Neutrophil"       0.63      0.71      0.67        97
+
+    accuracy                           0.71       264
+   macro avg       0.74      0.71      0.72       264
+weighted avg       0.72      0.71      0.71       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.89      0.66      0.76        50
+  "Monocyte"       0.74      0.75      0.74       114
+"Neutrophil"       0.62      0.70      0.66       100
+
+    accuracy                           0.71       264
+   macro avg       0.75      0.70      0.72       264
+weighted avg       0.72      0.71      0.71       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.68      0.73        38
+  "Monocyte"       0.71      0.81      0.75       103
+"Neutrophil"       0.80      0.74      0.77       123
+
+    accuracy                           0.76       264
+   macro avg       0.77      0.74      0.75       264
+weighted avg       0.76      0.76      0.76       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.82      0.68      0.75        41
+  "Monocyte"       0.75      0.76      0.76       110
+"Neutrophil"       0.69      0.73      0.71       113
+
+    accuracy                           0.73       264
+   macro avg       0.76      0.72      0.74       264
+weighted avg       0.74      0.73      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.66      0.69        38
+  "Monocyte"       0.80      0.74      0.77       121
+"Neutrophil"       0.69      0.77      0.73       105
+
+    accuracy                           0.74       264
+   macro avg       0.74      0.72      0.73       264
+weighted avg       0.75      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.71      0.72        41
+  "Monocyte"       0.69      0.80      0.74       104
+"Neutrophil"       0.80      0.71      0.75       119
+
+    accuracy                           0.74       264
+   macro avg       0.75      0.74      0.74       264
+weighted avg       0.75      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.76      0.76        38
+  "Monocyte"       0.68      0.74      0.71       103
+"Neutrophil"       0.74      0.68      0.71       123
+
+    accuracy                           0.72       264
+   macro avg       0.73      0.73      0.73       264
+weighted avg       0.72      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.80      0.76      0.78        46
+  "Monocyte"       0.76      0.67      0.71        97
+"Neutrophil"       0.73      0.81      0.77       121
+
+    accuracy                           0.75       264
+   macro avg       0.76      0.75      0.75       264
+weighted avg       0.75      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.81      0.53      0.64        47
+  "Monocyte"       0.81      0.81      0.81       103
+"Neutrophil"       0.72      0.82      0.77       114
+
+    accuracy                           0.77       264
+   macro avg       0.78      0.72      0.74       264
+weighted avg       0.77      0.77      0.76       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.85      0.71      0.78        49
+  "Monocyte"       0.73      0.74      0.73       111
+"Neutrophil"       0.65      0.69      0.67       104
+
+    accuracy                           0.72       264
+   macro avg       0.74      0.72      0.73       264
+weighted avg       0.72      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.72      0.73        39
+  "Monocyte"       0.75      0.75      0.75        93
+"Neutrophil"       0.76      0.77      0.76       132
+
+    accuracy                           0.75       264
+   macro avg       0.75      0.75      0.75       264
+weighted avg       0.75      0.75      0.75       264
+
+     Average accuracy: 0.7355303030303031
+     Standard deviation: 0.024262420730170067
+
+
+
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+                   solver='saga')
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.62      0.68        50
+  "Lymphoid"       0.88      0.64      0.74        11
+      "Mast"       1.00      0.45      0.62        11
+       "Meg"       0.67      0.80      0.73        15
+  "Monocyte"       0.68      0.73      0.71        98
+"Neutrophil"       0.70      0.74      0.72       113
+
+    accuracy                           0.71       298
+   macro avg       0.78      0.66      0.70       298
+weighted avg       0.72      0.71      0.71       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.77      0.55      0.64        44
+  "Lymphoid"       0.75      0.27      0.40        11
+      "Mast"       0.75      0.67      0.71         9
+       "Meg"       0.81      0.62      0.70        21
+  "Monocyte"       0.64      0.69      0.67       100
+"Neutrophil"       0.66      0.77      0.71       113
+
+    accuracy                           0.68       298
+   macro avg       0.73      0.59      0.64       298
+weighted avg       0.69      0.68      0.67       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.75      0.61      0.67        49
+  "Lymphoid"       1.00      0.38      0.55         8
+      "Mast"       0.80      0.33      0.47        12
+       "Meg"       0.88      0.88      0.88        17
+  "Monocyte"       0.69      0.78      0.73        99
+"Neutrophil"       0.71      0.76      0.74       113
+
+    accuracy                           0.72       298
+   macro avg       0.81      0.62      0.67       298
+weighted avg       0.73      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.59      0.60      0.60        48
+  "Lymphoid"       0.78      0.58      0.67        12
+      "Mast"       0.56      0.50      0.53        10
+       "Meg"       0.75      0.68      0.71        22
+  "Monocyte"       0.68      0.66      0.67        98
+"Neutrophil"       0.67      0.71      0.69       108
+
+    accuracy                           0.66       298
+   macro avg       0.67      0.62      0.64       298
+weighted avg       0.67      0.66      0.66       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.84      0.66      0.74        56
+  "Lymphoid"       0.00      0.00      0.00         6
+      "Mast"       0.40      0.25      0.31         8
+       "Meg"       0.50      0.80      0.62        10
+  "Monocyte"       0.63      0.81      0.71        96
+"Neutrophil"       0.76      0.69      0.72       122
+
+    accuracy                           0.70       298
+   macro avg       0.52      0.54      0.52       298
+weighted avg       0.70      0.70      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.68      0.77      0.72        35
+  "Lymphoid"       1.00      0.45      0.62        11
+      "Mast"       0.60      0.25      0.35        12
+       "Meg"       0.92      0.85      0.88        13
+  "Monocyte"       0.71      0.76      0.73       101
+"Neutrophil"       0.77      0.78      0.77       126
+
+    accuracy                           0.74       298
+   macro avg       0.78      0.64      0.68       298
+weighted avg       0.75      0.74      0.74       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.68      0.70      0.69        37
+  "Lymphoid"       1.00      0.44      0.62         9
+      "Mast"       0.80      0.44      0.57         9
+       "Meg"       0.77      0.83      0.80        12
+  "Monocyte"       0.76      0.72      0.74       121
+"Neutrophil"       0.67      0.75      0.70       110
+
+    accuracy                           0.71       298
+   macro avg       0.78      0.65      0.69       298
+weighted avg       0.72      0.71      0.71       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.65      0.71        48
+  "Lymphoid"       0.86      0.50      0.63        12
+      "Mast"       0.50      0.44      0.47         9
+       "Meg"       0.79      0.73      0.76        15
+  "Monocyte"       0.62      0.79      0.70        92
+"Neutrophil"       0.75      0.69      0.72       122
+
+    accuracy                           0.70       298
+   macro avg       0.72      0.63      0.66       298
+weighted avg       0.72      0.70      0.70       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.73      0.55      0.63        40
+  "Lymphoid"       1.00      0.25      0.40         8
+      "Mast"       0.00      0.00      0.00         2
+       "Meg"       0.75      0.75      0.75        16
+  "Monocyte"       0.67      0.75      0.71       117
+"Neutrophil"       0.66      0.68      0.67       115
+
+    accuracy                           0.68       298
+   macro avg       0.64      0.50      0.53       298
+weighted avg       0.68      0.68      0.67       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.65      0.54      0.59        41
+  "Lymphoid"       0.60      0.33      0.43         9
+      "Mast"       0.60      0.27      0.37        11
+       "Meg"       0.73      0.89      0.80         9
+  "Monocyte"       0.66      0.73      0.70       111
+"Neutrophil"       0.66      0.68      0.67       117
+
+    accuracy                           0.66       298
+   macro avg       0.65      0.57      0.59       298
+weighted avg       0.66      0.66      0.65       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.61      0.56      0.59        39
+  "Lymphoid"       0.67      0.44      0.53         9
+      "Mast"       1.00      0.20      0.33         5
+       "Meg"       0.76      0.72      0.74        18
+  "Monocyte"       0.69      0.78      0.73       109
+"Neutrophil"       0.70      0.68      0.69       118
+
+    accuracy                           0.69       298
+   macro avg       0.74      0.56      0.60       298
+weighted avg       0.69      0.69      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.64      0.68        39
+  "Lymphoid"       1.00      0.40      0.57        10
+      "Mast"       1.00      0.50      0.67         8
+       "Meg"       0.85      1.00      0.92        17
+  "Monocyte"       0.69      0.75      0.72       118
+"Neutrophil"       0.67      0.68      0.68       106
+
+    accuracy                           0.71       298
+   macro avg       0.82      0.66      0.71       298
+weighted avg       0.72      0.71      0.70       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.61      0.50      0.55        40
+  "Lymphoid"       0.78      0.54      0.64        13
+      "Mast"       0.50      0.20      0.29         5
+       "Meg"       0.77      0.77      0.77        13
+  "Monocyte"       0.60      0.69      0.64        98
+"Neutrophil"       0.68      0.67      0.67       129
+
+    accuracy                           0.64       298
+   macro avg       0.65      0.56      0.59       298
+weighted avg       0.65      0.64      0.64       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.70      0.69      0.70        45
+  "Lymphoid"       1.00      0.33      0.50         6
+      "Mast"       1.00      0.30      0.46        10
+       "Meg"       0.85      0.85      0.85        13
+  "Monocyte"       0.65      0.70      0.67       100
+"Neutrophil"       0.70      0.72      0.71       124
+
+    accuracy                           0.69       298
+   macro avg       0.82      0.60      0.65       298
+weighted avg       0.70      0.69      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.67      0.57      0.61        46
+  "Lymphoid"       0.88      0.58      0.70        12
+      "Mast"       0.60      0.30      0.40        10
+       "Meg"       0.92      0.80      0.86        15
+  "Monocyte"       0.60      0.68      0.64        90
+"Neutrophil"       0.69      0.72      0.70       125
+
+    accuracy                           0.67       298
+   macro avg       0.72      0.61      0.65       298
+weighted avg       0.67      0.67      0.67       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.73      0.76        41
+  "Lymphoid"       0.50      0.12      0.20         8
+      "Mast"       0.44      0.44      0.44         9
+       "Meg"       0.73      0.62      0.67        13
+  "Monocyte"       0.68      0.81      0.74       106
+"Neutrophil"       0.77      0.71      0.74       121
+
+    accuracy                           0.72       298
+   macro avg       0.65      0.57      0.59       298
+weighted avg       0.72      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.81      0.76      0.79        46
+  "Lymphoid"       1.00      0.43      0.60        14
+      "Mast"       0.80      0.31      0.44        13
+       "Meg"       0.57      0.89      0.70         9
+  "Monocyte"       0.72      0.80      0.76       106
+"Neutrophil"       0.72      0.74      0.73       110
+
+    accuracy                           0.73       298
+   macro avg       0.77      0.65      0.67       298
+weighted avg       0.75      0.73      0.73       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.65      0.73      0.69        30
+  "Lymphoid"       0.86      0.50      0.63        12
+      "Mast"       0.71      0.56      0.63         9
+       "Meg"       0.65      0.65      0.65        17
+  "Monocyte"       0.77      0.75      0.76       113
+"Neutrophil"       0.72      0.75      0.73       117
+
+    accuracy                           0.73       298
+   macro avg       0.73      0.66      0.68       298
+weighted avg       0.73      0.73      0.73       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.59      0.66        39
+  "Lymphoid"       0.67      0.25      0.36         8
+      "Mast"       0.67      0.44      0.53         9
+       "Meg"       0.67      0.71      0.69        14
+  "Monocyte"       0.71      0.75      0.73       102
+"Neutrophil"       0.71      0.77      0.74       126
+
+    accuracy                           0.71       298
+   macro avg       0.69      0.59      0.62       298
+weighted avg       0.71      0.71      0.71       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.71      0.55      0.62        44
+  "Lymphoid"       0.83      0.62      0.71         8
+      "Mast"       0.75      0.30      0.43        10
+       "Meg"       0.64      0.64      0.64        14
+  "Monocyte"       0.68      0.73      0.70       104
+"Neutrophil"       0.68      0.74      0.71       118
+
+    accuracy                           0.68       298
+   macro avg       0.72      0.60      0.64       298
+weighted avg       0.69      0.68      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.76      0.76        37
+  "Lymphoid"       0.67      0.15      0.25        13
+      "Mast"       0.80      0.36      0.50        11
+       "Meg"       0.78      0.67      0.72        21
+  "Monocyte"       0.73      0.77      0.75       117
+"Neutrophil"       0.64      0.72      0.68        99
+
+    accuracy                           0.70       298
+   macro avg       0.73      0.57      0.61       298
+weighted avg       0.70      0.70      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.80      0.71      0.75        49
+  "Lymphoid"       1.00      0.55      0.71        11
+      "Mast"       1.00      0.50      0.67         8
+       "Meg"       0.80      0.80      0.80        15
+  "Monocyte"       0.72      0.79      0.75       105
+"Neutrophil"       0.73      0.75      0.74       110
+
+    accuracy                           0.75       298
+   macro avg       0.84      0.68      0.74       298
+weighted avg       0.76      0.75      0.75       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.71      0.70      0.70        46
+  "Lymphoid"       1.00      0.45      0.62        11
+      "Mast"       0.67      0.33      0.44         6
+       "Meg"       0.69      0.53      0.60        17
+  "Monocyte"       0.67      0.83      0.74        95
+"Neutrophil"       0.77      0.72      0.74       123
+
+    accuracy                           0.72       298
+   macro avg       0.75      0.59      0.64       298
+weighted avg       0.73      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.71      0.61      0.66        49
+  "Lymphoid"       0.86      0.60      0.71        10
+      "Mast"       0.75      0.33      0.46         9
+       "Meg"       0.80      0.73      0.76        22
+  "Monocyte"       0.71      0.66      0.68        98
+"Neutrophil"       0.63      0.76      0.69       110
+
+    accuracy                           0.68       298
+   macro avg       0.74      0.62      0.66       298
+weighted avg       0.69      0.68      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.72      0.58      0.64        50
+  "Lymphoid"       0.71      0.50      0.59        10
+      "Mast"       0.83      0.45      0.59        11
+       "Meg"       0.77      0.71      0.74        14
+  "Monocyte"       0.66      0.72      0.69        99
+"Neutrophil"       0.66      0.73      0.69       114
+
+    accuracy                           0.68       298
+   macro avg       0.73      0.62      0.66       298
+weighted avg       0.69      0.68      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.53      0.62        49
+  "Lymphoid"       1.00      0.38      0.55         8
+      "Mast"       1.00      0.17      0.29         6
+       "Meg"       0.75      0.75      0.75        12
+  "Monocyte"       0.68      0.72      0.70       111
+"Neutrophil"       0.62      0.72      0.67       112
+
+    accuracy                           0.67       298
+   macro avg       0.80      0.54      0.60       298
+weighted avg       0.69      0.67      0.67       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.65      0.67      0.66        48
+  "Lymphoid"       0.67      0.57      0.62         7
+      "Mast"       0.67      0.24      0.35        17
+       "Meg"       0.69      0.85      0.76        13
+  "Monocyte"       0.67      0.77      0.72        95
+"Neutrophil"       0.76      0.72      0.74       118
+
+    accuracy                           0.70       298
+   macro avg       0.68      0.63      0.64       298
+weighted avg       0.70      0.70      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.63      0.76      0.69        38
+  "Lymphoid"       1.00      0.60      0.75         5
+      "Mast"       0.62      0.62      0.62         8
+       "Meg"       0.78      0.70      0.74        20
+  "Monocyte"       0.71      0.74      0.73       108
+"Neutrophil"       0.72      0.67      0.70       119
+
+    accuracy                           0.71       298
+   macro avg       0.74      0.68      0.70       298
+weighted avg       0.71      0.71      0.71       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.81      0.80        47
+  "Lymphoid"       0.67      0.40      0.50        10
+      "Mast"       1.00      0.46      0.63        13
+       "Meg"       0.86      0.80      0.83        15
+  "Monocyte"       0.68      0.76      0.72       103
+"Neutrophil"       0.68      0.68      0.68       110
+
+    accuracy                           0.71       298
+   macro avg       0.78      0.65      0.69       298
+weighted avg       0.72      0.71      0.71       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.72      0.53      0.61        43
+  "Lymphoid"       1.00      0.17      0.29         6
+      "Mast"       1.00      0.43      0.60         7
+       "Meg"       0.80      0.94      0.86        17
+  "Monocyte"       0.66      0.81      0.73        99
+"Neutrophil"       0.72      0.69      0.70       126
+
+    accuracy                           0.70       298
+   macro avg       0.82      0.59      0.63       298
+weighted avg       0.72      0.70      0.70       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.71      0.73        48
+  "Lymphoid"       0.67      0.55      0.60        11
+      "Mast"       0.60      0.38      0.46         8
+       "Meg"       0.62      0.73      0.67        11
+  "Monocyte"       0.66      0.73      0.70       105
+"Neutrophil"       0.72      0.69      0.70       115
+
+    accuracy                           0.69       298
+   macro avg       0.67      0.63      0.64       298
+weighted avg       0.70      0.69      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.51      0.61      0.55        38
+  "Lymphoid"       0.67      0.29      0.40        14
+      "Mast"       0.38      0.30      0.33        10
+       "Meg"       0.60      0.56      0.58        16
+  "Monocyte"       0.68      0.80      0.73        99
+"Neutrophil"       0.75      0.66      0.70       121
+
+    accuracy                           0.66       298
+   macro avg       0.60      0.54      0.55       298
+weighted avg       0.67      0.66      0.66       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.71      0.64      0.68        39
+  "Lymphoid"       0.60      0.60      0.60        10
+      "Mast"       0.67      0.86      0.75         7
+       "Meg"       1.00      0.80      0.89        15
+  "Monocyte"       0.73      0.75      0.74       109
+"Neutrophil"       0.75      0.75      0.75       118
+
+    accuracy                           0.74       298
+   macro avg       0.74      0.73      0.73       298
+weighted avg       0.74      0.74      0.74       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.82      0.66      0.73        47
+  "Lymphoid"       1.00      0.38      0.56        13
+      "Mast"       1.00      0.42      0.59        12
+       "Meg"       0.75      0.86      0.80        14
+  "Monocyte"       0.69      0.82      0.75       100
+"Neutrophil"       0.74      0.77      0.75       112
+
+    accuracy                           0.74       298
+   macro avg       0.83      0.65      0.70       298
+weighted avg       0.76      0.74      0.74       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.68      0.71        41
+  "Lymphoid"       1.00      0.38      0.56        13
+      "Mast"       1.00      0.50      0.67         6
+       "Meg"       0.92      0.79      0.85        14
+  "Monocyte"       0.66      0.74      0.70        98
+"Neutrophil"       0.73      0.75      0.74       126
+
+    accuracy                           0.72       298
+   macro avg       0.84      0.64      0.70       298
+weighted avg       0.74      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.75      0.64      0.69        42
+  "Lymphoid"       0.43      0.60      0.50         5
+      "Mast"       0.75      0.60      0.67        10
+       "Meg"       0.88      0.83      0.86        18
+  "Monocyte"       0.73      0.72      0.73       108
+"Neutrophil"       0.72      0.77      0.74       115
+
+    accuracy                           0.73       298
+   macro avg       0.71      0.69      0.70       298
+weighted avg       0.73      0.73      0.73       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.82      0.72      0.77        39
+  "Lymphoid"       0.89      0.57      0.70        14
+      "Mast"       0.83      0.62      0.71         8
+       "Meg"       0.60      0.75      0.67        12
+  "Monocyte"       0.66      0.78      0.72        97
+"Neutrophil"       0.77      0.72      0.74       128
+
+    accuracy                           0.73       298
+   macro avg       0.76      0.69      0.72       298
+weighted avg       0.74      0.73      0.73       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.80      0.70      0.75        61
+  "Lymphoid"       0.50      0.33      0.40         6
+      "Mast"       1.00      0.50      0.67         8
+       "Meg"       0.76      0.70      0.73        23
+  "Monocyte"       0.61      0.77      0.68        92
+"Neutrophil"       0.70      0.64      0.67       108
+
+    accuracy                           0.69       298
+   macro avg       0.73      0.61      0.65       298
+weighted avg       0.70      0.69      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.72      0.66      0.69        44
+  "Lymphoid"       1.00      0.22      0.36         9
+      "Mast"       0.67      0.20      0.31        10
+       "Meg"       0.50      1.00      0.67         7
+  "Monocyte"       0.67      0.71      0.69       104
+"Neutrophil"       0.69      0.72      0.70       124
+
+    accuracy                           0.68       298
+   macro avg       0.71      0.59      0.57       298
+weighted avg       0.69      0.68      0.67       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.68      0.64      0.66        39
+  "Lymphoid"       0.83      0.62      0.71         8
+      "Mast"       0.50      0.17      0.25         6
+       "Meg"       0.69      0.75      0.72        12
+  "Monocyte"       0.68      0.75      0.71       106
+"Neutrophil"       0.73      0.71      0.72       127
+
+    accuracy                           0.70       298
+   macro avg       0.68      0.61      0.63       298
+weighted avg       0.70      0.70      0.70       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.55      0.62      0.58        37
+  "Lymphoid"       1.00      0.56      0.71         9
+      "Mast"       0.71      0.42      0.53        12
+       "Meg"       0.87      0.59      0.70        22
+  "Monocyte"       0.70      0.76      0.73       117
+"Neutrophil"       0.65      0.65      0.65       101
+
+    accuracy                           0.67       298
+   macro avg       0.75      0.60      0.65       298
+weighted avg       0.69      0.67      0.67       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.76      0.59      0.67        49
+  "Lymphoid"       0.78      0.64      0.70        11
+      "Mast"       0.00      0.00      0.00         8
+       "Meg"       0.69      0.79      0.73        14
+  "Monocyte"       0.70      0.75      0.72       114
+"Neutrophil"       0.65      0.72      0.68       102
+
+    accuracy                           0.69       298
+   macro avg       0.60      0.58      0.58       298
+weighted avg       0.68      0.69      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.67      0.71        43
+  "Lymphoid"       1.00      0.29      0.44        14
+      "Mast"       0.50      0.17      0.25         6
+       "Meg"       0.67      0.73      0.70        11
+  "Monocyte"       0.68      0.72      0.70       112
+"Neutrophil"       0.69      0.74      0.71       112
+
+    accuracy                           0.69       298
+   macro avg       0.71      0.55      0.58       298
+weighted avg       0.70      0.69      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.72      0.73        40
+  "Lymphoid"       0.75      0.50      0.60         6
+      "Mast"       1.00      0.33      0.50        12
+       "Meg"       0.55      0.60      0.57        10
+  "Monocyte"       0.76      0.75      0.76       122
+"Neutrophil"       0.68      0.75      0.71       108
+
+    accuracy                           0.72       298
+   macro avg       0.75      0.61      0.65       298
+weighted avg       0.73      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.63      0.54      0.58        48
+  "Lymphoid"       1.00      0.44      0.62         9
+      "Mast"       0.80      0.36      0.50        11
+       "Meg"       0.80      0.62      0.70        13
+  "Monocyte"       0.73      0.79      0.76       113
+"Neutrophil"       0.64      0.71      0.67       104
+
+    accuracy                           0.69       298
+   macro avg       0.77      0.58      0.64       298
+weighted avg       0.70      0.69      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.74      0.66      0.70        44
+  "Lymphoid"       0.75      0.33      0.46         9
+      "Mast"       0.33      0.14      0.20         7
+       "Meg"       0.69      0.69      0.69        13
+  "Monocyte"       0.66      0.76      0.70       108
+"Neutrophil"       0.71      0.69      0.70       117
+
+    accuracy                           0.69       298
+   macro avg       0.65      0.55      0.58       298
+weighted avg       0.69      0.69      0.68       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.71      0.74      0.72        46
+  "Lymphoid"       0.67      0.40      0.50        10
+      "Mast"       0.75      0.27      0.40        11
+       "Meg"       0.83      0.83      0.83        18
+  "Monocyte"       0.75      0.75      0.75       113
+"Neutrophil"       0.69      0.75      0.72       100
+
+    accuracy                           0.72       298
+   macro avg       0.73      0.62      0.65       298
+weighted avg       0.73      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.78      0.58      0.67        48
+  "Lymphoid"       0.75      0.33      0.46         9
+      "Mast"       0.57      0.44      0.50         9
+       "Meg"       0.91      0.71      0.80        14
+  "Monocyte"       0.62      0.75      0.68        97
+"Neutrophil"       0.72      0.73      0.72       121
+
+    accuracy                           0.69       298
+   macro avg       0.72      0.59      0.64       298
+weighted avg       0.70      0.69      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.73      0.53      0.62        45
+  "Lymphoid"       0.75      0.38      0.50         8
+      "Mast"       1.00      0.50      0.67         8
+       "Meg"       1.00      0.77      0.87        13
+  "Monocyte"       0.74      0.77      0.76       118
+"Neutrophil"       0.66      0.77      0.71       106
+
+    accuracy                           0.72       298
+   macro avg       0.81      0.62      0.69       298
+weighted avg       0.73      0.72      0.71       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.67      0.70      0.69        44
+  "Lymphoid"       0.57      0.44      0.50         9
+      "Mast"       0.50      0.10      0.17        10
+       "Meg"       0.92      0.69      0.79        16
+  "Monocyte"       0.76      0.75      0.76       116
+"Neutrophil"       0.67      0.76      0.71       103
+
+    accuracy                           0.71       298
+   macro avg       0.68      0.57      0.60       298
+weighted avg       0.71      0.71      0.70       298
+
+     Average accuracy: 0.7014765100671141
+     Standard deviation: 0.023642457832272753
+
+
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.86      0.70      0.77        43
+  "Monocyte"       0.73      0.77      0.75       109
+"Neutrophil"       0.70      0.71      0.71       112
+
+    accuracy                           0.73       264
+   macro avg       0.76      0.73      0.74       264
+weighted avg       0.74      0.73      0.74       264
+
+     Best estimator: MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 30))
+     Best parameters: {'alpha': 1e-05, 'hidden_layer_sizes': (250, 30), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
