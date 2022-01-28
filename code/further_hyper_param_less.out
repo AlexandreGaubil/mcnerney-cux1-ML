@@ -5,9 +5,8 @@ GridSearchCV(estimator=MLPClassifier(),
                          'solver': ['adam']})
 ['./../../data/input/gene_sets/jeff_cux1_biding_targets.txt']
 ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
-
-Average accuracy: 0.5902311707680835
-Standard deviation: 0.02796171999888542
+MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 30))
+{'alpha': 1e-05, 'hidden_layer_sizes': (250, 30), 'solver': 'adam'}
 GridSearchCV(estimator=MLPClassifier(),
              param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
                          'hidden_layer_sizes': [(100, 20), (250, 100),
@@ -20,9 +19,8 @@ GridSearchCV(estimator=MLPClassifier(),
 ERROR: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
 
 
-
-Average accuracy: 0.6510067114093959
-Standard deviation: 0.0
+MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 100))
+{'alpha': 0.72, 'hidden_layer_sizes': (250, 100), 'solver': 'adam'}
 GridSearchCV(estimator=MLPClassifier(),
              param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
                          'hidden_layer_sizes': [(100, 20), (250, 100),
@@ -35,6 +33,5 @@ GridSearchCV(estimator=MLPClassifier(),
 ERROR: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
 
 
-
-Average accuracy: 0.6912751677852349
-Standard deviation: 0.0
+MLPClassifier(alpha=11, hidden_layer_sizes=(250, 100))
+{'alpha': 11, 'hidden_layer_sizes': (250, 100), 'solver': 'adam'}

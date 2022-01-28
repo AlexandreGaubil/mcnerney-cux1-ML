@@ -2,7 +2,7 @@
 #SBATCH --job-name=hyper_param_less
 #SBATCH --output=further_hyper_param_less.out
 #SBATCH --error=further_hyper_param_less.err
-#SBATCH --time=36:00:00
+#SBATCH --time=15:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
