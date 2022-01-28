@@ -6,41 +6,32 @@
 #
 
 # ---- LIBRARIES ----
-
-import numpy as np
-import pandas as pd
-from itertools import chain
 import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-import fitting
-import models
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# ---- MODEL ----
-
-# model = models.log_reg
-model = models.neural_network
-
-data_matrix = np.loadtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt')
-feature_array = np.genfromtxt('./../../data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt',
-                              dtype = 'str')
-df = pd.DataFrame(data_matrix)
-
-accuracy_mtx = fitting.fit_model_rdm_gene_sets(df, feature_array, model, 50, 10)
-
-accuracy_array = list(chain.from_iterable(accuracy_mtx))
+import models
+import run_model as run
 
 
-# ---- OUTPUT ----
-print("Average accuracy: {}".format(np.mean(accuracy_array)))
-print("Standard deviation: {}".format(np.std(accuracy_array)))
+models = [models.log_reg, models.hyper_param]
+goi_files = ['./../../data/input/gene_sets/all_genes.txt']
+data_mtx_files = [
+    './../../data/output/export_script/three_cells_all_genes_data_headers.txt',
+    './../../data/output/export_script/all_cells_all_genes_data_headers.txt']
+data_mtx_col_seps = [' ', ' ']
+features_array_files = [
+    './../../data/output/export_script/three_cells_all_genes_features.txt',
+    './../../data/output/export_script/all_cells_all_genes_features.txt']
+n_models = [50, 1]
+hyper_param_tuning = [False, True]
 
-# Results for 6 cell types with logistic regression:
-# Average accuracy: 0.561
-# Standard deviation: 0.040
 
-# Results for 6 cell types with neural network (p_mdl):
-# Average accuracy: 0.529
-# Standard deviation: 0.036
-# Had 27 errors where lbfgs failed to converge on 500
+print("\n\n\nNEGATIVE CONTROL: 1,000 RDM GENES")
+run.run_model(
+    models,
+    goi_files,
+    data_mtx_files,
+    data_mtx_col_seps,
+    features_array_files,
+    n_models,
+    hyper_param_tuning)
