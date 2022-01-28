@@ -36,7 +36,7 @@ def fit_model(data_df, features_array, model, n_models, hyper_param_tuning = Fal
                                                             test_size = 0.2)
 
         # Fit the model to the data
-        fitted_model = model.fit(x_train, y_train)
+        fitted_model = model.fit(x_train, y_train, n_jobs = -1)
 
         if not hyper_param_tuning:
             # Score the model accuracy

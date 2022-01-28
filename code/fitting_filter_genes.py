@@ -12,16 +12,22 @@ import numpy as np
 import pandas as pd
 import fitting
 from itertools import chain
+from sklearn.neural_network import MLPClassifier
 
 # ---- MODEL ----
-def fit_model_filter_genes(model,
-                           genes_of_interest_files,
-                           data_matrix_file,
-                           data_matrix_column_sep,
-                           features_array_file,
-                           n_models = 50,
-                           hyper_param_tuning = False):
+def fit_model_filter_genes(
+    model,
+    genes_of_interest_files,
+    data_mtx_file,
+    data_mtx_col_sep,
+    features_array_file,
+    n_models = 50,
+    hyper_param_tuning = False):
     goi_multi_array = []
+
+    print("\n\n\nMODEL --- {}".format(model))
+    print("     Data file: {}".format(data_mtx_file))
+    print("     Genes files: {}".format(genes_of_interest_files))
 
     # List of transcriptor factors
     for i in range(len(genes_of_interest_files)):
@@ -33,31 +39,43 @@ def fit_model_filter_genes(model,
 
     genes_of_interest = goi_multi_array[0]
 
-    data_matrix = pd.read_csv(data_matrix_file, sep = data_matrix_column_sep)
+    data_matrix = pd.read_csv(data_mtx_file, sep = data_mtx_col_sep)
     features_array = np.genfromtxt(features_array_file, dtype = 'str')
 
     # Keep only genes that are genes of interest
-    df = data_matrix[data_matrix.columns[data_matrix.columns.isin(genes_of_interest)]]
+    if genes_of_interest:
+        df = data_matrix[data_matrix.columns[data_matrix.columns.isin(genes_of_interest)]]
+    else:
+        df = data_matrix
 
     accuracy_matrix = []
 
     if (len(df.columns) > 1000):
         for _ in (range(1, 10)):
-            df_sample = df.sample(n = 1000,
-                                    replace = False,
-                                    axis = 1)
+            df_sample = df.sample(
+                n = 1000,
+                replace = False,
+                axis = 1)
             accuracy_matrix.append(fitting.fit_model(df_sample, features_array, model, n_models))
     else:
-        print("\n\nERROR: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling\n\n")
+        print("\n     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling\n")
         accuracy_matrix.append(fitting.fit_model(df, features_array, model, n_models))
 
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
     if not hyper_param_tuning:
-        # print(accuracy_array)
-        print("\nAverage accuracy: {}".format(np.mean(accuracy_array)))
-        print("Standard deviation: {}".format(np.std(accuracy_array)))
+        print("     Average accuracy: {}".format(np.mean(accuracy_array)))
+        print("     Standard deviation: {}".format(np.std(accuracy_array)))
     else:
-       # print(model.cv_results_)
-       print(model.best_estimator_)
-       print(model.best_params_)
+        print("     Best estimator: {}".format(model.best_estimator_))
+        print("     Best parameters: {}".format(model.best_params_))
+        print("     Starting run of that model with optimal parameters...")
+        optimal_model = MLPClassifier(**model.best_params_)
+        fit_model_filter_genes(
+            optimal_model,
+            genes_of_interest_files,
+            data_mtx_file,
+            data_mtx_col_sep,
+            features_array_file,
+            n_models,
+            hyper_param_tuning = False)
