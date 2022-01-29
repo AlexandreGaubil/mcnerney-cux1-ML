@@ -258,3 +258,99 @@ MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
                          'solver': ['adam']})
      Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
      Genes files: ['./../../data/input/gene_sets/wl001_shRNA_LowRen_DEGs.txt']
+     Best estimator: MLPClassifier(alpha=11, hidden_layer_sizes=(100, 20))
+     Best parameters: {'alpha': 11, 'hidden_layer_sizes': (100, 20), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+
+
+MODEL --- MLPClassifier(alpha=11, hidden_layer_sizes=(100, 20))
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/wl001_shRNA_LowRen_DEGs.txt']
+     Average accuracy: 0.7424242424242425
+     Standard deviation: 0.021052186869359914
+
+
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/wl001_shRNA_LowRen_DEGs.txt']
+     Best estimator: MLPClassifier(alpha=9, hidden_layer_sizes=(250, 30))
+     Best parameters: {'alpha': 9, 'hidden_layer_sizes': (250, 30), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+
+
+MODEL --- MLPClassifier(alpha=9, hidden_layer_sizes=(250, 30))
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/wl001_shRNA_LowRen_DEGs.txt']
+     Average accuracy: 0.6655480984340044
+     Standard deviation: 0.025702741147821145
+
+
+
+CUX1 RELATED GENES DEGS
+
+
+
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+                   solver='saga')
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Average accuracy: 0.7246212121212122
+     Standard deviation: 0.02716994521277166
+
+
+
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+                   solver='saga')
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Average accuracy: 0.6858538404175988
+     Standard deviation: 0.02552223246175513
+
+
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Best estimator: MLPClassifier(alpha=9, hidden_layer_sizes=(150, 50))
+     Best parameters: {'alpha': 9, 'hidden_layer_sizes': (150, 50), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+
+
+MODEL --- MLPClassifier(alpha=9, hidden_layer_sizes=(150, 50))
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Average accuracy: 0.707912457912458
+     Standard deviation: 0.023106022274934013
+
+
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Best estimator: MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 30))
+     Best parameters: {'alpha': 1e-05, 'hidden_layer_sizes': (250, 30), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+
+
+MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 30))
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Average accuracy: 0.656972408650261
+     Standard deviation: 0.0208532907592984
