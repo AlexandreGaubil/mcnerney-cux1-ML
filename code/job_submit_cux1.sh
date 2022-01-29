@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=cux1
-#SBATCH --output=new_cux1_and_degs_nn.out
-#SBATCH --error=new_cux1_and_degs_nn.err
+#SBATCH --job-name=cux1_t_test
+#SBATCH --output=cux1_t_test.out
+#SBATCH --error=cux1_t_test.err
 #SBATCH --time=20:00:00
 #SBATCH --partition=broadwl
-#SBATCH --nodes=4
+#SBATCH --nodes=8
 #SBATCH --ntasks-per-node=14
 #SBATCH --mem-per-cpu=200
 #SBATCH --mail-user=agaubil@icloud.com
@@ -12,6 +12,8 @@
 #SBATCH --mail-type=FAIL
 
 module load python
+
+date
 
 # HYPER-PARAM TUNING DNN
 python analyses/cux1.py

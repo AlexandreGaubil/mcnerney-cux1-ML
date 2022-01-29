@@ -92,6 +92,7 @@ def fit_model_filter_genes(
     if not hyper_param_tuning:
         print("     Average accuracy: {}".format(np.mean(accuracy_array)))
         print("     Standard deviation: {}".format(np.std(accuracy_array)))
+        print("     Accuracy array = {}".format(accuracy_array))
     else:
         print("     Best estimator: {}".format(model.best_estimator_))
         print("     Best parameters: {}".format(model.best_params_))
