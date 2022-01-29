@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=1000_degs
-#SBATCH --output=new_pos_ctrl_1000_most_var.out
-#SBATCH --error=new_pos_ctrl_1000_most_var.err
+#SBATCH --job-name=nn_1000
+#SBATCH --output=new_pos_ctrl_1000_most_var_nn.out
+#SBATCH --error=new_pos_ctrl_1000_most_var_nn.err
 #SBATCH --time=8:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4

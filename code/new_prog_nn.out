@@ -1,0 +1,180 @@
+
+
+
+POS CTRL PROG GENES
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+              precision    recall  f1-score   support
+
+      "Baso"       0.86      0.68      0.76        44
+  "Monocyte"       0.74      0.75      0.74       115
+"Neutrophil"       0.68      0.72      0.70       105
+
+    accuracy                           0.73       264
+   macro avg       0.76      0.72      0.73       264
+weighted avg       0.73      0.73      0.73       264
+
+     Best estimator: MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 100))
+     Best parameters: {'alpha': 1e-05, 'hidden_layer_sizes': (250, 100), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 100))
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+     Average accuracy: 0.7488636363636364
+     Standard deviation: 0.02159090909090907
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+              precision    recall  f1-score   support
+
+      "Baso"       0.80      0.60      0.69        55
+  "Lymphoid"       0.71      0.42      0.53        12
+      "Mast"       0.50      0.25      0.33         4
+       "Meg"       0.73      0.67      0.70        12
+  "Monocyte"       0.78      0.70      0.74       111
+"Neutrophil"       0.62      0.82      0.71       104
+
+    accuracy                           0.70       298
+   macro avg       0.69      0.58      0.61       298
+weighted avg       0.72      0.70      0.70       298
+
+     Best estimator: MLPClassifier(alpha=1, hidden_layer_sizes=(250, 100))
+     Best parameters: {'alpha': 1, 'hidden_layer_sizes': (250, 100), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+MODEL --- MLPClassifier(alpha=1, hidden_layer_sizes=(250, 100))
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+     Average accuracy: 0.7112751677852348
+     Standard deviation: 0.0335567785224161
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt']
+              precision    recall  f1-score   support
+
+      "Baso"       0.77      0.51      0.61        53
+  "Monocyte"       0.76      0.74      0.75       101
+"Neutrophil"       0.68      0.80      0.73       110
+
+    accuracy                           0.72       264
+   macro avg       0.74      0.68      0.70       264
+weighted avg       0.73      0.72      0.72       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.83      0.60      0.69        42
+  "Monocyte"       0.74      0.79      0.76       103
+"Neutrophil"       0.74      0.77      0.76       119
+
+    accuracy                           0.75       264
+   macro avg       0.77      0.72      0.74       264
+weighted avg       0.75      0.75      0.75       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.61      0.51      0.56        39
+  "Monocyte"       0.72      0.81      0.76       106
+"Neutrophil"       0.72      0.68      0.70       119
+
+    accuracy                           0.71       264
+   macro avg       0.68      0.67      0.67       264
+weighted avg       0.71      0.71      0.71       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.82      0.67      0.74        48
+  "Monocyte"       0.69      0.87      0.77        99
+"Neutrophil"       0.77      0.66      0.71       117
+
+    accuracy                           0.74       264
+   macro avg       0.76      0.73      0.74       264
+weighted avg       0.75      0.74      0.74       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.78      0.54      0.64        46
+  "Monocyte"       0.76      0.71      0.74       110
+"Neutrophil"       0.64      0.77      0.70       108
+
+    accuracy                           0.70       264
+   macro avg       0.73      0.67      0.69       264
+weighted avg       0.72      0.70      0.70       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.46      0.53      0.49        32
+  "Monocyte"       0.77      0.68      0.72       119
+"Neutrophil"       0.68      0.73      0.71       113
+
+    accuracy                           0.69       264
+   macro avg       0.64      0.65      0.64       264
+weighted avg       0.69      0.69      0.69       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.79      0.77      0.78        39
+  "Monocyte"       0.71      0.72      0.71       104
+"Neutrophil"       0.73      0.73      0.73       121
+
+    accuracy                           0.73       264
+   macro avg       0.74      0.74      0.74       264
+weighted avg       0.73      0.73      0.73       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.84      0.63      0.72        41
+  "Monocyte"       0.82      0.72      0.77       111
+"Neutrophil"       0.71      0.86      0.78       112
+
+    accuracy                           0.77       264
+   macro avg       0.79      0.74      0.76       264
+weighted avg       0.78      0.77      0.76       264
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.78      0.67      0.72        46
+  "Monocyte"       0.73      0.86      0.79       102
+"Neutrophil"       0.78      0.70      0.74       116
+
+    accuracy                           0.76       264
+   macro avg       0.76      0.74      0.75       264
+weighted avg       0.76      0.76      0.76       264
+
+     Best estimator: MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 100))
+     Best parameters: {'alpha': 1e-05, 'hidden_layer_sizes': (250, 100), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 100))
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt']
+     Average accuracy: 0.743097643097643
+     Standard deviation: 0.025458614705112122
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt']

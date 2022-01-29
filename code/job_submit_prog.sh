@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=prog
-#SBATCH --output=new_prog.out
-#SBATCH --error=new_prog.err
+#SBATCH --job-name=prog_nn
+#SBATCH --output=new_prog_nn.out
+#SBATCH --error=new_prog_nn.err
 #SBATCH --time=25:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4

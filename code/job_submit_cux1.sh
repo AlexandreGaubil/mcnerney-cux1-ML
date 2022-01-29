@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=cux1
-#SBATCH --output=new_cux1_and_degs.out
-#SBATCH --error=new_cux1_and_degs.err
+#SBATCH --output=new_cux1_and_degs_nn.out
+#SBATCH --error=new_cux1_and_degs_nn.err
 #SBATCH --time=20:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
