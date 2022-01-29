@@ -178,3 +178,137 @@ MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
                          'solver': ['adam']})
      Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
      Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt']
+              precision    recall  f1-score   support
+
+      "Baso"       0.52      0.74      0.62        43
+  "Lymphoid"       0.67      0.50      0.57         8
+      "Mast"       1.00      0.17      0.29        12
+       "Meg"       0.76      0.73      0.74        22
+  "Monocyte"       0.73      0.86      0.79        97
+"Neutrophil"       0.79      0.65      0.71       116
+
+    accuracy                           0.71       298
+   macro avg       0.75      0.61      0.62       298
+weighted avg       0.74      0.71      0.70       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.58      0.74      0.65        35
+  "Lymphoid"       0.60      0.50      0.55         6
+      "Mast"       1.00      0.22      0.36         9
+       "Meg"       0.67      0.67      0.67        15
+  "Monocyte"       0.79      0.76      0.77       108
+"Neutrophil"       0.78      0.79      0.79       125
+
+    accuracy                           0.74       298
+   macro avg       0.74      0.61      0.63       298
+weighted avg       0.76      0.74      0.74       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.77      0.65      0.71        46
+  "Lymphoid"       0.50      0.50      0.50         6
+      "Mast"       0.55      0.75      0.63         8
+       "Meg"       0.75      0.75      0.75        12
+  "Monocyte"       0.71      0.78      0.74       109
+"Neutrophil"       0.74      0.69      0.71       117
+
+    accuracy                           0.72       298
+   macro avg       0.67      0.69      0.67       298
+weighted avg       0.72      0.72      0.72       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.61      0.78      0.68        50
+  "Lymphoid"       0.57      0.50      0.53         8
+      "Mast"       1.00      0.25      0.40        12
+       "Meg"       0.86      0.63      0.73        19
+  "Monocyte"       0.62      0.69      0.66        98
+"Neutrophil"       0.69      0.63      0.66       111
+
+    accuracy                           0.66       298
+   macro avg       0.73      0.58      0.61       298
+weighted avg       0.68      0.66      0.65       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.68      0.60      0.64        43
+  "Lymphoid"       0.64      0.70      0.67        10
+      "Mast"       0.75      0.33      0.46         9
+       "Meg"       0.64      0.69      0.67        13
+  "Monocyte"       0.68      0.47      0.56       106
+"Neutrophil"       0.59      0.79      0.68       117
+
+    accuracy                           0.63       298
+   macro avg       0.66      0.60      0.61       298
+weighted avg       0.65      0.63      0.62       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.70      0.70      0.70        53
+  "Lymphoid"       0.80      0.31      0.44        13
+      "Mast"       0.67      0.25      0.36         8
+       "Meg"       0.70      0.54      0.61        13
+  "Monocyte"       0.74      0.79      0.76       103
+"Neutrophil"       0.75      0.82      0.79       108
+
+    accuracy                           0.74       298
+   macro avg       0.73      0.57      0.61       298
+weighted avg       0.74      0.74      0.73       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.61      0.57      0.59        44
+  "Lymphoid"       0.67      0.40      0.50         5
+      "Mast"       0.75      0.33      0.46         9
+       "Meg"       0.64      0.50      0.56        14
+  "Monocyte"       0.64      0.78      0.70        95
+"Neutrophil"       0.70      0.66      0.68       131
+
+    accuracy                           0.66       298
+   macro avg       0.67      0.54      0.58       298
+weighted avg       0.67      0.66      0.66       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.67      0.65      0.66        40
+  "Lymphoid"       0.29      0.25      0.27         8
+      "Mast"       0.60      0.67      0.63         9
+       "Meg"       0.83      0.68      0.75        22
+  "Monocyte"       0.69      0.72      0.71        97
+"Neutrophil"       0.72      0.72      0.72       122
+
+    accuracy                           0.69       298
+   macro avg       0.63      0.62      0.62       298
+weighted avg       0.70      0.69      0.69       298
+
+              precision    recall  f1-score   support
+
+      "Baso"       0.73      0.62      0.67        39
+  "Lymphoid"       0.78      0.64      0.70        11
+      "Mast"       0.67      0.40      0.50         5
+       "Meg"       0.90      0.82      0.86        22
+  "Monocyte"       0.75      0.66      0.70       113
+"Neutrophil"       0.65      0.81      0.72       108
+
+    accuracy                           0.71       298
+   macro avg       0.75      0.66      0.69       298
+weighted avg       0.72      0.71      0.71       298
+
+     Best estimator: MLPClassifier(alpha=1, hidden_layer_sizes=(250, 30))
+     Best parameters: {'alpha': 1, 'hidden_layer_sizes': (250, 30), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+MODEL --- MLPClassifier(alpha=1, hidden_layer_sizes=(250, 30))
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt']
+     Average accuracy: 0.7010290827740492
+     Standard deviation: 0.028343768585049004
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/prog_genes/Ren_CLP_Pre-B_DEG_progenitor_markers.txt']
