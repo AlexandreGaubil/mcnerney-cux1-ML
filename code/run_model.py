@@ -51,7 +51,7 @@ def fit_model_filter_genes(
     f1_classification = False):
     goi_multi_array = []
 
-    print("\n\n\nMODEL --- {}".format(model))
+    print("\nMODEL --- {}".format(model))
     print("     Data file: {}".format(data_mtx_file))
     print("     Genes files: {}".format(genes_of_interest_files))
 
@@ -103,7 +103,7 @@ def fit_model_filter_genes(
             data_mtx_file,
             data_mtx_col_sep,
             features_array_file,
-            n_models,
+            50,
             hyper_param_tuning = False)
 
 
