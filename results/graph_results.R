@@ -5,6 +5,7 @@
 #
 
 library(ggplot2)
+library(stringr)
 library(dplyr)
 library(stats)
 
@@ -15,7 +16,7 @@ analysis.mouse_tf = 'Positive Control - Mouse Transcriptor Factors'
 analysis.exp_jeff = 'Experimental - CUX1 Binding Jeff'
 analysis.exp_jeff_molly = 'Experimental - CUX1 Binding Jeff & Molly'
 analysis.exp_jeff_weihan = 'Experimental - CUX1 Binding Jeff & Weihan'
-model.log_reg = 'Logistic  Regression'
+model.log_reg = 'Logistic Regression'
 model.nn = 'Neural Network'
 dataset.in_vivo = 'In vivo'
 dataset.in_vitro = 'In vitro'
@@ -312,3 +313,30 @@ df <- add_row(df,
               n_rdm_gene_samples = n.rdm_gene_samples.default.no,
               average = 0.7159090909090909,
               std_deviation = NaN)
+
+
+
+
+
+# Graph
+
+for (i_n_cells in c(3, 6))
+{
+  i_n_cells <- 3
+  local_df <- filter(df, n_cell_types == i_n_cells)
+  
+  p <- ggplot(data = local_df,
+              aes(model, average, fill=model)) +
+    geom_bar(stat="identity") +
+    facet_grid(~analysis, labeller = label_wrap_gen(width = 25, multi_line = TRUE)) +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+    coord_cartesian(ylim=c(0.6, 0.76)) +
+    xlab("Gene Sets Used for Prediction") + 
+    ylab("Prediction Accuracy") +
+    ggtitle("Cell Fate Prediction Accuracy for In-Vitro Dataset Created by Weinred (2020) (Average of 50 Models, 95% CI)") +
+    guides(fill=guide_legend(title="Model")) +
+    theme_classic()
+  
+  p
+  
+}
