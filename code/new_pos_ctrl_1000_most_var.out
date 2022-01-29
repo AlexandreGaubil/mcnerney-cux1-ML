@@ -1,0 +1,31 @@
+
+
+\POSITIVE CONTROL: 1,000 MOST VARIABLE GENES
+
+
+
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+                   solver='saga')
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/2000_most_degs.txt']
+     Average accuracy: 0.7496885521885522
+     Standard deviation: 0.023968596188772454
+
+
+
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+                   solver='saga')
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/2000_most_degs.txt']
+     Average accuracy: 0.7112900820283371
+     Standard deviation: 0.025929285583589912
+
+
+
+MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
+             param_grid={'alpha': [1e-05, 0.72, 1, 5, 9, 11],
+                         'hidden_layer_sizes': [(100, 20), (250, 100),
+                                                (250, 30), (150, 50)],
+                         'solver': ['adam']})
+     Data file: ./../../data/output/export_script/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/2000_most_degs.txt']

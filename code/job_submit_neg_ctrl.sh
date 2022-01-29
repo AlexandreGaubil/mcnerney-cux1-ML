@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=neg_ctrl
-#SBATCH --output=new_neg_ctrl.out
-#SBATCH --error=new_neg_ctrl.err
-#SBATCH --time=15:00:00
+#SBATCH --output=new_neg_ctrl_nn.out
+#SBATCH --error=new_neg_ctrl_nn.err
+#SBATCH --time=10:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=14
