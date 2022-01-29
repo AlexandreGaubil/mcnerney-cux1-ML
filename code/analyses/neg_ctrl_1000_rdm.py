@@ -5,9 +5,10 @@
 # the different models we have to them.
 #
 
-#import os, sys
-#sys.path.insert(1, os.path.join(sys.path[0], '..'))
-#os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+import os, sys
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import run_model as run
 import default_variables as df
 
