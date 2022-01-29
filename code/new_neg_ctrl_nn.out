@@ -27,3 +27,12 @@ MODEL --- GridSearchCV(estimator=MLPClassifier(), n_jobs=-1,
                          'solver': ['adam']})
      Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
      Genes files: ['./../../data/input/gene_sets/all_genes.txt']
+     Best estimator: MLPClassifier(alpha=11, hidden_layer_sizes=(100, 20))
+     Best parameters: {'alpha': 11, 'hidden_layer_sizes': (100, 20), 'solver': 'adam'}
+     Starting run of that model with optimal parameters...
+
+MODEL --- MLPClassifier(alpha=11, hidden_layer_sizes=(100, 20))
+     Data file: ./../../data/output/export_script/all_cells_all_genes_data_headers.txt
+     Genes files: ['./../../data/input/gene_sets/all_genes.txt']
+     Average accuracy: 0.5681953765846384
+     Standard deviation: 0.03931263003915425
