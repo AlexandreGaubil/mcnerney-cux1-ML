@@ -17,8 +17,8 @@ analysis.mouse_tf = 'Positive Control - Mouse Transcriptor Factors'
 analysis.exp_jeff = 'Experimental - CUX1 Binding Targets Jeff'
 analysis.exp_jeff_molly = 'Experimental - CUX1 Binding Targets Jeff & Molly'
 analysis.exp_jeff_weihan = 'Experimental - CUX1 Binding Targets Jeff & Weihan'
-analysis.exp_molly_deg = 'Experimental - CUX1 Binding Targets Molly & DEGs'
-analysis.exp_weihan_deg = 'Experimental - CUX1 Binding Targets Weihan & DEGs'
+analysis.exp_molly_deg = 'Experimental - CUX1 Molly DEGs'
+analysis.exp_weihan_deg = 'Experimental - CUX1 Weihan DEGs'
 model.log_reg = 'Logistic Regression'
 model.nn = 'Neural Network'
 dataset.in_vivo = 'In vivo'
@@ -512,8 +512,8 @@ for (i_n_cells in c(3, 6))
                    "Experimental - CUX1 Binding Targets Jeff (# genes = 1000)",
                    'Experimental - CUX1 Binding Targets Jeff & Molly (# genes = 891)',
                    'Experimental - CUX1 Binding Targets Jeff & Weihan (# genes = 923)',
-                   'Experimental - CUX1 Binding Targets Molly & DEGs (# genes = 1000)',
-                   'Experimental - CUX1 Binding Targets Weihan & DEGs (# genes = 1000)'
+                   'Experimental - CUX1 Molly DEGs (# genes = 1000)',
+                   'Experimental - CUX1 Weihan DEGs (# genes = 1000)'
                  ))
 
         plot_title <- paste("Cell Fate Prediction Accuracy for In-Vitro Dataset Created by Weinred (2020) (Average of 50 models,", i_n_cells, "cells identities)", sep = " ")
@@ -529,7 +529,7 @@ for (i_n_cells in c(3, 6))
           geom_text(aes(label=t_test, y = 1), 
                     position=position_dodge(width=0.9)) + # vjust=5.25
           scale_color_manual(name = "Legend", values = c("black")) +
-          facet_grid(~analysis_in_order, labeller = label_wrap_gen(width = 18, multi_line = TRUE)) +
+          facet_grid(~analysis_in_order, labeller = label_wrap_gen(width = 15, multi_line = TRUE)) +
           scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
           coord_cartesian(ylim=c(0.5, 0.76)) +
           xlab("Gene Sets Used for Prediction (if number of genes = 1,000, 10 random samples of 1,000 genes were used)") +

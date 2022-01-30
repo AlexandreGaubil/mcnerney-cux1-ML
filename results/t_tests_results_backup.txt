@@ -1,9 +1,4 @@
-[1] T-Tests
-
 [1] "Negative Control & All Datasets"
-
-
-[1] " ----- 3C, LR"
 
 data:  neg_ctrl.3c.lr and most_var.3c.lr
 t = -53.396, df = 812.7, p-value < 2.2e-16
@@ -61,10 +56,6 @@ sample estimates:
 mean of x mean of y
 0.6401936 0.7300421
 
-
-
-[1] " ----- 6C, LR"
-
 data:  neg_ctrl.6c.lr and most_var.6c.lr
 t = -72.525, df = 867.58, p-value < 2.2e-16
 95 percent confidence interval:
@@ -120,10 +111,6 @@ t = -55.016, df = 869.85, p-value < 2.2e-16
 sample estimates:
 mean of x mean of y
 0.5629605 0.6712901
-
-
-
-[1] " ----- 3C, NN"
 
 data:  neg_ctrl.3c.nn and most_var.3c.nn
 t = -59.379, df = 771.15, p-value < 2.2e-16
@@ -181,10 +168,6 @@ sample estimates:
 mean of x mean of y
 0.6094613 0.7286027
 
-
-
-[1] " ----- 6C, NN"
-
 data:  neg_ctrl.6c.nn and most_var.6c.nn
 t = -81.114, df = 848.14, p-value < 2.2e-16
 95 percent confidence interval:
@@ -241,20 +224,7 @@ sample estimates:
 mean of x mean of y
 0.5483221 0.6643326
 
-
-
 [1] "1,000 Most Var & Experimental Datasets"
-
-
-[1] " ----- 3C, LR"
-
-data:  most_var.3c.lr and cux1.jeff.3c.lr
-t = 50.418, df = 882.94, p-value < 2.2e-16
-95 percent confidence interval:
- 0.08499178 0.09187691
-sample estimates:
-mean of x mean of y
-0.7464057 0.6579714
 
 data:  most_var.3c.lr and cux1.jeff_molly.3c.lr
 t = 7.4011, df = 59.298, p-value = 5.505e-10
@@ -288,18 +258,6 @@ sample estimates:
 mean of x mean of y
 0.7464057 0.7300421
 
-
-
-[1] " ----- 6C, LR"
-
-data:  most_var.6c.lr and cux1.jeff.6c.lr
-t = 55.21, df = 838.82, p-value < 2.2e-16
-95 percent confidence interval:
- 0.1099586 0.1180652
-sample estimates:
-mean of x mean of y
-0.7053244 0.5913125
-
 data:  most_var.6c.lr and cux1.jeff_molly.6c.lr
 t = 10.356, df = 59.229, p-value = 6.507e-15
 95 percent confidence interval:
@@ -331,18 +289,6 @@ t = 19.159, df = 897.95, p-value < 2.2e-16
 sample estimates:
 mean of x mean of y
 0.7053244 0.6712901
-
-
-
-[1] " ----- 3C, NN"
-
-data:  most_var.3c.nn and cux1.jeff.3c.nn
-t = 51.136, df = 861.18, p-value < 2.2e-16
-95 percent confidence interval:
- 0.09531183 0.10292050
-sample estimates:
-mean of x mean of y
-0.7424158 0.6432997
 
 data:  most_var.3c.nn and cux1.jeff_molly.3c.nn
 t = 6.3224, df = 62.084, p-value = 3.137e-08
@@ -376,18 +322,6 @@ sample estimates:
 mean of x mean of y
 0.7424158 0.7286027
 
-
-
-[1] " ----- 6C, NN"
-
-data:  most_var.6c.nn and cux1.jeff.6c.nn
-t = 56.167, df = 805.59, p-value < 2.2e-16
-95 percent confidence interval:
- 0.1127334 0.1208982
-sample estimates:
-mean of x mean of y
-0.7059433 0.5891275
-
 data:  most_var.6c.nn and cux1.jeff_molly.6c.nn
 t = 14.246, df = 67.443, p-value < 2.2e-16
 95 percent confidence interval:
@@ -420,20 +354,7 @@ sample estimates:
 mean of x mean of y
 0.7059433 0.6643326
 
-
-
 [1] "Mouse TFs & Experimental Datasets"
-
-
-[1] " ----- 3C, LR"
-
-data:  mouse_tf.3c.lr and cux1.jeff.3c.lr
-t = 0.71178, df = 828.89, p-value = 0.4768
-95 percent confidence interval:
- -0.002766647  0.005914795
-sample estimates:
-mean of x mean of y
-0.6595455 0.6579714
 
 data:  mouse_tf.3c.lr and cux1.jeff_molly.3c.lr
 t = -14.445, df = 74.55, p-value < 2.2e-16
@@ -467,18 +388,6 @@ sample estimates:
 mean of x mean of y
 0.6595455 0.7300421
 
-
-
-[1] " ----- 6C, LR"
-
-data:  mouse_tf.6c.lr and cux1.jeff.6c.lr
-t = -2.9233, df = 891.05, p-value = 0.003551
-95 percent confidence interval:
- -0.010880741 -0.002139394
-sample estimates:
-mean of x mean of y
-0.5848024 0.5913125
-
 data:  mouse_tf.6c.lr and cux1.jeff_molly.6c.lr
 t = -18.322, df = 64.029, p-value < 2.2e-16
 95 percent confidence interval:
@@ -510,18 +419,6 @@ t = -44.075, df = 871.55, p-value < 2.2e-16
 sample estimates:
 mean of x mean of y
 0.5848024 0.6712901
-
-
-
-[1] " ----- 3C, NN"
-
-data:  mouse_tf.3c.nn and cux1.jeff.3c.nn
-t = -1.4334, df = 894.22, p-value = 0.1521
-95 percent confidence interval:
- -0.007478412  0.001165281
-sample estimates:
-mean of x mean of y
-0.6401431 0.6432997
 
 data:  mouse_tf.3c.nn and cux1.jeff_molly.3c.nn
 t = -20.92, df = 72.479, p-value < 2.2e-16
@@ -555,18 +452,6 @@ sample estimates:
 mean of x mean of y
 0.6401431 0.7286027
 
-
-
-[1] " ----- 6C, NN"
-
-data:  mouse_tf.6c.nn and cux1.jeff.6c.nn
-t = -6.64, df = 870.37, p-value = 5.518e-11
-95 percent confidence interval:
- -0.01907152 -0.01036920
-sample estimates:
-mean of x mean of y
-0.5744072 0.5891275
-
 data:  mouse_tf.6c.nn and cux1.jeff_molly.6c.nn
 t = -27.388, df = 75.73, p-value < 2.2e-16
 95 percent confidence interval:
@@ -598,8 +483,6 @@ t = -46.925, df = 889.14, p-value < 2.2e-16
 sample estimates:
 mean of x mean of y
 0.5744072 0.6643326
-
-
 
 [1] "Cux1 Binding Targets vs Cux1 Binding Intersecting DEGs"
 
