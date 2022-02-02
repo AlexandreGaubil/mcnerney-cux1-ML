@@ -1,0 +1,668 @@
+[1] T-Tests
+
+[1] "Negative Control & All Datasets"
+
+
+[1] " ----- 3C, LR"
+
+data:  neg_ctrl.3c.lr and most_var.3c.lr
+t = -53.396, df = 812.7, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1101166 -0.1023076
+sample estimates:
+mean of x mean of y
+0.6401936 0.7464057
+
+data:  neg_ctrl.3c.lr and mouse_tf.3c.lr
+t = -8.0558, df = 890.43, p-value = 2.525e-15
+95 percent confidence interval:
+ -0.02406651 -0.01463719
+sample estimates:
+mean of x mean of y
+0.6401936 0.6595455
+
+data:  neg_ctrl.3c.lr and cux1.jeff.3c.lr
+t = -8.5155, df = 862.82, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.02187534 -0.01368021
+sample estimates:
+mean of x mean of y
+0.6401936 0.6579714
+
+data:  neg_ctrl.3c.lr and cux1.jeff_molly.3c.lr
+t = -19.538, df = 69.933, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.08586600 -0.06995892
+sample estimates:
+mean of x mean of y
+0.6401936 0.7181061
+
+data:  neg_ctrl.3c.lr and cux1.jeff_weihan.3c.lr
+t = -25.728, df = 79.219, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09634590 -0.08250931
+sample estimates:
+mean of x mean of y
+0.6401936 0.7296212
+
+data:  neg_ctrl.3c.lr and cux1_degs.molly.3c.lr
+t = -44.14, df = 843.03, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09417791 -0.08615879
+sample estimates:
+mean of x mean of y
+0.6401936 0.7303620
+
+data:  neg_ctrl.3c.lr and cux1_degs.weihan.3c.lr
+t = -44.39, df = 833.28, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09382133 -0.08587564
+sample estimates:
+mean of x mean of y
+0.6401936 0.7300421
+
+
+
+[1] " ----- 6C, LR"
+
+data:  neg_ctrl.6c.lr and most_var.6c.lr
+t = -72.525, df = 867.58, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1462166 -0.1385112
+sample estimates:
+mean of x mean of y
+0.5629605 0.7053244
+
+data:  neg_ctrl.6c.lr and mouse_tf.6c.lr
+t = -10.242, df = 897.97, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.02602739 -0.01765643
+sample estimates:
+mean of x mean of y
+0.5629605 0.5848024
+
+data:  neg_ctrl.6c.lr and cux1.jeff.6c.lr
+t = -12.697, df = 891.93, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.03273438 -0.02396957
+sample estimates:
+mean of x mean of y
+0.5629605 0.5913125
+
+data:  neg_ctrl.6c.lr and cux1.jeff_molly.6c.lr
+t = -23.465, df = 64.217, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1078497 -0.0909273
+sample estimates:
+mean of x mean of y
+0.5629605 0.6623490
+
+data:  neg_ctrl.6c.lr and cux1.jeff_weihan.6c.lr
+t = -35.232, df = 74.52, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1286215 -0.1148535
+sample estimates:
+mean of x mean of y
+0.5629605 0.6846980
+
+data:  neg_ctrl.6c.lr and cux1_degs.molly.6c.lr
+t = -59.652, df = 885.05, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1244720 -0.1165422
+sample estimates:
+mean of x mean of y
+0.5629605 0.6834676
+
+data:  neg_ctrl.6c.lr and cux1_degs.weihan.6c.lr
+t = -55.016, df = 869.85, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1121943 -0.1044649
+sample estimates:
+mean of x mean of y
+0.5629605 0.6712901
+
+
+
+[1] " ----- 3C, NN"
+
+data:  neg_ctrl.3c.nn and most_var.3c.nn
+t = -59.379, df = 771.15, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1373500 -0.1285591
+sample estimates:
+mean of x mean of y
+0.6094613 0.7424158
+
+data:  neg_ctrl.3c.nn and mouse_tf.3c.nn
+t = -12.417, df = 877.16, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.03553151 -0.02583213
+sample estimates:
+mean of x mean of y
+0.6094613 0.6401431
+
+data:  neg_ctrl.3c.nn and cux1.jeff.3c.nn
+t = -14.062, df = 857.62, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.03856135 -0.02911542
+sample estimates:
+mean of x mean of y
+0.6094613 0.6432997
+
+data:  neg_ctrl.3c.nn and cux1.jeff_molly.3c.nn
+t = -28.111, df = 81.929, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1177122 -0.1021531
+sample estimates:
+mean of x mean of y
+0.6094613 0.7193939
+
+data:  neg_ctrl.3c.nn and cux1.jeff_weihan.3c.nn
+t = -29.537, df = 76.469, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1315770 -0.1149549
+sample estimates:
+mean of x mean of y
+0.6094613 0.7327273
+
+data:  neg_ctrl.3c.nn and cux1_degs.molly.3c.nn
+t = -51.241, df = 800.01, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1215555 -0.1125859
+sample estimates:
+mean of x mean of y
+0.6094613 0.7265320
+
+data:  neg_ctrl.3c.nn and cux1_degs.weihan.3c.nn
+t = -52.33, df = 795.25, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1236106 -0.1146723
+sample estimates:
+mean of x mean of y
+0.6094613 0.7286027
+
+
+
+[1] " ----- 6C, NN"
+
+data:  neg_ctrl.6c.nn and most_var.6c.nn
+t = -81.114, df = 848.14, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1614352 -0.1538071
+sample estimates:
+mean of x mean of y
+0.5483221 0.7059433
+
+data:  neg_ctrl.6c.nn and mouse_tf.6c.nn
+t = -12.485, df = 893.01, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.03018560 -0.02198443
+sample estimates:
+mean of x mean of y
+0.5483221 0.5744072
+
+data:  neg_ctrl.6c.nn and cux1.jeff.6c.nn
+t = -17.824, df = 888.24, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.04529849 -0.03631225
+sample estimates:
+mean of x mean of y
+0.5483221 0.5891275
+
+data:  neg_ctrl.6c.nn and cux1.jeff_molly.6c.nn
+t = -35.005, df = 80.472, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1199414 -0.1070385
+sample estimates:
+mean of x mean of y
+0.5483221 0.6618121
+
+data:  neg_ctrl.6c.nn and cux1.jeff_weihan.6c.nn
+t = -30.675, df = 69.713, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1238000 -0.1086832
+sample estimates:
+mean of x mean of y
+0.5483221 0.6645638
+
+data:  neg_ctrl.6c.nn and cux1_degs.molly.6c.nn
+t = -64.315, df = 874.37, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1330373 -0.1251580
+sample estimates:
+mean of x mean of y
+0.5483221 0.6774198
+
+data:  neg_ctrl.6c.nn and cux1_degs.weihan.6c.nn
+t = -58.014, df = 871.83, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.1199352 -0.1120857
+sample estimates:
+mean of x mean of y
+0.5483221 0.6643326
+
+
+
+[1] "1,000 Most Var & Experimental Datasets"
+
+
+[1] " ----- 3C, LR"
+
+data:  most_var.3c.lr and cux1.jeff.3c.lr
+t = 50.418, df = 882.94, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.08499178 0.09187691
+sample estimates:
+mean of x mean of y
+0.7464057 0.6579714
+
+data:  most_var.3c.lr and cux1.jeff_molly.3c.lr
+t = 7.4011, df = 59.298, p-value = 5.505e-10
+95 percent confidence interval:
+ 0.02064927 0.03595006
+sample estimates:
+mean of x mean of y
+0.7464057 0.7181061
+
+data:  most_var.3c.lr and cux1.jeff_weihan.3c.lr
+t = 5.1074, df = 63.691, p-value = 3.192e-06
+95 percent confidence interval:
+ 0.01021869 0.02335033
+sample estimates:
+mean of x mean of y
+0.7464057 0.7296212
+
+data:  most_var.3c.lr and cux1_degs.molly.3c.lr
+t = 9.4356, df = 893, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.01270664 0.01938090
+sample estimates:
+mean of x mean of y
+0.7464057 0.7303620
+
+data:  most_var.3c.lr and cux1_degs.weihan.3c.lr
+t = 9.7531, df = 895.78, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.01307080 0.01965647
+sample estimates:
+mean of x mean of y
+0.7464057 0.7300421
+
+
+
+[1] " ----- 6C, LR"
+
+data:  most_var.6c.lr and cux1.jeff.6c.lr
+t = 55.21, df = 838.82, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.1099586 0.1180652
+sample estimates:
+mean of x mean of y
+0.7053244 0.5913125
+
+data:  most_var.6c.lr and cux1.jeff_molly.6c.lr
+t = 10.356, df = 59.229, p-value = 6.507e-15
+95 percent confidence interval:
+ 0.03467263 0.05127816
+sample estimates:
+mean of x mean of y
+0.7053244 0.6623490
+
+data:  most_var.6c.lr and cux1.jeff_weihan.6c.lr
+t = 6.1585, df = 66, p-value = 4.919e-08
+95 percent confidence interval:
+ 0.01393937 0.02731343
+sample estimates:
+mean of x mean of y
+0.7053244 0.6846980
+
+data:  most_var.6c.lr and cux1_degs.molly.6c.lr
+t = 11.925, df = 893.89, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.01825948 0.02545417
+sample estimates:
+mean of x mean of y
+0.7053244 0.6834676
+
+data:  most_var.6c.lr and cux1_degs.weihan.6c.lr
+t = 19.159, df = 897.95, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.03054783 0.03752078
+sample estimates:
+mean of x mean of y
+0.7053244 0.6712901
+
+
+
+[1] " ----- 3C, NN"
+
+data:  most_var.3c.nn and cux1.jeff.3c.nn
+t = 51.136, df = 861.18, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.09531183 0.10292050
+sample estimates:
+mean of x mean of y
+0.7424158 0.6432997
+
+data:  most_var.3c.nn and cux1.jeff_molly.3c.nn
+t = 6.3224, df = 62.084, p-value = 3.137e-08
+95 percent confidence interval:
+ 0.01574313 0.03030064
+sample estimates:
+mean of x mean of y
+0.7424158 0.7193939
+
+data:  most_var.3c.nn and cux1.jeff_weihan.3c.nn
+t = 2.4702, df = 59.999, p-value = 0.01636
+95 percent confidence interval:
+ 0.001843108 0.017533996
+sample estimates:
+mean of x mean of y
+0.7424158 0.7327273
+
+data:  most_var.3c.nn and cux1_degs.molly.3c.nn
+t = 8.898, df = 894.25, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.01238036 0.01938732
+sample estimates:
+mean of x mean of y
+0.7424158 0.7265320
+
+data:  most_var.3c.nn and cux1_degs.weihan.3c.nn
+t = 7.7826, df = 895.39, p-value = 1.957e-14
+95 percent confidence interval:
+ 0.01032971 0.01729655
+sample estimates:
+mean of x mean of y
+0.7424158 0.7286027
+
+
+
+[1] " ----- 6C, NN"
+
+data:  most_var.6c.nn and cux1.jeff.6c.nn
+t = 56.167, df = 805.59, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.1127334 0.1208982
+sample estimates:
+mean of x mean of y
+0.7059433 0.5891275
+
+data:  most_var.6c.nn and cux1.jeff_molly.6c.nn
+t = 14.246, df = 67.443, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.03794893 0.05031356
+sample estimates:
+mean of x mean of y
+0.7059433 0.6618121
+
+data:  most_var.6c.nn and cux1.jeff_weihan.6c.nn
+t = 11.285, df = 61.266, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.03404826 0.04871087
+sample estimates:
+mean of x mean of y
+0.7059433 0.6645638
+
+data:  most_var.6c.nn and cux1_degs.molly.6c.nn
+t = 16.165, df = 892.1, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.02506034 0.03198664
+sample estimates:
+mean of x mean of y
+0.7059433 0.6774198
+
+data:  most_var.6c.nn and cux1_degs.weihan.6c.nn
+t = 23.698, df = 893.34, p-value < 2.2e-16
+95 percent confidence interval:
+ 0.03816455 0.04505692
+sample estimates:
+mean of x mean of y
+0.7059433 0.6643326
+
+
+
+[1] "Mouse TFs & Experimental Datasets"
+
+
+[1] " ----- 3C, LR"
+
+data:  mouse_tf.3c.lr and cux1.jeff.3c.lr
+t = 0.71178, df = 828.89, p-value = 0.4768
+95 percent confidence interval:
+ -0.002766647  0.005914795
+sample estimates:
+mean of x mean of y
+0.6595455 0.6579714
+
+data:  mouse_tf.3c.lr and cux1.jeff_molly.3c.lr
+t = -14.445, df = 74.55, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.06663730 -0.05048391
+sample estimates:
+mean of x mean of y
+0.6595455 0.7181061
+
+data:  mouse_tf.3c.lr and cux1.jeff_weihan.3c.lr
+t = -19.731, df = 86.031, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.07713608 -0.06301544
+sample estimates:
+mean of x mean of y
+0.6595455 0.7296212
+
+data:  mouse_tf.3c.lr and cux1_degs.molly.3c.lr
+t = -32.648, df = 805.17, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.07507429 -0.06655870
+sample estimates:
+mean of x mean of y
+0.6595455 0.7303620
+
+data:  mouse_tf.3c.lr and cux1_degs.weihan.3c.lr
+t = -32.767, df = 794.16, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.07471989 -0.06627338
+sample estimates:
+mean of x mean of y
+0.6595455 0.7300421
+
+
+
+[1] " ----- 6C, LR"
+
+data:  mouse_tf.6c.lr and cux1.jeff.6c.lr
+t = -2.9233, df = 891.05, p-value = 0.003551
+95 percent confidence interval:
+ -0.010880741 -0.002139394
+sample estimates:
+mean of x mean of y
+0.5848024 0.5913125
+
+data:  mouse_tf.6c.lr and cux1.jeff_molly.6c.lr
+t = -18.322, df = 64.029, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.08600201 -0.06909121
+sample estimates:
+mean of x mean of y
+0.5848024 0.6623490
+
+data:  mouse_tf.6c.lr and cux1.jeff_weihan.6c.lr
+t = -28.943, df = 74.198, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.10677242 -0.09301878
+sample estimates:
+mean of x mean of y
+0.5848024 0.6846980
+
+data:  mouse_tf.6c.lr and cux1_degs.molly.6c.lr
+t = -49, df = 886.25, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.10261708 -0.09471327
+sample estimates:
+mean of x mean of y
+0.5848024 0.6834676
+
+data:  mouse_tf.6c.lr and cux1_degs.weihan.6c.lr
+t = -44.075, df = 871.55, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09033905 -0.08263634
+sample estimates:
+mean of x mean of y
+0.5848024 0.6712901
+
+
+
+[1] " ----- 3C, NN"
+
+data:  mouse_tf.3c.nn and cux1.jeff.3c.nn
+t = -1.4334, df = 894.22, p-value = 0.1521
+95 percent confidence interval:
+ -0.007478412  0.001165281
+sample estimates:
+mean of x mean of y
+0.6401431 0.6432997
+
+data:  mouse_tf.3c.nn and cux1.jeff_molly.3c.nn
+t = -20.92, df = 72.479, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.08680192 -0.07169976
+sample estimates:
+mean of x mean of y
+0.6401431 0.7193939
+
+data:  mouse_tf.3c.nn and cux1.jeff_weihan.3c.nn
+t = -22.81, df = 68.649, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.10068236 -0.08448599
+sample estimates:
+mean of x mean of y
+0.6401431 0.7327273
+
+data:  mouse_tf.3c.nn and cux1_degs.molly.3c.nn
+t = -41.764, df = 861.1, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09044881 -0.08232897
+sample estimates:
+mean of x mean of y
+0.6401431 0.7265320
+
+data:  mouse_tf.3c.nn and cux1_degs.weihan.3c.nn
+t = -42.948, df = 857.49, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09250225 -0.08441694
+sample estimates:
+mean of x mean of y
+0.6401431 0.7286027
+
+
+
+[1] " ----- 6C, NN"
+
+data:  mouse_tf.6c.nn and cux1.jeff.6c.nn
+t = -6.64, df = 870.37, p-value = 5.518e-11
+95 percent confidence interval:
+ -0.01907152 -0.01036920
+sample estimates:
+mean of x mean of y
+0.5744072 0.5891275
+
+data:  mouse_tf.6c.nn and cux1.jeff_molly.6c.nn
+t = -27.388, df = 75.73, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09376154 -0.08104831
+sample estimates:
+mean of x mean of y
+0.5744072 0.6618121
+
+data:  mouse_tf.6c.nn and cux1.jeff_weihan.6c.nn
+t = -24.066, df = 66.653, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09763468 -0.08267852
+sample estimates:
+mean of x mean of y
+0.5744072 0.6645638
+
+data:  mouse_tf.6c.nn and cux1_degs.molly.6c.nn
+t = -53.533, df = 890.66, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.10678936 -0.09923599
+sample estimates:
+mean of x mean of y
+0.5744072 0.6774198
+
+data:  mouse_tf.6c.nn and cux1_degs.weihan.6c.nn
+t = -46.925, df = 889.14, p-value < 2.2e-16
+95 percent confidence interval:
+ -0.09368658 -0.08616428
+sample estimates:
+mean of x mean of y
+0.5744072 0.6643326
+
+
+
+[1] "Cux1 Binding Targets vs Cux1 Binding Intersecting DEGs"
+
+data:  cux1.jeff_molly.3c.lr and cux1_degs.molly.3c.lr
+t = -3.1818, df = 61.042, p-value = 0.002302
+95 percent confidence interval:
+ -0.019958088 -0.004553697
+sample estimates:
+mean of x mean of y
+0.7181061 0.7303620
+
+data:  cux1.jeff_weihan.3c.lr and cux1_degs.weihan.3c.lr
+t = -0.12725, df = 65.323, p-value = 0.8991
+95 percent confidence interval:
+ -0.007025944  0.006184193
+sample estimates:
+mean of x mean of y
+0.7296212 0.7300421
+
+data:  cux1.jeff_molly.6c.lr and cux1_degs.molly.6c.lr
+t = -5.0559, df = 60.786, p-value = 4.208e-06
+95 percent confidence interval:
+ -0.02947163 -0.01276551
+sample estimates:
+mean of x mean of y
+0.6623490 0.6834676
+
+data:  cux1.jeff_weihan.6c.lr and cux1_degs.weihan.6c.lr
+t = 3.999, df = 66.276, p-value = 0.0001626
+95 percent confidence interval:
+ 0.006714247 0.020101562
+sample estimates:
+mean of x mean of y
+0.6846980 0.6712901
+
+data:  cux1.jeff_molly.3c.nn and cux1_degs.molly.3c.nn
+t = -1.9452, df = 64, p-value = 0.05615
+95 percent confidence interval:
+ -0.0144688999  0.0001928056
+sample estimates:
+mean of x mean of y
+0.7193939 0.7265320
+
+data:  cux1.jeff_weihan.3c.nn and cux1_degs.weihan.3c.nn
+t = 1.0458, df = 61.315, p-value = 0.2997
+95 percent confidence interval:
+ -0.003760644  0.012009802
+sample estimates:
+mean of x mean of y
+0.7327273 0.7286027
+
+data:  cux1.jeff_molly.6c.nn and cux1_degs.molly.6c.nn
+t = -4.9733, df = 70.957, p-value = 4.418e-06
+95 percent confidence interval:
+ -0.021865418 -0.009350093
+sample estimates:
+mean of x mean of y
+0.6618121 0.6774198
+
+data:  cux1.jeff_weihan.6c.nn and cux1_degs.weihan.6c.nn
+t = 0.062531, df = 63.28, p-value = 0.9503
+95 percent confidence interval:
+ -0.007155868  0.007618209
+sample estimates:
+mean of x mean of y
+0.6645638 0.6643326

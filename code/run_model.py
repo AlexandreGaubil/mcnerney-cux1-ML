@@ -4,6 +4,8 @@ from itertools import chain
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.utils.testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
 
 
 
@@ -109,6 +111,7 @@ def fit_model_filter_genes(
 
 
 
+@ignore_warnings(category=ConvergenceWarning)
 def run_model(
     model_list,
     genes_of_interest_files,
