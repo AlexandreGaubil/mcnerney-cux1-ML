@@ -1,8 +1,12 @@
 library(ggplot2)
 library(tidyverse)
+library(stringr)
 
 setwd("~/Documents/Research/mcnerney-cux1-ML-github")
 
+
+
+# ----- Data -----
 
 read_gene_file <- function(filename)
 {
@@ -11,7 +15,6 @@ read_gene_file <- function(filename)
     
     return(dat)
 }
-
 
 genes.most_var <- read_gene_file("2000_most_degs.txt")
 genes.mouse_tf <- read_gene_file("mouse_tfs.txt")
@@ -29,67 +32,20 @@ list_genes <- list(genes.most_var,
                    genes.degs.molly,
                    genes.degs.weihan)
 
-df_intersect <- data.frame(most_var = numeric(),
-                           mouse_tf = numeric(),
-                           binding.jeff = numeric(),
-                           binding.molly = numeric(),
-                           binding.weihan = numeric(),
-                           degs.molly = numeric(),
-                           degs.weihan = numeric())
+gene_sets_names <- list("Most var", 
+                        "Mouse TFs",
+                        "Jeff BT", 
+                        "Molly & Jeff BT",
+                        "Weihan & Jeff BT",
+                        "Molly DEGs",
+                        "Weihan DEGs")
 
-for (gene_set in list_genes)
-{
-    overlap_list <- list()
-    
-    for (second_gene_set in list_genes)
-    {
-        overlap <- length(Reduce(intersect, list(gene_set, second_gene_set)))
-        overlap_list <- append(overlap_list, overlap)
-    }
-    
-    df_intersect <- df_intersect %>% add_row(most_var = overlap_list[[1]],
-                                             mouse_tf = overlap_list[[2]],
-                                             binding.jeff = overlap_list[[3]],
-                                             binding.molly = overlap_list[[4]],
-                                             binding.weihan = overlap_list[[5]],
-                                             degs.molly = overlap_list[[6]],
-                                             degs.weihan = overlap_list[[7]])
-}
-
-row.names(df_intersect) <- list("most_var", 
-                                "mouse_tf",
-                                "binding.jeff", 
-                                "binding.molly",
-                                "binding.weihan",
-                                "degs.molly",
-                                "degs.weihan")
-
-mtx <- data.matrix(df_intersect)
-heatmap(mtx)
-
-
-
-
-
-
-
-
-
-
-
-
-gene_sets_names <- list("most_var", 
-                        "mouse_tf",
-                        "binding.jeff", 
-                        "binding.molly",
-                        "binding.weihan",
-                        "degs.molly",
-                        "degs.weihan")
-
-df_other <- data.frame(x = character(),
-                       y = character(),
-                       value = numeric(),
-                       percentage = numeric())
+df_intersect <- data.frame(x = character(),
+                           y = character(),
+                           value = numeric(),
+                           percentage = numeric(),
+                           order_x = numeric(),
+                           order_y = numeric())
 
 for (i in seq(from = 1, to = 7))
 {
@@ -97,21 +53,54 @@ for (i in seq(from = 1, to = 7))
     {
         overlap <- length(Reduce(intersect, 
                                  list(list_genes[[i]], list_genes[[j]])))
+        
         percent <- overlap / length(list_genes[[i]])
         
-        df_other <- df_other %>% add_row(x = gene_sets_names[[i]],
-                                         y = gene_sets_names[[j]],
-                                         value = overlap,
-                                         percentage = percent)
+        df_intersect <- df_intersect %>% add_row(x = gene_sets_names[[i]],
+                                                 y = gene_sets_names[[j]],
+                                                 value = overlap,
+                                                 percentage = percent,
+                                                 order_x = i,
+                                                 order_y = j)
     }
 }
 
+df_intersect$percentage.rounded <- with(df_intersect, round(percentage, 2))
 
-p <- ggplot(df_other,
-            aes(x = x, y = y, fill = percentage)) +
-    geom_tile() + 
-    geom_text(aes(label = round(percentage, 2))) +
-    scale_fill_gradient( trans = 'log' )
+df_intersect$x <- factor(df_intersect$x, levels = gene_sets_names)
+df_intersect$y <- factor(df_intersect$y, levels = gene_sets_names)
+
+
+
+# ----- Plot -----
+
+# ----- Plot parameters ------
+
+plot.title <- "Heatmap of Gene Sets Overlap for In-Vitro Dataset"
+plot.legend.title <- "Percentage of X that is in Y"
+
+scale_fun <- function(x) sprintf("%.2f", x)
+round_fun <- function(x) round(x, 2)
+
+
+# ----- Plot construction -----
+
+p <- ggplot(df_intersect,
+            aes(x = x, 
+                y = y, 
+                fill = percentage)) +
+    geom_tile(color = "black") + 
+    geom_text(aes(label = round_fun(percentage))) +
+    scale_fill_gradient(trans = 'log',
+                        low = "white", 
+                        high = "red",
+                        labels=scale_fun,
+                        name = str_wrap(plot.legend.title, width=15))+
+    #scale_x_discrete(limits=(df_intersect$x)[order(df_intersect$order_x)]) + 
+    #scale_y_discrete(limits=(df_intersect$y)[order(df_intersect$order_y)]) +
+    xlab("X (Reference)") + 
+    ylab("Y (Comparison)") +
+    ggtitle(str_wrap(plot.title, width=125))
 
 ggsave(filename = "Heatmap of gene sets overlap.png",
        device = "png",
@@ -120,4 +109,3 @@ ggsave(filename = "Heatmap of gene sets overlap.png",
        width = 30,
        height = 15,
        unit = "cm")
-

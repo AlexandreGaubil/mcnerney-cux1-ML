@@ -14,6 +14,7 @@ data_in_vitro/*
 data_in_vivo/*
 data.zip
 *.rds
+other/*
 
 # History files
 .Rhistory
