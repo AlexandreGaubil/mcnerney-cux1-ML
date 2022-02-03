@@ -44,7 +44,7 @@ library(mltools)
 ```
 
 
-## Check directory & specify kind of data analysis
+## Check directory
 ```{r}
 setwd(getwd())
 
@@ -52,26 +52,25 @@ setwd(getwd())
 if (!dir.exists("./data")) {
   stop("It seems that the current working directory is not correct (doesn't contain `data/`), you should check that.")
 }
-if (!dir.exists("./data/output/")) {
-  warning("No `data/output/` directory found, creating one now...")
-  dir.create("./data/output/")
+if (!dir.exists("./data/in_vitro/")) {
+  warning("No `data/in_vitro/` directory found, creating one now...")
+  dir.create("./data/in_vitro/")
 }
-if (!dir.exists("./data/input/")) {
-  stop("No `data/input/` directory found.")
+if (!dir.exists("./data/in_vitro/input_for_Seurat/")) {
+  stop("No `data/in_vitro/input_for_Seurat/` directory found, creating one now...")
+  dir.create("./data/in_vitro/input_for_Seurat/")
 }
-if (!dir.exists("./data/cache/")) {
-  warning("No `data/cache/` directory found, creating one now...")
-  dir.create("./data/cache/")
+if (!dir.exists("./data/in_vitro/RDS_objects/")) {
+  stop("No `data/in_vitro/RDS_objects/` directory found, creating one now...")
+  dir.create("./data/in_vitro/RDS_objects/")
 }
 ```
 
 ## Set options for code
 ```{r}
-# Define type of data transformation to apply, depending on the dataset we are working with
-settings.dataset <- "in_vitro"
-# settings.dataset <- "in_vivo"
-
-# If TRUE, will remove variables as they are no longer needed. Keep FALSE while developing to facilitate debugging
+# If TRUE, will remove variables as they are no longer needed.
+# Keep FALSE while developing to facilitate debugging. Set to TRUE to
+# optimise performance.
 settings.remove_unused <- FALSE
 ```
 
@@ -84,39 +83,37 @@ Read in the data from Weinreb 2020 and perform data cleaning.
 ## Create Count Matrix (`matrix.mtx.gz`)
 ```{r}
 # If the transposed normed counts matrix file doesn't exist yet, create it
-if (!file.exists("./data/cache/input_for_Seurat/matrix.mtx.gz")) {
+if (!file.exists("./data/in_vitro/input_for_Seurat/matrix.mtx.gz")) {
   print("Creating `matrix.mtx.gz`...")
   # Load the L1 normalized count matrix
-  count_mtx = readMM("./data/input/normed_counts.mtx")
+  count_mtx = readMM("./data/in_vitro/files_from_weinreb/normed_counts.mtx")
 
   # Read10X() expect gene-by-cell-matrix, so we need to transpose and export
   count_mtx <- t(count_mtx)
-  if (!dir.exists("./data/cache/input_for_Seurat/")) {
-    dir.create("./data/cache/input_for_Seurat/")
-  }
-  file.create("./data/cache/input_for_Seurat/matrix.mtx")
-  writeMM(count_mtx, "./data/cache/input_for_Seurat/matrix.mtx")
-  gzip("./data/cache/input_for_Seurat/matrix.mtx")
-  file.remove("./data/cache/input_for_Seurat/matrix.mtx")
+
+  file.create("./data/in_vitro/input_for_Seurat/matrix.mtx")
+  writeMM(count_mtx, "./in_vitro/cache/input_for_Seurat/matrix.mtx")
+  gzip("./data/in_vitro/input_for_Seurat/matrix.mtx")
+  file.remove("./data/in_vitro/input_for_Seurat/matrix.mtx")
 }
 ```
 
 ## Load `metadata.txt`
 ```{r}
-meta_data <- read.delim("./data/input/metadata.txt", header = TRUE)
+meta_data <- read.delim("./data/in_vitro/files_from_weinreb/metadata.txt", header = TRUE)
 ```
 
 We need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells.
 
 ## Read in the clone membership metadata
 ```{r}
-if (!file.exists("./data/cache/t_clone_matrix.mtx")) {
-  print("Creating `t_clone_matrix.mtx`...")
-  clone_matrix <- readMM("./data/input/clone_matrix.mtx")
+if (!file.exists("./data/in_vitro/files_from_weinreb/clone_matrix_transposed.mtx")) {
+  print("Creating `clone_matrix_transposed.mtx`...")
+  clone_matrix <- readMM("./data/in_vitro/files_from_weinreb/clone_matrix.mtx")
   t_clone_matrix <- t(clone_matrix)
 
-  file.create("./data/cache/t_clone_matrix.mtx")
-  writeMM(t_clone_matrix, "./data/cache/t_clone_matrix.mtx")
+  file.create("./data/in_vitro/files_from_weinreb/clone_matrix_transposed.mtx")
+  writeMM(t_clone_matrix, "./data/in_vitro/files_from_weinreb/clone_matrix_transposed.mtx")
 
   if (settings.remove_unused) {
     rm(clone_matrix)
@@ -125,7 +122,7 @@ if (!file.exists("./data/cache/t_clone_matrix.mtx")) {
 }
 
 # Read in the clonal membership matrix & convert to dataframe
-t_clone_matrix <- readMM("./data/cache/t_clone_matrix.mtx")
+t_clone_matrix <- readMM("./data/in_vitro/files_from_weinreb/clone_matrix_transposed.mtx")
 clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
 
 if (settings.remove_unused) { rm(t_clone_matrix) }
@@ -170,20 +167,20 @@ meta_data <- column_to_rownames(meta_data, var="cell.rowname")
 
 We use the new unique cell barcode to remake the `barcode.tsv` file for reading in Seurat object.
 ```{r}
-if (!file.exists("./data/cache/input_for_Seurat/barcodes.tsv.gz")) {
+if (!file.exists("./data/in_vitro/input_for_Seurat/barcodes.tsv.gz")) {
   print("Creating `barcode.tsv.gz`...")
   barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
 
   # Export the new cell barcode tsv file
-  write.table(barcode, file='./data/cache/input_for_Seurat/barcodes.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
-  gzip("./data/cache/input_for_Seurat/barcodes.tsv")
-  file.remove("./data/cache/input_for_Seurat/barcodes.tsv")
+  write.table(barcode, file='./data/in_vitro/input_for_Seurat/barcodes.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
+  gzip("./data/in_vitro/input_for_Seurat/barcodes.tsv")
+  file.remove("./data/in_vitro/input_for_Seurat/barcodes.tsv")
 }
 ```
 
 ## Read in the Seurat object
 ```{r}
-LT.data <- Read10X(data.dir="./data/cache/input_for_Seurat", gene.column=1, cell.column = 1)
+LT.data <- Read10X(data.dir="./data/in_vitro/input_for_Seurat", gene.column=1, cell.column = 1)
 
 # Initialize the Seurat object with the raw (non-normalized data).
 LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
@@ -329,10 +326,10 @@ DimPlot(LT.seu.day2, group.by = "final.ident", reduction = "pca")
 
 ```{r, include = FALSE, eval = FALSE}
 # Save LT.seu.day2 to not have to redo all previous calculations every time
-saveRDS(LT.seu.day2, file = "./data/cache/LT_seu_day2_before_filtering.rds")
+saveRDS(LT.seu.day2, file = "./data/in_vitro/RDS_objects/LT_seu_day2_before_filtering.rds")
 
 # Load LT.seu.day2 from file
-LT.seu.day2 <- readRDS(file = "./data/cache/LT_seu_day2_before_filtering.rds")
+LT.seu.day2 <- readRDS(file = "./data/in_vitro/RDS_objects/LT_seu_day2_before_filtering.rds")
 ```
 
 ## Combine cell final identities for rare cells and remove the ones that are very rare
@@ -343,31 +340,19 @@ Idents(LT.seu.day2) <- "final.ident"
 # In vivo: there is no NK cell
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
 
-if (settings.dataset == "in_vitro") {
-  LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
-    mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
-                                   final.ident == "Monocyte" ~ "Monocyte",
-                                   final.ident == "Neutrophil" ~ "Neutrophil"))
-                                   # Remove below for only three cells analysis
-                                   #final.ident == "Meg" ~ "Meg",
-                                   #final.ident == "Lymphoid" ~ "Lymphoid",
-                                   #final.ident == "Mast" ~ "Mast"))
-                                   # Remove below for only 6
-                                   # final.ident == "Ccr7_DC" ~ "Ccr7DC",
-                                   # final.ident == "Eos" ~ "Eos",
-                                   # final.ident == "Erythroid" ~ "Erythroid",
-                                   # final.ident == "pDC" ~ "pDC"))
-} else if (settings.dataset == "in_vivo") {
-  LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
-    mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
-                                   final.ident == "DC" ~ "My",
-                                   final.ident == "Mono" ~ "My",
-                                   final.ident == "Neu" ~ "My",
-                                   final.ident == "B" ~ "B",
-                                   final.ident == "Ery" ~ "Ery"))
-} else {
-  stop("Unrecognized value for `settings.dataset`")
-}
+LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
+  mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
+                                  final.ident == "Monocyte" ~ "Monocyte",
+                                  final.ident == "Neutrophil" ~ "Neutrophil"))
+                                  # Remove below for only three cells analysis
+                                  #final.ident == "Meg" ~ "Meg",
+                                  #final.ident == "Lymphoid" ~ "Lymphoid",
+                                  #final.ident == "Mast" ~ "Mast"))
+                                  # Remove below for only 6
+                                  # final.ident == "Ccr7_DC" ~ "Ccr7DC",
+                                  # final.ident == "Eos" ~ "Eos",
+                                  # final.ident == "Erythroid" ~ "Erythroid",
+                                  # final.ident == "pDC" ~ "pDC"))
 
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")
 
@@ -380,7 +365,7 @@ LT.seu.day2@meta.data %>%
 
 Save the day 2 Seurat object, this will be the object we will pull the training data from
 ```{r}
-saveRDS(LT.seu.day2, file = "./data/cache/LT_seu_day2_ML_source_data.rds")
+saveRDS(LT.seu.day2, file = "./data/in_vitro/RDS_objects/LT_seu_day2_ML_source_data.rds")
 ```
 
 
@@ -393,7 +378,7 @@ Read in and preparing the training data, export to your desktop and we will impl
 ### Negative Control
 
 Randomly sampled 1000 genes from day 2 Seurat object (will be randomly sampled in Python)
-```{r} 
+```{r}
 day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
 day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
 # Attach the final identity (label) to the data
@@ -461,246 +446,4 @@ write.table(day2.count.var.2000.feature,
             row.names = TRUE,
             col.names = TRUE,
             "./data/output/pos_control/var_2000_pos_ctrl_feature_headers.txt")
-```
-
-
-Experimental gene sets:
-1.All cux1 binding genes from Jeff. One caveat is that all the Cux1 binding targets are derived from a Cut and Run experiment in human CD34, but we are testing the ML classifier in mouse
-```{r}
-Cux1_binding_sites_df <- read.table("./data/lab_data/CUX1_target_genes_Jeff_CUT_Run_human_CD34/20210530-public-4.0.4-rlNUuD-hg19-all-region.txt",sep = "\t")
-
-#data cleaning
-#parse the column into correct format
-Cux1_binding_sites_df <- separate(Cux1_binding_sites_df, V2, into = c("C1","C2","C3","C4","C5","C6","C7","C8"), sep = " ")
-#obtain the gene list from the parsed columns
-Cux1_binding_genes <- c(Cux1_binding_sites_df$C1,Cux1_binding_sites_df$C3,Cux1_binding_sites_df$C5,Cux1_binding_sites_df$C7)
-#remove duplicates
-Cux1_binding_genes <- unique(Cux1_binding_genes)
-#convert to mouse gene symbol
-library(HumanMouseConvert)
-Cux1_binding_genes <- human_mouse_convert(Cux1_binding_genes,"human")
-
-#obtain traning data from the day 2 Seurat object
-day2.count.cux1.bound.genes <- as.data.frame(LT.seu.day2@assays$RNA@data)
-day2.count.cux1.bound.genes <- filter(day2.count.cux1.bound.genes,rownames(day2.count.cux1.bound.genes) %in% Cux1_binding_genes)
-day2.count.cux1.bound.genes <- t(day2.count.cux1.bound.genes) %>% as.data.frame()
-#attach the final identity(label) to the data
-day2.count.cux1.bound.genes$final.ident <- LT.seu.day2@meta.data$final.ident
-
-day2.count.cux1.bound.genes
-
-#this is the data for ML classifier for all Cux1 binding genes, let's export it
-write.table(day2.count.cux1.bound.genes,"./data/ML_classifier/input_data/all_cux1_bound_genes.txt")
-```
-
-2).Intersect of Cux1 binding genes(jeff's cut and Run) and DEGs after Cux1 KD in mouse LSK HSPC(from Molly's bulk RNA seq)
-Molly's bulk RNA seq: shCux1 vs Ren(Ren being the base), so the DEGs up in this imported file are up in shCux1 sample, DEGs down in this file in down in shCux1 sample likewise
-```{r}
-library(readxl)
-#read in Molly's bulk RNA seq results
-mouse_LSK_bulk_RNA_df <- read_excel("./data/lab_data/Bulk_RNA_seq_mouse_LSK_shCux1_Molly/HSC_tophat_20190213_B.xlsx")
-#filter the df based on FDR
-bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, FDR <= 0.1)
-#filter based on LFC
-bulk_RNA_sig_genes <- filter(mouse_LSK_bulk_RNA_df, abs(logFC) >= 0.8)
-#sort the DEG table for LFC
-bulk_RNA_sig_genes <- bulk_RNA_sig_genes[order(bulk_RNA_sig_genes$logFC,decreasing = TRUE),]
-
-#intersect
-day2.count.cux1.bound.DEG <- day2.count.cux1.bound.genes[,colnames(day2.count.cux1.bound.genes) %in% c(bulk_RNA_sig_genes$genes,"final.ident")]
-
-day2.count.cux1.bound.DEG
-
-#export the data
-write.table(day2.count.cux1.bound.DEG,"./data/ML_classifier/input_data/all_cux1_bound_DEG.txt")
-```
-
-
-3).Cux1 signature(DEGs comparing Cux1 + and Cux1- cells)
-This table is from 5_DE_pathway_analysis and contains the DEGs both up and down regulated in Cux1 + cells vs Cux1 - cells
-```{r,fig.width=10,fig.height=6}
-kon1 <- readRDS(file = "./data/single_cell_project/code/seurat_object_ln12_comb_cell_cycle_regress/kon1_3_slingshot_TI.rds")
-
-Idents(kon1) <- "cux1_status"
-#perform DE analysis, the result contains DEGs both up and down regulated in Cux1+ cells
-Cux1_signature <- FindMarkers(kon1, ident.1 = "positive", ident.2 = "negative",test.use = "MAST")
-#sort the result table based on log2 Fold change from high to low
-Cux1_signature <- Cux1_signature[order(Cux1_signature$avg_log2FC,decreasing = TRUE),]
-
-DimPlot(kon.comb, split.by = "orig.ident", group.by = "final.ident.2",label = TRUE, repel = TRUE)
-```
-
-
-
-
-
-# Machine learning
-
-We will try algorithm below
-1).Random Forest
-2).Adaboost
-3).DNN
-
-Load relevant packages
-```{r}
-library(tidymodels)
-library(tidyverse)
-library(workflows)
-library(tune)
-```
-
-
-Create bootstrapped samples
-```{r}
-#controls
-day2.count.neg.ctrl.bs <- bootstraps(day2.count.neg.ctrl)
-day2.count.var.3000.bs <- bootstraps(day2.count.var.3000)
-
-#treatment
-day2.count.cux1.bound.DEG.bs <- bootstraps(day2.count.cux1.bound.DEG)
-day2.count.cux1.bound.genes.bs <- bootstraps(day2.count.cux1.bound.genes)
-
-```
-
-
-Cux1 bound DEGs
-```{r}
-library(themis)
-
-day2.count.cux1.bound.DEG_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.DEG)
-
-day2.count.cux1.bound.DEG_prep <- prep(day2.count.cux1.bound.DEG_rec)
-juice(day2.count.cux1.bound.DEG_prep)
-```
-
-Define workflow
-```{r}
-rf_spec.Cux1.bound.DEG <- rand_forest(trees = 1000) %>%
-  set_mode("classification") %>%
-  set_engine("ranger")
-
-cux1.bound.DEG.wf <- workflow() %>%
-  add_recipe(day2.count.cux1.bound.DEG_rec) %>%
-  add_model(rf_spec.Cux1.bound.DEG)
-
-cux1.bound.DEG.wf
-```
-
-Fit the workflow to bootstrapped samples
-```{r}
-cux1.bound.DEG.res <- fit_resamples(
-  cux1.bound.DEG.wf,
-  resamples = day2.count.cux1.bound.DEG.bs,
-  control = control_resamples(save_pred = TRUE)
-)
-```
-
-Examine performance
-```{r}
-cux1.bound.DEG.res %>%
-  collect_metrics()
-```
-
-
-Examine variable importance
-```{r}
-library(vip)
-
-rf_spec %>%
-  set_engine("ranger", importance = "permutation") %>%
-  fit(
-    volcano_type ~ .,
-    data = juice(volcano_prep) %>%
-      select(-volcano_number) %>%
-      janitor::clean_names()
-  ) %>%
-  vip(geom = "point")
-```
-
-
-All Cux1 bound genes
-```{r}
-day2.count.cux1.bound.genes_rec <- recipe(final.ident ~ ., data = day2.count.cux1.bound.genes)
-
-day2.count.cux1.bound.genes_prep <- prep(day2.count.cux1.bound.genes_rec)
-juice(day2.count.cux1.bound.genes_prep)
-
-rf_spec.cux1.bound.genes <- rand_forest(trees = 1000) %>%
-  set_mode("classification") %>%
-  set_engine("ranger")
-
-day2.count.cux1.bound.genes.wf <- workflow() %>%
-  add_recipe(day2.count.cux1.bound.genes_rec) %>%
-  add_model(rf_spec.cux1.bound.genes)
-
-day2.count.cux1.bound.genes.res <- fit_resamples(
-  day2.count.cux1.bound.genes.wf,
-  resamples = day2.count.cux1.bound.genes.bs,
-  control = control_resamples(save_pred = TRUE)
-)
-
-day2.count.cux1.bound.genes.res %>%
-  collect_metrics()
-```
-
-
-Neg control
-```{r}
-day2.count.neg.ctrl_rec <- recipe(final.ident ~ ., data = day2.count.neg.ctrl)
-
-day2.count.neg.ctrl_prep <- prep(day2.count.neg.ctrl_rec)
-juice(day2.count.neg.ctrl_prep)
-
-rf_spec <- rand_forest(trees = 1000) %>%
-  set_mode("classification") %>%
-  set_engine("ranger")
-
-day2.count.neg.ctrl.wf <- workflow() %>%
-  add_recipe(day2.count.neg.ctrl_rec) %>%
-  add_model(rf_spec)
-
-day2.count.neg.ctrl.res <- fit_resamples(
-  day2.count.neg.ctrl.wf,
-  resamples = day2.count.neg.ctrl.bs,
-  control = control_resamples(save_pred = TRUE)
-)
-
-day2.count.neg.ctrl.res %>%
-  collect_metrics()
-```
-
-
-### Negative control testing using logistic regression
-
-```{r}
-# TODO: implement negative control testing using logistic regression. Should get ~40% prediction accuracy
-
-# Do for 50 sets of 1,000 genes
-
-# sklearn.linear_model.LogisticRegression(penalty=‘l2’, dual=False, tol=0.0001, C=[0.008 in vitro; 0.004 in vivo], fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=‘warn’, max_iter=100, multi_class=‘warn’, verbose=0, warm_start=False, n_jobs=None)
-```
-
-Positive control, top 3000 most variable genes
-```{r}
-day2.count.var.3000_rec <- recipe(final.ident ~ ., data = day2.count.var.3000)
-
-day2.count.var.3000_prep <- prep(day2.count.var.3000_rec)
-juice(day2.count.var.3000_prep)
-
-rf_spec <- rand_forest(trees = 1000) %>%
-  set_mode("classification") %>%
-  set_engine("ranger")
-
-day2.count.var.3000.wf <- workflow() %>%
-  add_recipe(day2.count.var.3000_rec) %>%
-  add_model(rf_spec)
-
-day2.count.var.3000.res <- fit_resamples(
-  day2.count.var.3000.wf,
-  resamples = day2.count.var.3000.bs,
-  control = control_resamples(save_pred = TRUE)
-)
-
-day2.count.var.3000.res  %>%
-  collect_metrics()
 ```
