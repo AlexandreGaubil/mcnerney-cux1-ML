@@ -9,11 +9,12 @@
 code/__pycache__/
 
 # Data files (too big to track with git - should be copied by each user)
-data/*
-data_in_vitro/*
-data_in_vivo/*
-data.zip
 *.rds
+analyses_input/
+files_from_weinreb/
+input_for_Seurat/
+RDS_objects/
+analyses_output/
 other/*
 
 # History files
