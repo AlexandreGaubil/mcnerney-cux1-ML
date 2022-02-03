@@ -64,6 +64,10 @@ if (!dir.exists("./data/in_vitro/RDS_objects/")) {
   stop("No `data/in_vitro/RDS_objects/` directory found, creating one now...")
   dir.create("./data/in_vitro/RDS_objects/")
 }
+if (!dir.exists("./data/in_vitro/analyses/")) {
+  warning("No `data/in_vitro/analyses/` directory found, creating one now...")
+  dir.create("./data/in_vitro/analyses/")
+}
 ```
 
 ## Set options for code
@@ -391,19 +395,14 @@ day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.iden
 day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
 day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
 
-if (!dir.exists("./data/output/neg_control/")) {
-  warning("No `data/output/neg_control` directory found, creating one now...")
-  dir.create("./data/output/neg_control")
-}
-
 write.table(day2.count.neg.ctrl.data,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/output/neg_control/rand_genes_neg_ctrl_data_all_cell_types.txt")
+            "./data/in_vitro/analyses/rand_genes_neg_ctrl_data_all_cell_types.txt")
 write.table(day2.count.neg.ctrl.feature,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/output/neg_control/rand_genes_neg_ctrl_feature_all_cell_types.txt")
+            "./data/in_vitro/analyses/rand_genes_neg_ctrl_feature_all_cell_types.txt")
 ```
 
 ### Positive Control
@@ -420,11 +419,6 @@ day2.count.var.2000$final.ident <- LT.seu.day2@meta.data$final.ident
 
 day2.count.var.2000
 
-if (!dir.exists("./data/output/pos_control/")) {
-  warning("No `data/output/pos_control` directory found, creating one now...")
-  dir.create("./data/output/pos_control")
-}
-
 # Export the df
 day2.count.var.2000.data <- subset(day2.count.var.2000, select = -c(final.ident))
 day2.count.var.2000.feature <- subset(day2.count.var.2000, select = c(final.ident))
@@ -432,18 +426,18 @@ day2.count.var.2000.feature <- subset(day2.count.var.2000, select = c(final.iden
 write.table(day2.count.var.2000.data,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/output/pos_control/var_2000_pos_ctrl_data.txt")
+            "./data/in_vitro/analyses/var_2000_pos_ctrl_data.txt")
 write.table(day2.count.var.2000.feature,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/output/pos_control/var_2000_pos_ctrl_feature.txt")
+            "./data/in_vitro/analyses/var_2000_pos_ctrl_feature.txt")
 
 write.table(day2.count.var.2000.data,
             row.names = TRUE,
             col.names = TRUE,
-            "./data/output/pos_control/var_2000_pos_ctrl_data_headers.txt")
+            "./data/in_vitro/analyses/var_2000_pos_ctrl_data_headers.txt")
 write.table(day2.count.var.2000.feature,
             row.names = TRUE,
             col.names = TRUE,
-            "./data/output/pos_control/var_2000_pos_ctrl_feature_headers.txt")
+            "./data/in_vitro/analyses/var_2000_pos_ctrl_feature_headers.txt")
 ```
