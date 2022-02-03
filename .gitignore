@@ -6,7 +6,7 @@
 .autohidefiles
 
 # Python cache
-code/__pycache__/
+__pycache__/
 
 # Data files (too big to track with git - should be copied by each user)
 *.rds
