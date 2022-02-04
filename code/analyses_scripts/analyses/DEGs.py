@@ -21,4 +21,6 @@ for i in range(len(df.goi_cux1_deg)):
         df.data_col_seps,
         df.features_files,
         df.n_models,
-        df.hyper_param_tuning)
+        df.hyper_param_tuning,
+        False,
+        df.f1_score)

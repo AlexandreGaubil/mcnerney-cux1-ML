@@ -4,6 +4,7 @@ from itertools import chain
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score as sklearn_f1_score
 from sklearn.utils.testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
 
@@ -14,8 +15,9 @@ def fit_model(
     features_array,
     model,
     n_models,
-    hyper_param_tuning = False,
-    f1_classification = False):
+    hyper_param_tuning,
+    f1_classification,
+    f1_score):
     accuracy_array = []
 
     # Bootstrapping: Create 50 models of 1,000 random genes each and calculate
@@ -36,7 +38,14 @@ def fit_model(
 
         # If we aren't doing hyper parameter tuning, score the model
         if not hyper_param_tuning:
-            accuracy_array.append(fitted_model.score(x_test, y_test))
+            if not f1_score:
+                accuracy_array.append(fitted_model.score(x_test, y_test))
+            else:
+                y_pred = fitted_model.predict(x_test)
+                accuracy_array.append(sklearn_f1_score(
+                    y_true = y_test,
+                    y_pred = y_pred,
+                    average = 'macro'))
 
     return accuracy_array
 
@@ -48,9 +57,10 @@ def fit_model_filter_genes(
     data_mtx_file,
     data_mtx_col_sep,
     features_array_file,
-    n_models = 50,
-    hyper_param_tuning = False,
-    f1_classification = False):
+    n_models,
+    hyper_param_tuning,
+    f1_classification,
+    f1_score):
     goi_multi_array = []
 
     print("\nMODEL --- {}".format(model))
@@ -84,10 +94,17 @@ def fit_model_filter_genes(
                 n = 1000,
                 replace = False,
                 axis = 1)
-            accuracy_matrix.append(fit_model(df_sample, features_array, model, n_models, f1_classification = f1_classification))
+            accuracy_matrix.append(fit_model(
+                df_sample,
+                features_array,
+                model,
+                n_models,
+                hyper_param_tuning,
+                f1_classification,
+                f1_score))
     else:
         print("     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling")
-        accuracy_matrix.append(fit_model(df, features_array, model, n_models, f1_classification = f1_classification))
+        accuracy_matrix.append(fit_model(df, features_array, model, n_models, f1_classification, ))
 
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
@@ -107,7 +124,8 @@ def fit_model_filter_genes(
             data_mtx_col_sep,
             features_array_file,
             50,
-            hyper_param_tuning = False)
+            False,
+            f1_score)
 
 
 
@@ -120,7 +138,8 @@ def run_model(
     features_array_files,
     n_models,
     hyper_param_tuning,
-    f1_classification = False):
+    f1_classification = False,
+    f1_score = False):
     for i in range(len(model_list)):
         for j in range(len(data_mtx_files)):
             fit_model_filter_genes(
@@ -131,4 +150,5 @@ def run_model(
                 features_array_files[j],
                 n_models[i],
                 hyper_param_tuning[i],
-                f1_classification)
+                f1_classification,
+                f1_score)

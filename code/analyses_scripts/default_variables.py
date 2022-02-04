@@ -6,6 +6,7 @@
 
 import models as md
 import file_strings as st
+from sklearn.metrics import f1_score
 
 models = [md.log_reg, md.hyper_param]
 #models = [md.hyper_param]
@@ -16,6 +17,9 @@ n_models = [50, 1]
 # n_models = [1]
 hyper_param_tuning = [False, True]
 # hyper_param_tuning = [True]
+
+# Specifies if all models should calculate f1 score instead of accuracy
+f1_score = True
 
 # ----- Genes of Interest files -----
 

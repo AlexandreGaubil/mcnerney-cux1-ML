@@ -24,4 +24,5 @@ for i in range(len(df.goi_all_prog)):
         df.features_files,
         df.n_models,
         df.hyper_param_tuning,
-        f1_classification = True)
+        True,
+        df.f1_score)

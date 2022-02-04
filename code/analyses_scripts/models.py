@@ -8,6 +8,7 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
+import default_variables as df
 
 
 # LOGISTIC REGRESSION
@@ -35,5 +36,13 @@ _parameters = {
     'hidden_layer_sizes': [(100, 20), (250, 100), (250, 30), (150, 50)],
     'solver': ['adam']
 }
+
 _hyper_param_model_type = MLPClassifier()
-hyper_param = GridSearchCV(_hyper_param_model_type, _parameters, n_jobs = -1)
+
+_f1_score_string = 'accuracy' if df.f1_score else 'f1_macro'
+
+hyper_param = GridSearchCV(
+    _hyper_param_model_type,
+    _parameters,
+    scoring = _f1_score_string,
+    n_jobs = -1)
