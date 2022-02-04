@@ -16,6 +16,7 @@ input_for_Seurat/
 RDS_objects/
 analyses_output/
 other/*
+data/output/
 
 # History files
 .Rhistory
