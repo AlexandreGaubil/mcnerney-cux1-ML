@@ -6,7 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score as sklearn_f1_score
 from sklearn.exceptions import ConvergenceWarning
-
+import sys
+import numpy
+numpy.set_printoptions(threshold=sys.maxsize)
 
 
 def fit_model(
@@ -154,7 +156,7 @@ def run_model(
     hyper_param_tuning,
     f1_classification = False,
     f1_score = False,
-    print_coeffs = False):
+    print_coeffs = [False, False]):
     for i in range(len(model_list)):
         for j in range(len(data_mtx_files)):
             fit_model_filter_genes(
@@ -167,4 +169,4 @@ def run_model(
                 hyper_param_tuning[i],
                 f1_classification,
                 f1_score,
-                print_coeffs)
+                print_coeffs[i])
