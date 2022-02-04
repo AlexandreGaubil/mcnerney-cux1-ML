@@ -8,7 +8,6 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
-import default_variables as df
 
 
 # LOGISTIC REGRESSION
@@ -39,7 +38,8 @@ _parameters = {
 
 _hyper_param_model_type = MLPClassifier()
 
-_f1_score_string = 'accuracy' if df.f1_score else 'f1_macro'
+# _f1_score_string = 'accuracy' if df.f1_score else 'f1_macro'
+_f1_score_string = 'f1_macro'
 
 hyper_param = GridSearchCV(
     _hyper_param_model_type,
