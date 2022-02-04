@@ -11,21 +11,22 @@ from sklearn.model_selection import GridSearchCV
 
 
 # LOGISTIC REGRESSION
-log_reg = LogisticRegression(penalty = 'l2',
-                           dual = False,
-                           tol = 0.0001,
-                           # C = [0.008 in vitro; 0.004 in vivo]
-                           C = 0.008,
-                           fit_intercept = True,
-                           intercept_scaling = 1,
-                           class_weight = None,
-                           random_state = None,
-                           solver = 'saga',
-                           max_iter = 1000,
-                           multi_class = 'multinomial',
-                           verbose = 0,
-                           warm_start = False,
-                           n_jobs = -1)
+log_reg = LogisticRegression(
+    penalty = 'l2',
+    dual = False,
+    tol = 0.0001,
+    # C = [0.008 in vitro; 0.004 in vivo]
+    C = 0.008,
+    fit_intercept = True,
+    intercept_scaling = 1,
+    class_weight = None,
+    random_state = None,
+    solver = 'saga',
+    max_iter = 1000,
+    multi_class = 'multinomial',
+    verbose = 0,
+    warm_start = False,
+    n_jobs = -1)
 
 
 # HYPER PARAMETER TUNING
