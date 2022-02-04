@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=prog_t_test
-#SBATCH --output=prog_t_test.out
-#SBATCH --error=prog_t_test.err
+#SBATCH --job-name=prog_f1
+#SBATCH --output=prog_f1.out
+#SBATCH --error=prog_f1.err
 #SBATCH --time=25:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=8
@@ -16,4 +16,4 @@ module load python
 date
 
 # POS CTRL
-python analyses/pos_ctrl_prog.py
+python ../analyses/pos_ctrl_prog.py
