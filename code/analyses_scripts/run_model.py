@@ -11,6 +11,8 @@ import numpy
 numpy.set_printoptions(threshold=sys.maxsize)
 
 
+#_matrix_coeffs = np.array()
+
 def fit_model(
     data_df,
     features_array,
@@ -49,8 +51,9 @@ def fit_model(
                     y_pred = y_pred,
                     average = 'macro'))
 
-        if print_coeffs:
-            print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
+        #if print_coeffs:
+        #    _matrix_coeffs.append(fitted_model.coef_)
+        #    # print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
 
     return accuracy_array
 
@@ -140,6 +143,7 @@ def fit_model_filter_genes(
             features_array_file,
             50,
             False,
+            f1_classification,
             f1_score,
             print_coeffs)
 
@@ -170,3 +174,6 @@ def run_model(
                 f1_classification,
                 f1_score,
                 print_coeffs[i])
+
+            #if print_coeffs[i]:
+            #    np.average(_matrix_coeffs, axis=0)
