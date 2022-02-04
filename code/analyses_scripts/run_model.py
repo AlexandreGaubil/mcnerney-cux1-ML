@@ -16,7 +16,8 @@ def fit_model(
     n_models,
     hyper_param_tuning,
     f1_classification,
-    f1_score):
+    f1_score,
+    print_coeffs):
     accuracy_array = []
 
     # Bootstrapping: Create 50 models of 1,000 random genes each and calculate
@@ -46,6 +47,9 @@ def fit_model(
                     y_pred = y_pred,
                     average = 'macro'))
 
+        if print_coeffs:
+            print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
+
     return accuracy_array
 
 
@@ -59,7 +63,8 @@ def fit_model_filter_genes(
     n_models,
     hyper_param_tuning,
     f1_classification,
-    f1_score):
+    f1_score,
+    print_coeffs):
     goi_multi_array = []
 
     print("\nMODEL --- {}".format(model))
@@ -100,10 +105,19 @@ def fit_model_filter_genes(
                 n_models,
                 hyper_param_tuning,
                 f1_classification,
-                f1_score))
+                f1_score,
+                print_coeffs))
     else:
         print("     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling")
-        accuracy_matrix.append(fit_model(df, features_array, model, n_models, f1_classification, ))
+        accuracy_matrix.append(fit_model(
+            df,
+            features_array,
+            model,
+            n_models,
+            hyper_param_tuning,
+            f1_classification,
+            f1_score,
+            print_coeffs))
 
     accuracy_array = list(chain.from_iterable(accuracy_matrix))
 
@@ -124,7 +138,8 @@ def fit_model_filter_genes(
             features_array_file,
             50,
             False,
-            f1_score)
+            f1_score,
+            print_coeffs)
 
 
 
@@ -138,7 +153,8 @@ def run_model(
     n_models,
     hyper_param_tuning,
     f1_classification = False,
-    f1_score = False):
+    f1_score = False,
+    print_coeffs = False):
     for i in range(len(model_list)):
         for j in range(len(data_mtx_files)):
             fit_model_filter_genes(
@@ -150,4 +166,5 @@ def run_model(
                 n_models[i],
                 hyper_param_tuning[i],
                 f1_classification,
-                f1_score)
+                f1_score,
+                print_coeffs)

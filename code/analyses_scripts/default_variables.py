@@ -17,6 +17,7 @@ n_models = [50, 1]
 # n_models = [1]
 hyper_param_tuning = [False, True]
 # hyper_param_tuning = [True]
+print_coeffs = [True, False]
 
 # Specifies if all models should calculate f1 score instead of accuracy
 f1_score = True

@@ -25,4 +25,5 @@ for i in range(len(df.goi_all_prog)):
         df.n_models,
         df.hyper_param_tuning,
         True,
-        df.f1_score)
+        df.f1_score,
+        df.print_coeffs)

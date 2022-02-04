@@ -23,4 +23,5 @@ for i in range(len(df.goi_cux1_binding)):
         df.n_models,
         df.hyper_param_tuning,
         False,
-        df.f1_score)
+        df.f1_score,
+        df.print_coeffs)

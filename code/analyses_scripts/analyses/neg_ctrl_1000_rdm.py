@@ -22,4 +22,5 @@ run.run_model(
     df.n_models,
     df.hyper_param_tuning,
     False,
-    df.f1_score)
+    df.f1_score,
+    df.print_coeffs)
