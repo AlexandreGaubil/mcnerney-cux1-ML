@@ -19,6 +19,7 @@ other/*
 data/output/
 code/analyses_scripts/job_submit_scripts/*/
 code/analyses_scripts/job_submit_scripts/*.zip
+*.png
 
 # History files
 .Rhistory
