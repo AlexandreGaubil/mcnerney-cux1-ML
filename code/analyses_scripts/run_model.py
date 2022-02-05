@@ -8,10 +8,10 @@ from sklearn.metrics import f1_score as sklearn_f1_score
 from sklearn.exceptions import ConvergenceWarning
 import sys
 import numpy
+from heapq import nlargest
 numpy.set_printoptions(threshold=sys.maxsize)
 
 
-#_matrix_coeffs = np.array()
 
 def fit_model(
     data_df,
@@ -23,6 +23,9 @@ def fit_model(
     f1_score,
     print_coeffs):
     accuracy_array = []
+
+    # Matrix of the coefficients used by each parameter
+    matrix_coeffs = np.array()
 
     # Bootstrapping: Create 50 models of 1,000 random genes each and calculate
     # each model's accuracy
@@ -51,9 +54,17 @@ def fit_model(
                     y_pred = y_pred,
                     average = 'macro'))
 
-        #if print_coeffs:
-        #    _matrix_coeffs.append(fitted_model.coef_)
-        #    # print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
+        if print_coeffs:
+            matrix_coeffs.append(fitted_model.coef_)
+            #print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
+
+    if print_coeffs:
+        col_averages = np.average(matrix_coeffs, axis=0)
+        col_names = df.columns
+        res = dict(zip(col_averages, col_names))
+        hundred_largest = nlargest(100, res, key=res.get)
+        print(hundred_largest)
+
 
     return accuracy_array
 
@@ -174,6 +185,3 @@ def run_model(
                 f1_classification,
                 f1_score,
                 print_coeffs[i])
-
-            #if print_coeffs[i]:
-            #    np.average(_matrix_coeffs, axis=0)
