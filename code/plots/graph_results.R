@@ -4,6 +4,7 @@
 # Present the results of the analyses as graphs
 #
 
+setwd("~/Documents/Research/mcnerney-cux1-ML-github/code/plots")
 library(ggplot2)
 library(stringr)
 library(dplyr)
@@ -136,7 +137,8 @@ generate_plot <- function(dataset, n_cells, score_func, t_test, x_label)
         facet_grid(~analysis_in_order, labeller = label_wrap_gen(width = 15, multi_line = TRUE)) +
         { if (x_label) scale_x_discrete(labels = function(x) str_wrap(x, width = 8))
           else scale_x_discrete(labels = function(x) "") } +
-        coord_cartesian(ylim=c(0.2, 0.76)) +
+        coord_cartesian(ylim=c(0.3, 0.8)) +
+        scale_y_continuous(breaks = round(seq(0.3, 0.8, by = 0.1),1)) +
         xlab(x_axis_title) +
         ylab(y_axis_title) +
         ggtitle(str_wrap(plot_title, width = 125)) +
@@ -147,28 +149,18 @@ generate_plot <- function(dataset, n_cells, score_func, t_test, x_label)
                                                 linetype = 1)) +
         theme(panel.grid.minor.y = element_line(color = "#808080",
                                                 size = 0.1,
-                                                linetype = 1))
+                                                linetype = 2))
 
     return(p)
 }
 
 
 save_plot(
-    "In vitro, 3 cells, all scoring methods",
+    "In vitro, 3 cells, f1",
     generate_plot(
         dataset = dataset.in_vitro,
         n_cells = 3,
-        score_func = NaN,
-        t_test = NaN,
-        x_label = FALSE)
-)
-
-save_plot(
-    "In vitro, 6 cells, all scoring methods",
-    generate_plot(
-        dataset = dataset.in_vitro,
-        n_cells = 6,
-        score_func = NaN,
+        score_func = score_function.f1,
         t_test = NaN,
         x_label = FALSE)
 )
@@ -182,15 +174,3 @@ save_plot(
         t_test = NaN,
         x_label = FALSE)
 )
-
-for (score_func in list(NaN, score_function.accuracy, score_function.f1))
-{
-    for (i_n_cells in c(3, 6))
-    {
-        # for (t_test in c("none", "neg ctrl", "pos ctrl"))
-        for (t_test in c(NaN))
-        {
-            
-        }
-    }
-}
