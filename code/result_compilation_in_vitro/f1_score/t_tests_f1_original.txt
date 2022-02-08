@@ -1,0 +1,258 @@
+----- Negative Control & All Datasets
+-----  3C, LR
+
+data:  neg_ctrl.3c.lr and most_var.3c.lr
+t = -67.559, df = 718.68, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.lr and mouse_tf.3c.lr
+t = -27.133, df = 891.42, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.lr and cux1.jeff.3c.lr
+t = -21.039, df = 889.08, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.lr and cux1.jeff_molly.3c.lr
+t = 41.773, df = 896.07, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.lr and cux1.jeff_weihan.3c.lr
+t = -33.409, df = 82.201, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.lr and cux1_degs.molly.3c.lr
+t = -58.439, df = 737.72, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.lr and cux1_degs.weihan.3c.lr
+t = -58.036, df = 727.73, p-value < 2.2e-16
+
+-----  6C, LR
+
+data:  neg_ctrl.6c.lr and most_var.6c.lr
+t = -106.7, df = 875.41, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.lr and mouse_tf.6c.lr
+t = -19.66, df = 783.33, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.lr and cux1.jeff.6c.lr
+t = -109.81, df = 890.72, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.lr and cux1.jeff_molly.6c.lr
+t = -38.325, df = 879.82, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.lr and cux1.jeff_weihan.6c.lr
+t = -39.117, df = 59.036, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.lr and cux1_degs.molly.6c.lr
+t = -76.807, df = 846.71, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.lr and cux1_degs.weihan.6c.lr
+t = -82.124, df = 868.67, p-value < 2.2e-16
+
+-----  3C, NN
+
+data:  neg_ctrl.3c.nn and most_var.3c.nn
+t = -64.538, df = 821.59, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.nn and mouse_tf.3c.nn
+t = -13.642, df = 876.95, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.nn and cux1.jeff.3c.nn
+t = -10.954, df = 897.67, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.nn and cux1.jeff_molly.3c.nn
+t = -26.608, df = 71.38, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.nn and cux1.jeff_weihan.3c.nn
+t = -27.315, df = 68.114, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.nn and cux1_degs.molly.3c.nn
+t = -54.841, df = 858.63, p-value < 2.2e-16
+
+data:  neg_ctrl.3c.nn and cux1_degs.weihan.3c.nn
+t = -51.243, df = 849.01, p-value < 2.2e-16
+
+-----  6C, NN
+
+data:  neg_ctrl.6c.nn and most_var.6c.nn
+t = -65.598, df = 885.41, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.nn and mouse_tf.6c.nn
+t = -14.485, df = 880.48, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.nn and cux1.jeff.6c.nn
+t = -8.1011, df = 883.98, p-value = 1.802e-15
+
+data:  neg_ctrl.6c.nn and cux1.jeff_molly.6c.nn
+t = -23.335, df = 72.446, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.nn and cux1.jeff_weihan.6c.nn
+t = -26.597, df = 66.837, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.nn and cux1_degs.molly.6c.nn
+t = -57.371, df = 888.95, p-value < 2.2e-16
+
+data:  neg_ctrl.6c.nn and cux1_degs.weihan.6c.nn
+t = -44.85, df = 884.31, p-value < 2.2e-16
+
+----- 1,000 Most Var & Experimental Datasets
+-----  3C, LR
+
+data:  most_var.3c.lr and cux1.jeff.3c.lr
+t = 46.272, df = 763.15, p-value < 2.2e-16
+
+data:  most_var.3c.lr and cux1.jeff_molly.3c.lr
+t = 121.68, df = 739.01, p-value < 2.2e-16
+
+data:  most_var.3c.lr and cux1.jeff_weihan.3c.lr
+t = 4.5124, df = 59.297, p-value = 3.092e-05
+
+data:  most_var.3c.lr and cux1_degs.molly.3c.lr
+t = 11.692, df = 896.3, p-value < 2.2e-16
+
+data:  most_var.3c.lr and cux1_degs.weihan.3c.lr
+t = 12.889, df = 897.61, p-value < 2.2e-16
+
+-----  6C, LR
+
+data:  most_var.6c.lr and cux1.jeff.6c.lr
+t = 1.1597, df = 893.46, p-value = 0.2465
+
+data:  most_var.6c.lr and cux1.jeff_molly.6c.lr
+t = 64.366, df = 897.73, p-value < 2.2e-16
+
+data:  most_var.6c.lr and cux1.jeff_weihan.6c.lr
+t = 9.9675, df = 63.086, p-value = 1.401e-14
+
+data:  most_var.6c.lr and cux1_degs.molly.6c.lr
+t = 22.727, df = 890.95, p-value < 2.2e-16
+
+data:  most_var.6c.lr and cux1_degs.weihan.6c.lr
+t = 21.476, df = 897.49, p-value < 2.2e-16
+
+-----  3C, NN
+
+data:  most_var.3c.nn and cux1.jeff.3c.nn
+t = 51.258, df = 813.57, p-value < 2.2e-16
+
+data:  most_var.3c.nn and cux1.jeff_molly.3c.nn
+t = 6.9545, df = 60.483, p-value = 2.883e-09
+
+data:  most_var.3c.nn and cux1.jeff_weihan.3c.nn
+t = 4.1228, df = 58.85, p-value = 0.000119
+
+data:  most_var.3c.nn and cux1_degs.molly.3c.nn
+t = 8.756, df = 889.6, p-value < 2.2e-16
+
+data:  most_var.3c.nn and cux1_degs.weihan.3c.nn
+t = 13.853, df = 893.64, p-value < 2.2e-16
+
+-----  6C, NN
+
+data:  most_var.6c.nn and cux1.jeff.6c.nn
+t = 61.499, df = 897.96, p-value < 2.2e-16
+
+data:  most_var.6c.nn and cux1.jeff_molly.6c.nn
+t = 14.114, df = 67.136, p-value < 2.2e-16
+
+data:  most_var.6c.nn and cux1.jeff_weihan.6c.nn
+t = 6.9143, df = 62.842, p-value = 2.85e-09
+
+data:  most_var.6c.nn and cux1_degs.molly.6c.nn
+t = 8.1823, df = 897.69, p-value = 9.479e-16
+
+data:  most_var.6c.nn and cux1_degs.weihan.6c.nn
+t = 22.277, df = 897.98, p-value < 2.2e-16
+
+
+----- Mouse TFs & Experimental Datasets
+-----  3C, LR
+
+data:  mouse_tf.3c.lr and cux1.jeff.3c.lr
+t = 6.5639, df = 897.81, p-value = 8.855e-11
+
+data:  mouse_tf.3c.lr and cux1.jeff_molly.3c.lr
+t = 71.429, df = 896.59, p-value < 2.2e-16
+
+data:  mouse_tf.3c.lr and cux1.jeff_weihan.3c.lr
+t = -15.979, df = 76.504, p-value < 2.2e-16
+
+data:  mouse_tf.3c.lr and cux1_degs.molly.3c.lr
+t = -28.623, df = 776.22, p-value < 2.2e-16
+
+data:  mouse_tf.3c.lr and cux1_degs.weihan.3c.lr
+t = -28.015, df = 766.03, p-value < 2.2e-16
+
+-----  6C, LR
+
+data:  mouse_tf.6c.lr and cux1.jeff.6c.lr
+t = -68.734, df = 822.65, p-value < 2.2e-16
+
+data:  mouse_tf.6c.lr and cux1.jeff_molly.6c.lr
+t = -12.263, df = 844.07, p-value < 2.2e-16
+
+data:  mouse_tf.6c.lr and cux1.jeff_weihan.6c.lr
+t = -27.073, df = 72.542, p-value < 2.2e-16
+
+data:  mouse_tf.6c.lr and cux1_degs.molly.6c.lr
+t = -45.474, df = 878.06, p-value < 2.2e-16
+
+data:  mouse_tf.6c.lr and cux1_degs.weihan.6c.lr
+t = -48.502, df = 858.72, p-value < 2.2e-16
+
+-----  3C, NN
+
+data:  mouse_tf.3c.nn and cux1.jeff.3c.nn
+t = 3.4464, df = 881.62, p-value = 0.0005951
+
+data:  mouse_tf.3c.nn and cux1.jeff_molly.3c.nn
+t = -17.325, df = 80.415, p-value < 2.2e-16
+
+data:  mouse_tf.3c.nn and cux1.jeff_weihan.3c.nn
+t = -18.581, df = 75.755, p-value < 2.2e-16
+
+data:  mouse_tf.3c.nn and cux1_degs.molly.3c.nn
+t = -34.809, df = 796.38, p-value < 2.2e-16
+
+data:  mouse_tf.3c.nn and cux1_degs.weihan.3c.nn
+t = -31.336, df = 784.18, p-value < 2.2e-16
+
+-----  6C, NN
+
+data:  mouse_tf.6c.nn and cux1.jeff.6c.nn
+t = 6.7769, df = 897.79, p-value = 2.221e-11
+
+data:  mouse_tf.6c.nn and cux1.jeff_molly.6c.nn
+t = -15.554, df = 66.3, p-value < 2.2e-16
+
+data:  mouse_tf.6c.nn and cux1.jeff_weihan.6c.nn
+t = -19.648, df = 62.212, p-value < 2.2e-16
+
+data:  mouse_tf.6c.nn and cux1_degs.molly.6c.nn
+t = -46.417, df = 896.51, p-value < 2.2e-16
+
+data:  mouse_tf.6c.nn and cux1_degs.weihan.6c.nn
+t = -32.838, df = 897.74, p-value < 2.2e-16
+
+----- Cux1 Binding Targets vs Cux1 Binding Intersecting DEGs
+
+data:  cux1.jeff_molly.3c.lr and cux1_degs.molly.3c.lr
+t = -111.58, df = 758.44, p-value < 2.2e-16
+
+data:  cux1.jeff_weihan.3c.lr and cux1_degs.weihan.3c.lr
+t = 1.0563, df = 59.754, p-value = 0.2951
+
+data:  cux1.jeff_molly.6c.lr and cux1_degs.molly.6c.lr
+t = -38.484, df = 888, p-value < 2.2e-16
+
+data:  cux1.jeff_weihan.6c.lr and cux1_degs.weihan.6c.lr
+t = 0.66012, df = 63.812, p-value = 0.5116
+
+data:  cux1.jeff_molly.3c.nn and cux1_degs.molly.3c.nn
+t = -2.7924, df = 63.088, p-value = 0.006917
+
+data:  cux1.jeff_weihan.3c.nn and cux1_degs.weihan.3c.nn
+t = 1.8899, df = 60.396, p-value = 0.06357
+
+data:  cux1.jeff_molly.6c.nn and cux1_degs.molly.6c.nn
+t = -9.6076, df = 67.868, p-value = 2.786e-14
+
+data:  cux1.jeff_weihan.6c.nn and cux1_degs.weihan.6c.nn
+t = 3.8743, df = 62.69, p-value = 0.0002581
+
