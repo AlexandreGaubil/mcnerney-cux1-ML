@@ -25,7 +25,7 @@ def fit_model(
     accuracy_array = []
 
     # Matrix of the coefficients used by each parameter
-    matrix_coeffs = np.array()
+    # matrix_coeffs = np.array()
 
     # Bootstrapping: Create 50 models of 1,000 random genes each and calculate
     # each model's accuracy
@@ -54,16 +54,16 @@ def fit_model(
                     y_pred = y_pred,
                     average = 'macro'))
 
-        if print_coeffs:
-            matrix_coeffs.append(fitted_model.coef_)
-            #print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
+        #if print_coeffs:
+        #    matrix_coeffs.append(fitted_model.coef_)
+        #    #print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
 
-    if print_coeffs:
-        col_averages = np.average(matrix_coeffs, axis=0)
-        col_names = df.columns
-        res = dict(zip(col_averages, col_names))
-        hundred_largest = nlargest(100, res, key=res.get)
-        print(hundred_largest)
+    #if print_coeffs:
+    #    col_averages = np.average(matrix_coeffs, axis=0)
+    #    col_names = df.columns
+    #    res = dict(zip(col_averages, col_names))
+    #    hundred_largest = nlargest(100, res, key=res.get)
+    #    print(hundred_largest)
 
 
     return accuracy_array
