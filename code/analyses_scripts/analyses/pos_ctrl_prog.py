@@ -13,12 +13,11 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import run_model as run
 import default_variables as df
 
-
-print("\n\n\nPOS CTRL PROG GENES")
-for i in range(len(df.goi_all_prog)):
+def run_prog(goi_local):
+    print("\n\n\nPOS CTRL PROG GENES")
     run.run_model(
         df.models,
-        df.goi_all_prog[i],
+        goi_local,
         df.data_files,
         df.data_col_seps,
         df.features_files,
