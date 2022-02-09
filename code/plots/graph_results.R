@@ -26,8 +26,19 @@ df <- data.frame(analysis = character(),
                  t_test_neg_ctrl = numeric(),
                  t_test_pos_ctrl = numeric())
 
+df_prog <- data.frame(
+    analysis = character(),
+    dataset = character(),
+    score_function = character(),
+    n_cell_types = integer(),
+    model = character(),
+    cell_type = character(),
+    average = numeric(),
+    std_deviation = numeric())
+
 source('in_vitro_accuracy_results.R')
 source('in_vitro_f1_results.R')
+source('in_vitro_f1_prog_results.R')
 
 
 
@@ -155,6 +166,92 @@ generate_plot <- function(dataset, n_cells, score_func, t_test, x_label)
 }
 
 
+
+
+# Function to generate a plot for progenitor cells
+generate_plot_prog <- function(dataset, n_cells, model_to_keep, score_func, x_label)
+{
+    # Filter based on the dataset (either in vitro or in vivo)
+    local_df <- filter(df_prog, dataset == dataset)
+
+    # Filter based on number of cell types
+    if (!(is.nan(n_cells)))
+        local_df <- filter(local_df, n_cell_types == n_cells)
+    
+    # Filter based on model used 
+    if (!(is.nan(model_to_keep)))
+        local_df <- filter(local_df, model == model_to_keep)
+
+    # Filter based on the scoring method used (F1, accuracy, etc.)
+    if (!(is.nan(score_func)))
+        local_df <- filter(local_df, score_function == score_func)
+    # If no scoring method was specified, combine the model and the scoring method into one
+    else
+        local_df$model <- paste0(local_df$model, ", ", local_df$score_function)
+
+    # Used for the top category legend (show the gene dataset & the number of genes)
+    local_df$model <- paste0(local_df$model, ", ", local_df$cell_type)
+
+    # Order the gene sets so that they are in a sensical order in the graph
+    local_df$analysis_in_order <-
+        factor(
+            local_df$analysis,
+            levels = c(
+                analysis.prog.DC,
+                analysis.prog.ba,
+                analysis.prog.modc,
+                analysis.prog.moneu,
+                analysis.prog.b,
+                analysis.prog.preb,
+                analysis.prog.neu,
+                analysis.prog.hsc,
+                analysis.prog.mep
+            ))
+
+
+    # Set the plot, axis, & legend title
+    plot_title <- generate_plot_title(dataset, n_cells, score_func)
+    x_axis_title <- "Progenitor Gene Sets Used for Prediction"
+    y_axis_title <- "Prediction Score"
+    legend_title <- "Model"
+    if (is.nan(score_func))
+        legend_title <- "Model & Scoring Function"
+
+    # Generate the plot
+    p <- ggplot(data = local_df,
+                aes(model, average, fill = model)) +
+        geom_bar(stat="identity") +
+        geom_errorbar(
+            aes(ymin=average-std_deviation,
+                ymax=average+std_deviation,
+                color="1 std dev"),
+            width=.2,
+            position=position_dodge(.9)) +
+        scale_color_manual(name = "Error Bars", values = c("black")) +
+        facet_grid(~analysis_in_order, labeller = label_wrap_gen(width = 15, multi_line = TRUE)) +
+        { if (x_label) scale_x_discrete(labels = function(x) str_wrap(x, width = 8))
+          else scale_x_discrete(labels = function(x) "") } +
+        coord_cartesian(ylim=c(0.3, 0.8)) +
+        scale_y_continuous(breaks = round(seq(0.3, 0.8, by = 0.1),1)) +
+        xlab(x_axis_title) +
+        ylab(y_axis_title) +
+        ggtitle(str_wrap(plot_title, width = 125)) +
+        guides(fill=guide_legend(title=legend_title)) +
+        theme_classic() +
+        theme(panel.grid.major.y = element_line(color = "#808080",
+                                                size = 0.1,
+                                                linetype = 1)) +
+        theme(panel.grid.minor.y = element_line(color = "#808080",
+                                                size = 0.1,
+                                                linetype = 2))
+
+    return(p)
+}
+
+
+
+
+
 save_plot(
     "In vitro, 3 cells, f1",
     generate_plot(
@@ -172,5 +269,24 @@ save_plot(
         n_cells = 6,
         score_func = score_function.f1,
         t_test = NaN,
+        x_label = FALSE)
+)
+
+save_plot(
+    "In vitro, 3 cells, f1, log reg, prog",
+    generate_plot_prog(
+        dataset = dataset.in_vitro,
+        n_cells = 3,
+        model_to_keep = model.log_reg,
+        score_func = score_function.f1,
+        x_label = FALSE)
+)
+save_plot(
+    "In vitro, 3 cells, f1, neural network, prog",
+    generate_plot_prog(
+        dataset = dataset.in_vitro,
+        n_cells = 3,
+        model_to_keep = model.nn,
+        score_func = score_function.f1,
         x_label = FALSE)
 )
