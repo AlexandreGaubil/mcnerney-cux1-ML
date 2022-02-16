@@ -208,6 +208,7 @@ generate_plot_prog <- function(dataset, n_cells, model_to_keep, score_func, x_la
                 analysis.prog.mep
             ))
 
+    color_palette <- c("#999999", "#E69F00", "#56B4E9")
 
     # Set the plot, axis, & legend title
     plot_title <- generate_plot_title(dataset, n_cells, score_func)
@@ -228,6 +229,7 @@ generate_plot_prog <- function(dataset, n_cells, model_to_keep, score_func, x_la
             width=.2,
             position=position_dodge(.9)) +
         scale_color_manual(name = "Error Bars", values = c("black")) +
+        scale_fill_manual(values = color_palette) +
         facet_grid(~analysis_in_order, labeller = label_wrap_gen(width = 15, multi_line = TRUE)) +
         { if (x_label) scale_x_discrete(labels = function(x) str_wrap(x, width = 8))
           else scale_x_discrete(labels = function(x) "") } +
@@ -268,6 +270,25 @@ save_plot(
         dataset = dataset.in_vitro,
         n_cells = 6,
         score_func = score_function.f1,
+        t_test = NaN,
+        x_label = FALSE)
+)
+
+save_plot(
+    "In vitro, 3 cells, f1 & accuracy",
+    generate_plot(
+        dataset = dataset.in_vitro,
+        n_cells = 3,
+        score_func = NaN,
+        t_test = NaN,
+        x_label = FALSE)
+)
+save_plot(
+    "In vitro, 6 cells, f1 & accuracy",
+    generate_plot(
+        dataset = dataset.in_vitro,
+        n_cells = 6,
+        score_func = NaN,
         t_test = NaN,
         x_label = FALSE)
 )
