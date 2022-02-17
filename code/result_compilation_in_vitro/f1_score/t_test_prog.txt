@@ -1,0 +1,50 @@
+[1] "\n\n\n\nProgenitor Genes"
+
+	Welch Two Sample t-test
+
+data:  prog.neu.3c.lr.ba and prog.neu.3c.lr.neu
+t = -5.8029, df = 1389.2, p-value = 8.06e-09
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.016829668 -0.008325888
+sample estimates:
+mean of x mean of y 
+0.7019667 0.7145444 
+
+
+	Welch Two Sample t-test
+
+data:  prog.neu.3c.nn.ba and prog.neu.3c.nn.neu
+t = -6.8006, df = 1507.8, p-value = 1.497e-11
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.02581164 -0.01425503
+sample estimates:
+mean of x mean of y 
+0.6988444 0.7188778 
+
+[1] ""
+
+	Welch Two Sample t-test
+
+data:  prog.ba.3c.lr.ba and prog.ba.3c.lr.neu
+t = 3.4957, df = 85.4, p-value = 0.0007524
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.01086787 0.03953213
+sample estimates:
+mean of x mean of y 
+   0.7524    0.7272 
+
+
+	Welch Two Sample t-test
+
+data:  prog.ba.3c.nn.ba and prog.ba.3c.nn.neu
+t = 4.3075, df = 76.914, p-value = 4.825e-05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.0192501 0.0523499
+sample estimates:
+mean of x mean of y 
+   0.7534    0.7176 
+

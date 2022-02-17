@@ -13,6 +13,7 @@ source('data_cux1_degs.R')
 source('data_cux1.R')
 source('data_mouse_tf.R')
 source('data_neg_ctrl.R')
+source('data_prog.R')
 
 library(stats)
 
@@ -144,3 +145,9 @@ print(t.test(cux1.jeff_weihan.3c.nn, cux1_degs.weihan.3c.nn))
 
 print(t.test(cux1.jeff_molly.6c.nn, cux1_degs.molly.6c.nn))
 print(t.test(cux1.jeff_weihan.6c.nn, cux1_degs.weihan.6c.nn))
+
+
+print('\n\n\n\nProgenitor Genes')
+
+print(t.test(prog.3c.lr.ba, prog.3c.lr.neu))
+print(t.test(prog.3c.nn.ba, prog.3c.nn.neu))

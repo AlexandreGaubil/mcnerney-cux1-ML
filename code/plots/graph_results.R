@@ -38,20 +38,20 @@ df_prog <- data.frame(
 
 source('in_vitro_accuracy_results.R')
 source('in_vitro_f1_results.R')
-source('in_vitro_f1_prog_results.R')
-
+# source('in_vitro_f1_prog_results.R')
+source('in_vitro_f1_prog_results_ba_and_neu.R')
 
 
 
 # Function to save the specified plot p
-save_plot <- function(filename, p)
+save_plot <- function(filename, p, width_param = 30)
 {
    ggsave(
     filename = paste0(filename, ".png"),
     device = "png",
     plot = p,
     dpi = "retina",
-    width = 30,
+    width = width_param,
     height = 15,
     unit = "cm")
 }
@@ -177,8 +177,8 @@ generate_plot_prog <- function(dataset, n_cells, model_to_keep, score_func, x_la
     # Filter based on number of cell types
     if (!(is.nan(n_cells)))
         local_df <- filter(local_df, n_cell_types == n_cells)
-    
-    # Filter based on model used 
+
+    # Filter based on model used
     if (!(is.nan(model_to_keep)))
         local_df <- filter(local_df, model == model_to_keep)
 
@@ -300,7 +300,8 @@ save_plot(
         n_cells = 3,
         model_to_keep = model.log_reg,
         score_func = score_function.f1,
-        x_label = FALSE)
+        x_label = FALSE),
+    width_param = 15
 )
 save_plot(
     "In vitro, 3 cells, f1, neural network, prog",
@@ -309,5 +310,6 @@ save_plot(
         n_cells = 3,
         model_to_keep = model.nn,
         score_func = score_function.f1,
-        x_label = FALSE)
+        x_label = FALSE),
+    width_param = 15
 )
