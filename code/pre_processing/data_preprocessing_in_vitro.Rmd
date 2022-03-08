@@ -4,23 +4,6 @@ author: "Weihan Liu"
 date: "12/08/2021"
 output: html_document
 ---
-Use a Machine learning model on Weinreb_2020 data to test if
-
-Treatment
-1).Cux1 binding genes(from Jeff's Cut and Run on human CD34 HSPC)
-2).Intersect of Cux1 binding genes and DEGs after Cux1 KD in mouse Lin-CKit+Sca1+CD135- HSPC
-3).Cux1 signature(DEGs comparing Cux1 + and Cux1- cells)
-4).DE genes for each lineage from Tradeseq to predict fate of each lineage?
-5).Sites opened by Cux1 from Jeff's ATAC seq data on human CD34
-6).The intersect between these sites and DEGs from bulk RNA seq
-
-Controls:
-1).highly variable genes(+ ctrl)
-1).DEGs between progenitors genes(+ ctrl)
-3) randomly sampled genes (- ctrl)
-
-I want to test if the treatment groups are more accurate to predict HSPC cell fate than background(randomly sampled genes)
-
 
 # Setup
 
@@ -76,6 +59,7 @@ if (!dir.exists("./data/in_vitro/analyses/")) {
 # Keep FALSE while developing to facilitate debugging. Set to TRUE to
 # optimize performance.
 settings.remove_unused <- FALSE
+settings.multipotent_cells <- TRUE
 ```
 
 
@@ -248,20 +232,27 @@ count_and_sort_identifiers <- function(ids) {
 
   # Find identifier with most counts & identifier with second most count
   m <- 0
-  m_prev <- 0
-  m_key <- ""
+  m_prev <- list()
+  m_key <- list()
   for (key in names(unlist(ids_count))) {
-    if (ids_count[[key]] >= m) {
-      m_prev <- m
+    if (ids_count[[key]] == m) {
+      m_prev <- append(m, m_prev)
       m <- ids_count[[key]]
-      m_key <- key
+      m_key <- append(key, m_key)
+    }
+    else if ((settings.multipotent_cells) && (ids_count[[key]] > m)) {
+      m_prev <- list(m)
+      m <- ids_count[[key]]
+      m_key <- list(key)
     }
   }
 
   # Return the identifier with the most occurrences or the "ambiguous" if there is a tie
   if (m == 0) { return("ambiguous") }
-  if (m > m_prev) { return(m_key) }
-  if (m == m_prev) { return ("ambiguous") }
+  if (m >= m_prev[[1]]) {
+    # Return the list as a single string, sorted (to ensure that all identical identities get matched to each other)
+    return(paste(sort(unlist(strsplit(paste(m_key, sep = ","), ","))), collapse = ","))
+  }
 
   stop("`count_and_sort_identifiers()` has a bug")
 }
