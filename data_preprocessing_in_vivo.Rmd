@@ -77,7 +77,7 @@ if (!dir.exists("./data/in_vivo/analyses_input/")) {
 # If TRUE, will remove variables as they are no longer needed.
 # Keep FALSE while developing to facilitate debugging. Set to TRUE to
 # optimize performance.
-settings.remove_unused <- TRUE
+settings.remove_unused <- FALSE
 ```
 
 
@@ -128,7 +128,8 @@ if (!file.exists("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx"
 }
 
 # Read in the clonal membership matrix & convert to dataframe
-t_clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
+# t_clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
+t_clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix.mtx")
 clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
 
 if (settings.remove_unused) { rm(t_clone_matrix) }
