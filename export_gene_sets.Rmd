@@ -42,7 +42,7 @@ day2.all_cells.all_genes.feature <- subset(day2.all_cells.all_genes, select = c(
 write.table(day2.all_cells.all_genes.data,
             row.names = FALSE,
             col.names = FALSE,
-            "data/in_vivo/analyses/all_cells_all_genes_data.txt")
+            "./data/in_vivo/analyses/all_cells_all_genes_data.txt")
 #            "./data/in_vitro/analyses/all_cells_all_genes_data.txt")
 write.table(day2.all_cells.all_genes.feature,
             row.names = FALSE,

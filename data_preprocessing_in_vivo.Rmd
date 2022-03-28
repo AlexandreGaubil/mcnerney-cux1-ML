@@ -352,12 +352,11 @@ LT.seu.day2@meta.data %>%
   summarize(count=n())
 
 LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
-  mutate(final.ident = case_when(final.ident == "Baso" ~ "My",
-                                 final.ident == "DC" ~ "My",
-                                 final.ident == "Mono" ~ "My",
-                                 final.ident == "Neu" ~ "My",
-                                 final.ident == "B" ~ "B",
-                                 final.ident == "Ery" ~ "Ery"))
+  mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
+                                 final.ident == "Lymphoid" ~ "Lymphoid",
+                                 final.ident == "Mast" ~ "Mast",
+                                 final.ident == "Meg" ~ "Meg",
+                                 final.ident == "Monocyte" ~ "Monocyte"))
 
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")
 
@@ -370,7 +369,7 @@ LT.seu.day2@meta.data %>%
 
 Save the day 2 Seurat object, this will be the object we will pull the training data from
 ```{r}
-saveRDS(LT.seu.day2, file = "./data/in_vivo/RDS_objects/LT_seu_day2_ML_source_data.rds")
+saveRDS(LT.seu.day2, file = "./data/in_vivo/RDS_objects/LT_seu_day2_ML_source_data_filtered.rds")
 ```
 
 
