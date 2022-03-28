@@ -116,7 +116,7 @@ We need to find the clonal membership of each cell, in order to connect the fina
 if (!file.exists("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")) {
   print("Creating `clone_matrix_transposed.mtx`...")
   clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix.mtx")
-  t_clone_matrix <- t(clone_matrix)
+  t_clone_matrix <- clone_matrix #t(clone_matrix)
   
   file.create("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
   writeMM(t_clone_matrix, "./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
