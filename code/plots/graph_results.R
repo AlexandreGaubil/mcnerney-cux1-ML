@@ -38,6 +38,7 @@ df_prog <- data.frame(
 
 source('in_vitro_accuracy_results.R')
 source('in_vitro_f1_results.R')
+source('in_vivo_f1_results.R')
 # source('in_vitro_f1_prog_results.R')
 source('in_vitro_f1_prog_results_ba_and_neu.R')
 
@@ -259,6 +260,16 @@ save_plot(
     generate_plot(
         dataset = dataset.in_vitro,
         n_cells = 3,
+        score_func = score_function.f1,
+        t_test = NaN,
+        x_label = FALSE)
+)
+
+save_plot(
+    "In vivo, 5 cells, f1",
+    generate_plot(
+        dataset = dataset.in_vivo,
+        n_cells = 5,
         score_func = score_function.f1,
         t_test = NaN,
         x_label = FALSE)

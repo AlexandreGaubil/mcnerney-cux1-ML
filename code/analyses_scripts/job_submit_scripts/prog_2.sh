@@ -17,4 +17,4 @@ date
 echo 'PROG 2'
 
 # POS CTRL
-python ../analyses/prog_wrapper.py -i 'ba' -i 'b' -i 'pre_b'
+python ../analyses/prog_wrapper.py -i 'ba' -i 'b'

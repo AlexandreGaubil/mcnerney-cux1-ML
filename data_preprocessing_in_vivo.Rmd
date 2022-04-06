@@ -356,6 +356,7 @@ LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
                                  final.ident == "Lymphoid" ~ "Lymphoid",
                                  final.ident == "Mast" ~ "Mast",
                                  final.ident == "Meg" ~ "Meg",
+                                 final.ident == "Neutrophil" ~ "Neutrophil",
                                  final.ident == "Monocyte" ~ "Monocyte"))
 
 LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")

@@ -17,4 +17,4 @@ date
 echo 'PROG 3'
 
 # POS CTRL
-python ../analyses/prog_wrapper.py -i 'neu' -i 'hsc' -i 'mep'
+python ../analyses/prog_wrapper.py -i 'neu' -i 'mep'

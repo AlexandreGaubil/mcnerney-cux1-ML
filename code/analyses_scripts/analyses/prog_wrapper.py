@@ -17,9 +17,9 @@ def main(argv):
 		print('Should be called as `prog_wrapper.py -i <inputfile>`')
 		sys.exit(2)
 	for opt, arg in opts:
-		if (arg == 'ba'):
+		if (arg == 'ba'): #baso
 			prog.run_prog(df.goi_prog_ba)
-		elif (arg == 'b'):
+		elif (arg == 'b'): #lymp
 			prog.run_prog(df.goi_prog_b)
 		elif (arg == 'pre_b'):
 			prog.run_prog(df.goi_prog_pre_b)
@@ -29,11 +29,11 @@ def main(argv):
 			prog.run_prog(df.goi_prog_mo_dc)
 		elif (arg == 'mo_neu'):
 			prog.run_prog(df.goi_prog_mo_neu)
-		elif (arg == 'neu'):
+		elif (arg == 'neu'): #neu
 			prog.run_prog(df.goi_prog_neu)
 		elif (arg == 'hsc'):
 			prog.run_prog(df.goi_prog_hsc)
-		elif (arg == 'mep'):
+		elif (arg == 'mep'): # Mega
 			prog.run_prog(df.goi_prog_mep)
 		else:
 			print("ERROR: Unknown parameter `{}` passed to prog_wrapper.py".format(opt))
