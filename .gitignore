@@ -19,6 +19,8 @@ other/*
 data/output/
 data/in_vivo/analyses/
 data/in_vitro/analyses/
+data/gene_sets/mouse-human-genes.csv
+data/gene_sets/GSE101300_HSC_EdgeR_results.txt
 
 # Midway2 job files
 code/analyses_scripts/job_submit_scripts/*/
