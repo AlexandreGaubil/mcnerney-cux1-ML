@@ -14,6 +14,9 @@ GOI_MOST_VAR = './../../../data/gene_sets/2000_most_degs.txt'
 
 GOI_MOUSE_TFS = './../../../data/gene_sets/mouse_tfs.txt'
 
+GOI_HUMAN_STRICT = './../../../data/gene_sets/human_cd34_deg_strict.txt'
+GOI_HUMAN_LOOSE = './../../../data/gene_sets/human_cd34_deg_loose.txt'
+
 GOI_PROG_BA = './../../../data/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt'
 GOI_PROG_B = './../../../data/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt'
 GOI_PROG_PRE_B = './../../../data/gene_sets/prog_genes/Ren_CLP_Pre-B_DEG_progenitor_markers.txt'

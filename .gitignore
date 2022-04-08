@@ -17,7 +17,8 @@ RDS_objects/
 analyses_output/
 other/*
 data/output/
-analyses/
+data/in_vivo/analyses/
+data/in_vitro/analyses/
 
 # Midway2 job files
 code/analyses_scripts/job_submit_scripts/*/
