@@ -468,3 +468,65 @@ df <- add_row(df,
               std_deviation = 0.029312446100727516,
               t_test_neg_ctrl = NaN,
               t_test_pos_ctrl = NaN)
+
+
+
+## Experimental: Human CD34 HSC DEGs with Strict Thresholds
+df <- add_row(df,
+              analysis = analysis.exp_human_strict,
+              dataset = dataset.in_vitro,
+              score_function = score_function.f1,
+              n_cell_types = 6,
+              model = model.log_reg,
+              n_genes = 367,
+              n_boostraps = n.bootstraps.default,
+              n_rdm_gene_samples = n.rdm_gene_samples.default.yes,
+              average = 0.3186236471617522,
+              std_deviation = 0.036479176784458126,
+              t_test_neg_ctrl = NaN,
+              t_test_pos_ctrl = NaN)
+
+df <- add_row(df,
+              analysis = analysis.exp_human_strict,
+              dataset = dataset.in_vitro,
+              score_function = score_function.f1,
+              n_cell_types = 6,
+              model = model.nn,
+              n_genes = 367,
+              n_boostraps = n.bootstraps.default,
+              n_rdm_gene_samples = n.rdm_gene_samples.default.yes,
+              average = 0.46677476220685427,
+              std_deviation = 0.04999891526191349,
+              t_test_neg_ctrl = NaN,
+              t_test_pos_ctrl = NaN)
+
+
+
+## Experimental: Human CD34 HSC DEGs with Loose Thresholds
+df <- add_row(df,
+              analysis = analysis.exp_human_loose,
+              dataset = dataset.in_vitro,
+              score_function = score_function.f1,
+              n_cell_types = 6,
+              model = model.log_reg,
+              n_genes = 594,
+              n_boostraps = n.bootstraps.default,
+              n_rdm_gene_samples = n.rdm_gene_samples.default.yes,
+              average = 0.4093581555199306,
+              std_deviation = 0.0449757362537479,
+              t_test_neg_ctrl = NaN,
+              t_test_pos_ctrl = NaN)
+
+df <- add_row(df,
+              analysis = analysis.exp_human_loose,
+              dataset = dataset.in_vitro,
+              score_function = score_function.f1,
+              n_cell_types = 6,
+              model = model.nn,
+              n_genes = 594,
+              n_boostraps = n.bootstraps.default,
+              n_rdm_gene_samples = n.rdm_gene_samples.default.yes,
+              average = 0.492362521021519,
+              std_deviation = 0.04003026182163374,
+              t_test_neg_ctrl = NaN,
+              t_test_pos_ctrl = NaN)

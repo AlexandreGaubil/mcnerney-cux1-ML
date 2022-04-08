@@ -85,22 +85,22 @@ generate_plot_title <- function(dataset, n_cells, score_func)
 
 
 # Function to generate a plot
-generate_plot <- function(dataset, n_cells, score_func, t_test, x_label)
+generate_plot <- function(dataset_name, n_cells, score_func, t_test, x_label)
 {
     # Filter based on the dataset (either in vitro or in vivo)
-    local_df <- filter(df, dataset == dataset)
+    local_df <- filter(df, dataset == dataset_name)
 
     # Filter based on number of cell types
     if (!(is.nan(n_cells)))
         local_df <- filter(local_df, n_cell_types == n_cells)
-
+    
     # Filter based on the scoring method used (F1, accuracy, etc.)
     if (!(is.nan(score_func)))
         local_df <- filter(local_df, score_function == score_func)
     # If no scoring method was specified, combine the model and the scoring method into one
     else
         local_df$model <- paste0(local_df$model, ", ", local_df$score_function)
-
+    
     # If we should display the t_tests, set the t_test column to the appropriate values
     if (t_test == "neg ctrl")
         local_df$t_test <- local_df$t_test_neg_ctrl
@@ -110,7 +110,7 @@ generate_plot <- function(dataset, n_cells, score_func, t_test, x_label)
     # Used for the top category legend (show the gene dataset & the number of genes)
     local_df$analysis_n_genes <- paste0(local_df$analysis, " (# genes = ", local_df$n_genes, ")")
 
-    # Order the gene sets so that they are in a sensical order in thr graph
+    # Order the gene sets so that they are in a valid order in the graph
     local_df$analysis_in_order <-
         factor(
             local_df$analysis_n_genes,
@@ -122,12 +122,13 @@ generate_plot <- function(dataset, n_cells, score_func, t_test, x_label)
                 'Experimental - CUX1 Binding Targets Jeff & Molly (# genes = 891)',
                 'Experimental - CUX1 Binding Targets Jeff & Weihan (# genes = 923)',
                 'Experimental - CUX1 Molly DEGs (# genes = 1000)',
-                'Experimental - CUX1 Weihan DEGs (# genes = 1000)'
+                'Experimental - CUX1 Weihan DEGs (# genes = 1000)',
+                'Experimental - Human HSC DEGs Strict Threshold (# genes = 367)',
+                'Experimental - Human HSC DEGs Loose Threshold (# genes = 594)'
             ))
 
-
     # Set the plot, axis, & legend title
-    plot_title <- generate_plot_title(dataset, n_cells, score_func)
+    plot_title <- generate_plot_title(dataset_name, n_cells, score_func)
     x_axis_title <- "Gene Sets Used for Prediction (if number of genes = 1,000, 10 random samples of 1,000 genes were used)"
     y_axis_title <- "Prediction Score"
     legend_title <- "Model"
@@ -258,7 +259,7 @@ generate_plot_prog <- function(dataset, n_cells, model_to_keep, score_func, x_la
 save_plot(
     "In vitro, 3 cells, f1",
     generate_plot(
-        dataset = dataset.in_vitro,
+        dataset_name = dataset.in_vitro,
         n_cells = 3,
         score_func = score_function.f1,
         t_test = NaN,
@@ -266,13 +267,14 @@ save_plot(
 )
 
 save_plot(
-    "In vivo, 5 cells, f1",
+    "In vivo, 6 cells, f1",
     generate_plot(
-        dataset = dataset.in_vivo,
-        n_cells = 5,
+        dataset_name = dataset.in_vivo,
+        n_cells = 6,
         score_func = score_function.f1,
         t_test = NaN,
-        x_label = FALSE)
+        x_label = FALSE),
+    width_param = 36
 )
 
 save_plot(
@@ -282,7 +284,8 @@ save_plot(
         n_cells = 6,
         score_func = score_function.f1,
         t_test = NaN,
-        x_label = FALSE)
+        x_label = FALSE),
+    width_param = 36
 )
 
 save_plot(

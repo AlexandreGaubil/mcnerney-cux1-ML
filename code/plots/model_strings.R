@@ -7,6 +7,8 @@ analysis.exp_jeff_molly = 'Experimental - CUX1 Binding Targets Jeff & Molly'
 analysis.exp_jeff_weihan = 'Experimental - CUX1 Binding Targets Jeff & Weihan'
 analysis.exp_molly_deg = 'Experimental - CUX1 Molly DEGs'
 analysis.exp_weihan_deg = 'Experimental - CUX1 Weihan DEGs'
+analysis.exp_human_strict = 'Experimental - Human HSC DEGs Strict Threshold'
+analysis.exp_human_loose = 'Experimental - Human HSC DEGs Loose Threshold'
 
 analysis.prog.DC = 'Progenitor DC'
 analysis.prog.ba = 'Progenitor Ba'
