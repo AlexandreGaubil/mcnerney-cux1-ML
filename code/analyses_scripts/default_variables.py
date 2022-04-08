@@ -36,7 +36,7 @@ goi_most_var = [st.GOI_MOST_VAR]
 goi_mouse_tfs = [st.GOI_MOUSE_TFS]
 
 # Experimental: human cd34 HSC DEG genes with strict and loose filters
-goi_human = [st.GOI_HUMAN_STRICT, st.GOI_HUMAN_LOOSE]
+goi_human = [[st.GOI_HUMAN_LOOSE], [st.GOI_HUMAN_STRICT]]
 
 # Positive control: progenitor genes
 goi_prog_ba = [st.GOI_PROG_BA]
