@@ -19,7 +19,7 @@ df <- as.data.frame(matrix)
 rm(matrix)
 
 df = subset(df, select = -c(logCPM, LR, PValue, cpm.control_1, cpm.control_2, cpm.CUX1KD_A1, cpm.CUX1KD_A2,
-                            cpm.CUX1KD_B1, cpm.CUX1KD_B2, upDown, control_1, control_2, CUX1KD_A1, 
+                            cpm.CUX1KD_B1, cpm.CUX1KD_B2, upDown, control_1, control_2, CUX1KD_A1,
                             CUX1KD_A2, CUX1KD_B1, CUX1KD_B2, cpm.control_1.1, cpm.control_2.1,
                             cpm.CUX1KD_A1.1, cpm.CUX1KD_A2.1, cpm.CUX1KD_B1.1, cpm.CUX1KD_B2.1) )
 
@@ -33,14 +33,14 @@ dim(df)
 gene_conversion_df <- as.data.frame(
     read.csv("/Users/alexandregaubil/CUX1_ML_Github/data/gene_sets/mouse-human-genes.csv"))
 
-gene_conversion_df <- gene_conversion_df %>% 
+gene_conversion_df <- gene_conversion_df %>%
   rename(
     gene = HumanSymbol,
     mouse_gene = MouseSymbol)
 
 setDT(gene_conversion_df)
 
-df <- gene_conversion_df[df, on = c(gene = "genes")] 
+df <- gene_conversion_df[df, on = c(gene = "genes")]
 ```
 
 
@@ -74,3 +74,6 @@ dim(loose_df)
 loose_df = subset(loose_df, select = -c(gene, logFC, FDR) )
 write.table(loose_df, "human_cd34_deg_loose.txt", append = FALSE, row.names = FALSE, col.names = FALSE)
 ```
+
+
+Try LFC > 0.5
