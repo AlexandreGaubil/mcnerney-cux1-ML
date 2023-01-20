@@ -8,20 +8,30 @@ import models as md
 import file_strings as st
 from sklearn.metrics import f1_score
 
+# NOTE ON LENGTH OF ARRAYS
+# For all the arrays, there are two possible lengths.
+# `model_list`, `n_models`, `hyper_param_tuning`, and `print_coeffs` must
+# all have the same length.
+# `data_mtx_files`, `data_mtx_col_seps`, and `features_array_files` must
+# all have the same length.
+
+# All the following arrays should have the same length.
 models = [md.random_forest]
-# models = [md.log_reg, md.hyper_param]
-# models = [md.hyper_param]
-# data_files = [st.THREE_CELLS_ALL_GENES_DATA, st.ALL_CELLS_ALL_GENES_DATA]
-data_files = [st.ALL_CELLS_ALL_GENES_DATA]
-# features_files = [st.THREE_CELLS_ALL_GENES_FEATURES, st.ALL_CELLS_ALL_GENES_FEATURES]
-features_files = [st.ALL_CELLS_ALL_GENES_FEATURES]
-data_col_seps = [' ', ' ']
 n_models = [10]
+hyper_param_tuning = [True]
+print_coeffs = [False]
+# models = [md.log_reg, md.neural_network]
 # n_models = [50, 1]
-# n_models = [1]
-hyper_param_tuning = [False, True]
-# hyper_param_tuning = [True]
-print_coeffs = [False, False]
+# hyper_param_tuning = [False, True]
+# print_coeffs = [False, False]
+
+# All the following arrays should have the same length.
+data_files = [st.THREE_CELLS_ALL_GENES_DATA, st.ALL_CELLS_ALL_GENES_DATA]
+features_files = [st.THREE_CELLS_ALL_GENES_FEATURES, st.ALL_CELLS_ALL_GENES_FEATURES]
+data_col_seps = [' ', ' ']
+# data_files = [st.ALL_CELLS_ALL_GENES_DATA]
+# features_files = [st.ALL_CELLS_ALL_GENES_FEATURES]
+# data_col_seps = [' ']
 
 # Specifies if all models should calculate f1 score instead of accuracy
 f1_score = True

@@ -26,4 +26,3 @@ for i in range(len(df.goi_cux1_binding)):
         False,
         df.f1_score,
         df.print_coeffs)
-

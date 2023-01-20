@@ -159,6 +159,11 @@ def fit_model_filter_genes(
 
 
 # @ignore_warnings(category=ConvergenceWarning)
+# For all the arrays, there are two possible lengths.
+# `model_list`, `n_models`, `hyper_param_tuning`, and `print_coeffs` must
+# all have the same length.
+# `data_mtx_files`, `data_mtx_col_seps`, and `features_array_files` must
+# all have the same length.
 def run_model(
     model_list,
     genes_of_interest_files,
@@ -184,4 +189,3 @@ def run_model(
                 f1_classification,
                 f1_score,
                 print_coeffs[i])
-
