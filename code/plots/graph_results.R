@@ -4,10 +4,11 @@
 # Present the results of the analyses as graphs
 #
 
-setwd("~/Documents/Research/mcnerney-cux1-ML-github/code/plots")
+setwd("~/CUX1_ML_Github/code/plots")
 library(ggplot2)
 library(stringr)
 library(dplyr)
+library(tidyverse)
 # library(stats)
 source('model_strings.R')
 # library(ggpubr)
@@ -42,6 +43,13 @@ source('in_vivo_f1_results.R')
 # source('in_vitro_f1_prog_results.R')
 source('in_vitro_f1_prog_results_ba_and_neu.R')
 
+df <- df %>% filter(analysis != analysis.exp_human_strict)
+df <- df %>% filter(analysis != analysis.exp_human_loose)
+df <- df %>% filter(model != model.log_reg)
+df <- df %>% filter(analysis != analysis.exp_weihan_deg)
+df <- df %>% filter(analysis != analysis.exp_jeff_molly)
+df <- df %>% filter(analysis != analysis.exp_jeff_weihan)
+
 
 
 # Function to save the specified plot p
@@ -53,7 +61,7 @@ save_plot <- function(filename, p, width_param = 30)
     plot = p,
     dpi = "retina",
     width = width_param,
-    height = 15,
+    height = 12,
     unit = "cm")
 }
 
@@ -108,8 +116,9 @@ generate_plot <- function(dataset_name, n_cells, score_func, t_test, x_label)
         local_df$t_test <- local_df$t_test_pos_ctrl
 
     # Used for the top category legend (show the gene dataset & the number of genes)
-    local_df$analysis_n_genes <- paste0(local_df$analysis, " (# genes = ", local_df$n_genes, ")")
-
+    #local_df$analysis_n_genes <- paste0(local_df$analysis, " (# genes = ", local_df$n_genes, ")")
+    local_df$analysis_n_genes <- local_df$analysis
+    
     # Order the gene sets so that they are in a valid order in the graph
     local_df$analysis_in_order <-
         factor(
@@ -126,10 +135,26 @@ generate_plot <- function(dataset_name, n_cells, score_func, t_test, x_label)
                 'Experimental - Human HSC DEGs Strict Threshold (# genes = 367)',
                 'Experimental - Human HSC DEGs Loose Threshold (# genes = 594)'
             ))
+    
+    local_df$analysis_in_order <-
+        factor(
+            local_df$analysis_n_genes,
+            levels = c(
+                "Random Gene Set",
+                "Mouse TFs",
+                "1,000 Most DEGs",
+                "CUX1 Binding Targets",
+                'CUX1 Binding Targets & Molly',
+                'CUX1 Binding Targets & Weihan',
+                'CUX1 DEGs',
+                'CUX1 Weihan DEGs'
+            ))
+    
 
     # Set the plot, axis, & legend title
     plot_title <- generate_plot_title(dataset_name, n_cells, score_func)
-    x_axis_title <- "Gene Sets Used for Prediction (if number of genes = 1,000, 10 random samples of 1,000 genes were used)"
+    plot_title <- ""
+    x_axis_title <- "Gene Sets Used for Prediction" #(if number of genes = 1,000, 10 random samples of 1,000 genes were used)"
     y_axis_title <- "Prediction Score"
     legend_title <- "Model"
     if (is.nan(score_func))
@@ -137,12 +162,11 @@ generate_plot <- function(dataset_name, n_cells, score_func, t_test, x_label)
 
     # Generate the plot
     p <- ggplot(data = local_df,
-                aes(model, average, fill = model)) +
+                aes(model, average)) +
         geom_bar(stat="identity") +
         geom_errorbar(
             aes(ymin=average-std_deviation,
-                ymax=average+std_deviation,
-                color="1 std dev"),
+                ymax=average+std_deviation),
             width=.2,
             position=position_dodge(.9)) +
         { if (!(is.nan(t_test))) geom_text(aes(label=t_test, y = 1), position=position_dodge(width=0.9)) } +
@@ -150,8 +174,8 @@ generate_plot <- function(dataset_name, n_cells, score_func, t_test, x_label)
         facet_grid(~analysis_in_order, labeller = label_wrap_gen(width = 15, multi_line = TRUE)) +
         { if (x_label) scale_x_discrete(labels = function(x) str_wrap(x, width = 8))
           else scale_x_discrete(labels = function(x) "") } +
-        coord_cartesian(ylim=c(0.3, 0.8)) +
-        scale_y_continuous(breaks = round(seq(0.3, 0.8, by = 0.1),1)) +
+        coord_cartesian(ylim=c(0.35, 0.7)) +
+        scale_y_continuous(breaks = round(seq(0.35, 0.7, by = 0.05),1)) +
         xlab(x_axis_title) +
         ylab(y_axis_title) +
         ggtitle(str_wrap(plot_title, width = 125)) +
@@ -167,7 +191,16 @@ generate_plot <- function(dataset_name, n_cells, score_func, t_test, x_label)
     return(p)
 }
 
-
+save_plot(
+    "in_vitro_nn",
+    generate_plot(
+        dataset = dataset.in_vitro,
+        n_cells = 6,
+        score_func = score_function.f1,
+        t_test = NaN,
+        x_label = FALSE),
+    width_param = 13
+)
 
 
 # Function to generate a plot for progenitor cells
@@ -285,7 +318,7 @@ save_plot(
         score_func = score_function.f1,
         t_test = NaN,
         x_label = FALSE),
-    width_param = 36
+    width_param = 25
 )
 
 save_plot(

@@ -17,7 +17,7 @@ p <- ggplot(df,
     #geom_errorbarh(height = 0) +
     ylim(0.55, 0.85) +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 20)) +
-    labs(title = "Progenitor Genes Prediction F1 Score (X? cells)",
+    labs(title = "Progenitor Genes Prediction F1 Score (6 cells, In Vivo Dataset)",
          x = "Gene Set",
          y = "F1 Score Prediction Score",
          color = "Cell Fate")
@@ -25,10 +25,10 @@ p <- ggplot(df,
 p
 
 ggsave(
-    filename = 'Progenitor genes, X? cells, f1, in vivo.png',
+    filename = 'Progenitor genes, 6 cells, f1, in vivo.png',
     device = "png",
     plot = p,
     dpi = "retina",
-    width = 40,
-    height = 15,
+    width = 20,
+    height = 13,
     unit = "cm")
