@@ -20,7 +20,7 @@ log_reg = LogisticRegression(
     penalty='l2',
     dual=False,
     tol=0.0001,
-    # C = [0.008 in vitro; 0.004 in vivo]
+    # C=[0.008 in vitro; 0.004 in vivo]
     C=0.008,
     fit_intercept=True,
     intercept_scaling=1,
@@ -50,4 +50,3 @@ hyper_param = GridSearchCV(
     _parameters,
     scoring=_f1_score_string,
     n_jobs=-1)
-

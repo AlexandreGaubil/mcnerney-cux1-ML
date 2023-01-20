@@ -8,6 +8,7 @@ import models as md
 import file_strings as st
 from sklearn.metrics import f1_score
 
+models = [md.random_forest]
 # models = [md.log_reg, md.hyper_param]
 # models = [md.hyper_param]
 # data_files = [st.THREE_CELLS_ALL_GENES_DATA, st.ALL_CELLS_ALL_GENES_DATA]
@@ -15,7 +16,8 @@ data_files = [st.ALL_CELLS_ALL_GENES_DATA]
 # features_files = [st.THREE_CELLS_ALL_GENES_FEATURES, st.ALL_CELLS_ALL_GENES_FEATURES]
 features_files = [st.ALL_CELLS_ALL_GENES_FEATURES]
 data_col_seps = [' ', ' ']
-n_models = [50, 1]
+n_models = [10]
+# n_models = [50, 1]
 # n_models = [1]
 hyper_param_tuning = [False, True]
 # hyper_param_tuning = [True]
