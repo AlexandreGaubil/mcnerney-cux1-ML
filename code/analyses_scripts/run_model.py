@@ -20,7 +20,7 @@ def fit_model(
     hyper_param_tuning,
     f1_classification,
     f1_score,
-    print_coeffs,
+    print_coeffs
 ):
     accuracy_array = []
 
@@ -66,7 +66,6 @@ def fit_model(
     #     print(hundred_largest)
 
     return accuracy_array
-
 
 
 def fit_model_filter_genes(
