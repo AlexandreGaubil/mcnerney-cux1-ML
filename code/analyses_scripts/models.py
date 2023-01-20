@@ -13,7 +13,8 @@ from sklearn.ensemble import RandomForestClassifier
 # FIXME: Do a grid search for random forest as well
 random_forest = RandomForestClassifier(
     n_estimators=100,
-    max_features=1.0)
+    max_features=1.0,
+    n_jobs=-1)
 
 # LOGISTIC REGRESSION
 log_reg = LogisticRegression(
