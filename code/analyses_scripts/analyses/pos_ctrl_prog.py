@@ -24,7 +24,7 @@ def run_prog(goi_local):
         df.features_files,
         df.n_models,
         df.hyper_param_tuning,
+        df.submodel,
         True,
         df.f1_score,
         df.print_coeffs)
-

@@ -76,9 +76,10 @@ def fit_model_filter_genes(
     features_array_file,
     n_models,
     hyper_param_tuning,
+    submodel,
     f1_classification,
     f1_score,
-    print_coeffs
+    print_coeffs,
 ):
     goi_multi_array = []
 
@@ -144,7 +145,7 @@ def fit_model_filter_genes(
         print("     Best estimator: {}".format(model.best_estimator_))
         print("     Best parameters: {}".format(model.best_params_))
         print("     Starting run of that model with optimal parameters...")
-        optimal_model = MLPClassifier(**model.best_params_)
+        optimal_model = submodel(**model.best_params_)
         fit_model_filter_genes(
             optimal_model,
             genes_of_interest_files,
@@ -172,6 +173,7 @@ def run_model(
     features_array_files,
     n_models,
     hyper_param_tuning,
+    submodel,
     f1_classification=False,
     f1_score=False,
     print_coeffs=[False, False]
@@ -186,6 +188,7 @@ def run_model(
                 features_array_files[j],
                 n_models[i],
                 hyper_param_tuning[i],
+                submodel[i],
                 f1_classification,
                 f1_score,
                 print_coeffs[i])

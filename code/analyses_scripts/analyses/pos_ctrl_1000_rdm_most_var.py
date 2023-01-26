@@ -23,7 +23,7 @@ run.run_model(
     df.features_files,
     df.n_models,
     df.hyper_param_tuning,
+    df.submodel,
     False,
     df.f1_score,
     df.print_coeffs)
-

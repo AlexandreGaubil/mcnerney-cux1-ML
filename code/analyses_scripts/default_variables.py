@@ -16,11 +16,13 @@ from sklearn.metrics import f1_score
 # all have the same length.
 
 # All the following arrays should have the same length.
-models = [md.random_forest]
-n_models = [10]
-hyper_param_tuning = [True]
-print_coeffs = [False]
+models = [md.random_forest, md.gradient_boosting]
+submodel = [md._random_forest_model, md._gradient_boosting_model]
+n_models = [10, 10]
+hyper_param_tuning = [True, True]
+print_coeffs = [False, False]
 # models = [md.log_reg, md.neural_network]
+# submodel = [None, md._neural_network_model]
 # n_models = [50, 1]
 # hyper_param_tuning = [False, True]
 # print_coeffs = [False, False]

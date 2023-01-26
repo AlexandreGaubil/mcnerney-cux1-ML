@@ -8,6 +8,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 
 # Scoring method
@@ -16,10 +17,10 @@ _f1_score_string = 'f1_macro'
 
 
 # RANDOM FOREST
-# FIXME: Do a grid search for random forest as well
 _random_forest_search_parameters = {
-    'n_estimators': [100, 500, 1000, 2000],
-    'max_features': [1.0, 2.0, 5.0]
+    'n_estimators': [500, 1000, 2000, 3000],
+    'max_features': [1.0, "sqrt", "log2"],
+    'max_leaf_nodes': [1000, 2000, None],
 }
 
 _random_forest_model = RandomForestClassifier()
@@ -27,6 +28,22 @@ _random_forest_model = RandomForestClassifier()
 random_forest = GridSearchCV(
     _random_forest_model,
     _random_forest_search_parameters,
+    scoring=_f1_score_string,
+    n_jobs=-1)
+
+
+# GRADIENT BOOSTING
+_gradient_boosting_search_parameters = {
+    'loss': {'log_loss', 'exponential'},  # exponential = AdaBoost
+    "n_estimators": [1, 10, 50, 150, 500],
+    "max_leaf_nodes": [2, 10, 50, 100],
+}
+
+_gradient_boosting_model = GradientBoostingClassifier()
+
+gradient_boosting = GridSearchCV(
+    _gradient_boosting_model,
+    _gradient_boosting_search_parameters,
     scoring=_f1_score_string,
     n_jobs=-1)
 
