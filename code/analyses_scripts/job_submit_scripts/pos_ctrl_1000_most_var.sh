@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=cux1
-#SBATCH --output=cux1_rf_and_gb.out
-#SBATCH --error=cux1_rf_and_gb.err
+#SBATCH --job-name=pos_ctrl_1000_most_var_rf_and_gb
+#SBATCH --output=pos_ctrl_1000_most_var_rf_and_gb.out
+#SBATCH --error=pos_ctrl_1000_most_var_rf_and_gb.err
 #SBATCH --time=48:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=8
@@ -15,4 +15,4 @@ module load python
 
 date
 
-python ../analyses/cux1.py
+python ../analyses/pos_ctrl_1000_rdm_most_var.py

@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=human_f1
-#SBATCH --output=human_f1.out
-#SBATCH --error=human_f1.err
-#SBATCH --time=20:00:00
+#SBATCH --job-name=human_rf_and_gb
+#SBATCH --output=human_rf_and_gb.out
+#SBATCH --error=human_rf_and_gb.err
+#SBATCH --time=48:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-node=14
@@ -15,5 +15,4 @@ module load python
 
 date
 
-# HYPER-PARAM TUNING DNN
 python ../analyses/human.py
