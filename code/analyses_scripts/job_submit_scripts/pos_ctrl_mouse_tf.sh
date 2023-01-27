@@ -7,9 +7,8 @@
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-node=14
 #SBATCH --mem-per-cpu=200
-#SBATCH --mail-user=automatic@gaubil.me
-#SBATCH --mail-type=END
-#SBATCH --mail-type=FAIL
+#SBATCH --mail-user=alerts@gaubil.me
+#SBATCH --mail-type=ALL
 
 module load python
 
