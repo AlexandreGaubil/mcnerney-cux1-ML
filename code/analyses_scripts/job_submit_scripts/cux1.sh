@@ -10,7 +10,7 @@
 #SBATCH --mail-user=alerts@gaubil.me
 #SBATCH --mail-type=ALL
 
-module load python
+module load python/anaconda-2021.05
 
 date
 
