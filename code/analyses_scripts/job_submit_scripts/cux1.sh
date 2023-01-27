@@ -11,7 +11,8 @@
 #SBATCH --mail-type=ALL
 
 module load python/anaconda-2021.05
-conda env create --prefix=/home/gaubil/env/lab -f labenv.yml
+source activate /project2/mcnerney/gaubil/mcnerney-cux1-ML/env
+# conda env create --prefix=/home/gaubil/env/lab -f labenv.yml
 
 date
 
