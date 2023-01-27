@@ -1,0 +1,85 @@
+
+
+
+CUX1 RELATED GENES
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'n_estimators': [100, 500, 1000, 2000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/jeff_cux1_biding_targets.txt']
+     Best estimator: RandomForestClassifier(max_features=1.0, n_estimators=1000)
+     Best parameters: {'max_features': 1.0, 'n_estimators': 1000}
+     Starting run of that model with optimal parameters...
+
+
+
+CUX1 RELATED GENES DEGS
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'n_estimators': [100, 500, 1000, 2000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/Molly_shCux1_bulk_RNA_DEGs.txt']
+     Best estimator: RandomForestClassifier(n_estimators=1000)
+     Best parameters: {'max_features': 'sqrt', 'n_estimators': 1000}
+     Starting run of that model with optimal parameters...
+
+
+
+HUMAN HSC RELATED GENES
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'n_estimators': [100, 500, 1000, 2000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/human_cd34_deg_loose.txt']
+     Warning: Unable to sample dataframe, less than 1,000 columns. Will proceed without sampling
+     Best estimator: RandomForestClassifier()
+     Best parameters: {'max_features': 'sqrt', 'n_estimators': 100}
+     Starting run of that model with optimal parameters...
+
+
+
+NEGATIVE CONTROL: 1,000 RDM GENES
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'n_estimators': [100, 500, 1000, 2000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/all_genes.txt']
+     Best estimator: RandomForestClassifier(max_features=1.0, n_estimators=2000)
+     Best parameters: {'max_features': 1.0, 'n_estimators': 2000}
+     Starting run of that model with optimal parameters...
+
+
+
+POSITIVE CONTROL: 1,000 MOST VARIABLE GENES
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'n_estimators': [100, 500, 1000, 2000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/2000_most_degs.txt']
+     Best estimator: RandomForestClassifier(n_estimators=2000)
+     Best parameters: {'max_features': 'sqrt', 'n_estimators': 2000}
+     Starting run of that model with optimal parameters...
+
+
+
+POSITIVE CONTROL: MOUSE TFS
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'n_estimators': [100, 500, 1000, 2000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/mouse_tfs.txt']
+     Best estimator: RandomForestClassifier(max_features=1.0, n_estimators=1000)
+     Best parameters: {'max_features': 1.0, 'n_estimators': 1000}
+     Starting run of that model with optimal parameters...
