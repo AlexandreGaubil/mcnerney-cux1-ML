@@ -34,7 +34,7 @@ random_forest = GridSearchCV(
 
 # GRADIENT BOOSTING
 _gradient_boosting_search_parameters = {
-    'loss': {'log_loss', 'exponential'},  # exponential = AdaBoost
+    'loss': ['log_loss', 'exponential'],  # exponential = AdaBoost
     "n_estimators": [1, 10, 50, 150, 500],
     "max_leaf_nodes": [2, 10, 50, 100],
 }
