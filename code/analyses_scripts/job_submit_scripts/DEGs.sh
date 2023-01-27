@@ -2,7 +2,7 @@
 #SBATCH --job-name=degs
 #SBATCH --output=degs_rf_and_gb.out
 #SBATCH --error=degs_rf_and_gb.err
-#SBATCH --time=48:00:00
+#SBATCH --time=36:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-node=14

@@ -2,7 +2,7 @@
 #SBATCH --job-name=prog_2
 #SBATCH --output=prog_2_rf_and_gb.out
 #SBATCH --error=prog_2_rf_and_gb.err
-#SBATCH --time=48:00:00
+#SBATCH --time=36:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-node=14
