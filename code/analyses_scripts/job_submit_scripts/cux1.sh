@@ -6,7 +6,7 @@
 #SBATCH --partition=broadwl
 #SBATCH --nodes=8
 #SBATCH --ntasks-per-node=14
-#SBATCH --mem-per-cpu=200
+#SBATCH --mem=64G
 #SBATCH --mail-user=alerts@gaubil.me
 #SBATCH --mail-type=ALL
 
