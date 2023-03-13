@@ -28,9 +28,6 @@ code/analyses_scripts/job_submit_scripts/*.zip
 code/analyses_scripts/job_submit_scripts/*.err
 code/analyses_scripts/job_submit_scripts/*.out
 
-# Images
-*.png
-
 # Zip files
 data/in_vivo.zip
 data/in_vitro.zip
