@@ -7,9 +7,9 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score as sklearn_f1_score
 from sklearn.exceptions import ConvergenceWarning
 import sys
-import numpy
+# import numpy
 from heapq import nlargest
-numpy.set_printoptions(threshold=sys.maxsize)
+np.set_printoptions(threshold=sys.maxsize)
 
 
 def fit_model(
@@ -154,6 +154,7 @@ def fit_model_filter_genes(
             features_array_file,
             50,
             False,
+            None,
             f1_classification,
             f1_score,
             print_coeffs)
