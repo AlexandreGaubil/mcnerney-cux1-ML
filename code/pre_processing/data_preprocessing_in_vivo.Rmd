@@ -25,11 +25,19 @@ I want to test if the treatment groups are more accurate to predict HSPC cell fa
 # Setup
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-#setwd("/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
-#knitr::opts_knit$set(root.dir = "/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
 #set up working directory, this will vary from desktop to desktop
-# knitr::opts_knit$set(root.dir = "/Users/weihan/Box\ Sync/McNerney\ Lab\ Bioinformatics/Alexandre\ Gaubil/mcnerney-cux1-ML")
+wd <- "/Users/weihan/Desktop/Research/mcnerney-cux1-ML"
+
+#knitr::opts_chunk$set(echo = FALSE)
+#<<<<<<< solve_invivo_preprocessing
+#setwd(wd)
+#knitr::opts_knit$set(root.dir = wd)
+#=======
+##setwd("/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
+#knitr::opts_knit$set(root.dir = "/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
+#>>>>>>> main
+#set up working directory, this will vary from desktop to desktop
+
 ```
 
 ## Load relevant libraries
@@ -98,10 +106,11 @@ if (!file.exists("./data/in_vivo/input_for_Seurat/matrix.mtx.gz")) {
   count_mtx <- t(count_mtx)
   
   file.create("./data/in_vivo/input_for_Seurat/matrix.mtx")
-  writeMM(count_mtx, "./in_vivo/cache/input_for_Seurat/matrix.mtx")
+  writeMM(count_mtx, "./data/in_vivo/input_for_Seurat/matrix.mtx")
   gzip("./data/in_vivo/input_for_Seurat/matrix.mtx")
   file.remove("./data/in_vivo/input_for_Seurat/matrix.mtx")
 }
+
 ```
 
 ## Load `metadata.txt`
@@ -113,42 +122,28 @@ We need to find the clonal membership of each cell, in order to connect the fina
 
 ## Read in the clone membership metadata
 ```{r}
-if (!file.exists("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")) {
-  print("Creating `clone_matrix_transposed.mtx`...")
-  clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix.mtx")
-  t_clone_matrix <- t(clone_matrix)
-  
-  file.create("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
-  writeMM(t_clone_matrix, "./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
-  
-  if (settings.remove_unused) {
-    rm(clone_matrix)
-    rm(t_clone_matrix)
-  }
-}
-
 # Read in the clonal membership matrix & convert to dataframe
-t_clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
-clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
-
-if (settings.remove_unused) { rm(t_clone_matrix) }
+clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix.mtx")
+clone_meta_data_df <- as.data.frame(clone_matrix, col.names = TRUE)
 ```
 
 ## Extract Clonal Identity
 
-The `clone_meta_data_fr`'s row are clone membership IDs, and columns are all cells. For each cell / column, if it belong to a clone / row, the value in the matrix is 1. If it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell.
+The `clone_meta_data_df`'s row are clone membership IDs, and columns are all cells. For each cell / column, if it belong to a clone / row, the value in the matrix is 1. If it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell.
 ```{r}
 # Use match function to find the row number where the 1 occurs (indicating this cell below to this clone), and store the location of 1 for all cells into a vector
 clone_membership <- lapply(clone_meta_data_df, function(x) match(1,x))
 if (settings.remove_unused) { rm(clone_meta_data_df) }
 
-clone_membership <- unlist(clone_membership)
+clone_membership <- unlist(clone_membership) 
+clone_membership <- as.vector(clone_membership)
 # Now clone membership is a vector that contains the clonal ID for each cell. The order should be the same as in the count matrix and metadata
 
 # Attach the clonal membership vector to the metadata
 meta_data$clone_membership <- clone_membership
 
 if (settings.remove_unused) { rm(clone_membership) }
+
 ```
 
 
