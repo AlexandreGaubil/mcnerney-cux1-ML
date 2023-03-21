@@ -3,11 +3,19 @@ THREE_CELLS_ALL_GENES_FEATURES = './../../../data/in_vitro/analyses_input/three_
 ALL_CELLS_ALL_GENES_DATA = './../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt'
 ALL_CELLS_ALL_GENES_FEATURES = './../../../data/in_vitro/analyses_input/all_cells_all_genes_features.txt'
 
+# THREE_CELLS_ALL_GENES_DATA = './../../../data/in_vivo/analyses_input/three_cells_all_genes_data_headers.txt'
+# THREE_CELLS_ALL_GENES_FEATURES = './../../../data/in_vivo/analyses_input/three_cells_all_genes_features.txt'
+# ALL_CELLS_ALL_GENES_DATA = './../../../data/in_vivo/analyses_input/all_cells_all_genes_data_headers.txt'
+# ALL_CELLS_ALL_GENES_FEATURES = './../../../data/in_vivo/analyses_input/all_cells_all_genes_features.txt'
+
 GOI_ALL_GENES = './../../../data/gene_sets/all_genes.txt'
 
 GOI_MOST_VAR = './../../../data/gene_sets/2000_most_degs.txt'
 
 GOI_MOUSE_TFS = './../../../data/gene_sets/mouse_tfs.txt'
+
+GOI_HUMAN_STRICT = './../../../data/gene_sets/human_cd34_deg_strict.txt'
+GOI_HUMAN_LOOSE = './../../../data/gene_sets/human_cd34_deg_loose.txt'
 
 GOI_PROG_BA = './../../../data/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt'
 GOI_PROG_B = './../../../data/gene_sets/prog_genes/Ren_CLP_B_DEG_progenitor_markers.txt'

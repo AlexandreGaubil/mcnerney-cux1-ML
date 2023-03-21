@@ -8,16 +8,40 @@ import models as md
 import file_strings as st
 from sklearn.metrics import f1_score
 
-models = [md.log_reg, md.hyper_param]
-#models = [md.hyper_param]
+# NOTE ON LENGTH OF ARRAYS
+# For all the arrays, there are two possible lengths.
+# `model_list`, `n_models`, `hyper_param_tuning`, and `print_coeffs` must
+# all have the same length.
+# `data_mtx_files`, `data_mtx_col_seps`, and `features_array_files` must
+# all have the same length.
+
+# All the following arrays should have the same length.
+# Option 1
+models = [md.neural_network]
+submodel = [md._neural_network_model]
+n_models = [10]
+hyper_param_tuning = [True]
+print_coeffs = [False]
+# Option 2
+# models = [md.random_forest, md.gradient_boosting]
+# submodel = [md._random_forest_model, md._gradient_boosting_model]
+# n_models = [10, 10]
+# hyper_param_tuning = [True, True]
+# print_coeffs = [False, False]
+# Option 3
+# models = [md.log_reg, md.neural_network]
+# submodel = [None, md._neural_network_model]
+# n_models = [50, 1]
+# hyper_param_tuning = [False, True]
+# print_coeffs = [False, False]
+
+# All the following arrays should have the same length.
 data_files = [st.THREE_CELLS_ALL_GENES_DATA, st.ALL_CELLS_ALL_GENES_DATA]
 features_files = [st.THREE_CELLS_ALL_GENES_FEATURES, st.ALL_CELLS_ALL_GENES_FEATURES]
 data_col_seps = [' ', ' ']
-n_models = [50, 1]
-# n_models = [1]
-hyper_param_tuning = [False, True]
-# hyper_param_tuning = [True]
-print_coeffs = [False, False]
+# data_files = [st.ALL_CELLS_ALL_GENES_DATA]
+# features_files = [st.ALL_CELLS_ALL_GENES_FEATURES]
+# data_col_seps = [' ']
 
 # Specifies if all models should calculate f1 score instead of accuracy
 f1_score = True
@@ -32,6 +56,9 @@ goi_most_var = [st.GOI_MOST_VAR]
 
 # Positive control: mouse tfs
 goi_mouse_tfs = [st.GOI_MOUSE_TFS]
+
+# Experimental: human cd34 HSC DEG genes with strict and loose filters
+goi_human = [[st.GOI_HUMAN_LOOSE], [st.GOI_HUMAN_STRICT]]
 
 # Positive control: progenitor genes
 goi_prog_ba = [st.GOI_PROG_BA]

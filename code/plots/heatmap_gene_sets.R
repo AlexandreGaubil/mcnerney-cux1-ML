@@ -3,14 +3,15 @@ library(tidyverse)
 library(stringr)
 
 setwd("~/Documents/Research/mcnerney-cux1-ML-github")
-
+setwd("~/CUX1_ML_Github/")
 
 
 # ----- Data -----
 
 read_gene_file <- function(filename)
 {
-    filepath <- paste("data/input/gene_sets/", filename, sep = "")
+    filepath <- paste("data/gene_sets/", filename, sep = "")
+    print(filepath)
     dat = readLines(filepath)
     
     return(dat)
@@ -76,7 +77,7 @@ df_intersect$y <- factor(df_intersect$y, levels = gene_sets_names)
 
 # ----- Plot parameters ------
 
-plot.title <- "Heatmap of Gene Sets Overlap for In-Vitro Dataset"
+plot.title <- ""#"Heatmap of Gene Sets Overlap for In-Vitro Dataset"
 plot.legend.title <- "Percentage of X that is in Y"
 
 scale_fun <- function(x) sprintf("%.2f", x)

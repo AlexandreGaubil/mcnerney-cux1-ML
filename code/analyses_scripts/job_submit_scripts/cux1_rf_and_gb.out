@@ -1,0 +1,13 @@
+Sun Feb 12 11:34:01 CST 2023
+
+
+
+CUX1 RELATED GENES
+
+MODEL --- GridSearchCV(estimator=RandomForestClassifier(), n_jobs=-1,
+             param_grid={'max_features': [1.0, 'sqrt', 'log2'],
+                         'max_leaf_nodes': [1000, 2000, None],
+                         'n_estimators': [500, 1000, 2000, 3000]},
+             scoring='f1_macro')
+     Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+     Genes files: ['./../../../data/gene_sets/jeff_cux1_biding_targets.txt']

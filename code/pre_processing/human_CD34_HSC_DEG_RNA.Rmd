@@ -1,0 +1,79 @@
+---
+title: "Human CD34 HSC DEG RNA"
+author: "Alexandre Gaubil"
+date: "4/7/2022"
+output: html_document
+---
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(tidyr)
+library(data.table)
+
+setwd("/Users/alexandregaubil/CUX1_ML_Github/data/gene_sets")
+matrix <- read.table("/Users/alexandregaubil/CUX1_ML_Github/data/gene_sets/GSE101300_HSC_EdgeR_results.txt")
+df <- as.data.frame(matrix)
+rm(matrix)
+
+df = subset(df, select = -c(logCPM, LR, PValue, cpm.control_1, cpm.control_2, cpm.CUX1KD_A1, cpm.CUX1KD_A2,
+                            cpm.CUX1KD_B1, cpm.CUX1KD_B2, upDown, control_1, control_2, CUX1KD_A1,
+                            CUX1KD_A2, CUX1KD_B1, CUX1KD_B2, cpm.control_1.1, cpm.control_2.1,
+                            cpm.CUX1KD_A1.1, cpm.CUX1KD_A2.1, cpm.CUX1KD_B1.1, cpm.CUX1KD_B2.1) )
+
+dim(df)
+```
+
+
+# Convert Human Genes to Mouse Genes
+
+```{r}
+gene_conversion_df <- as.data.frame(
+    read.csv("/Users/alexandregaubil/CUX1_ML_Github/data/gene_sets/mouse-human-genes.csv"))
+
+gene_conversion_df <- gene_conversion_df %>%
+  rename(
+    gene = HumanSymbol,
+    mouse_gene = MouseSymbol)
+
+setDT(gene_conversion_df)
+
+df <- gene_conversion_df[df, on = c(gene = "genes")]
+```
+
+
+# Strict rules
+
+Keep genes with (FDR < 0.1) & (|logFC| > 1).
+Gives 387 genes (367 with mouse gene name)
+
+```{r}
+strict_df <- df[df$FDR < 0.1,]
+strict_df <- strict_df[abs(strict_df$logFC) > 1,]
+strict_df <- strict_df %>% drop_na()
+dim(strict_df)
+
+strict_df = subset(strict_df, select = -c(gene, logFC, FDR) )
+write.table(strict_df, "human_cd34_deg_strict.txt", append = FALSE, row.names = FALSE, col.names = FALSE)
+```
+
+
+# Loose rules
+
+Keep genes with (FDR < 0.2) & (|logFC| > 0.7)
+Gives 619 genes (594 with mouse gene name)
+
+```{r}
+loose_df <- df[df$FDR < 0.2,]
+loose_df <- loose_df[abs(loose_df$logFC) > 0.7,]
+loose_df <- loose_df %>% drop_na()
+dim(loose_df)
+
+loose_df = subset(loose_df, select = -c(gene, logFC, FDR) )
+write.table(loose_df, "human_cd34_deg_loose.txt", append = FALSE, row.names = FALSE, col.names = FALSE)
+```
+
+
+Try LFC > 0.5

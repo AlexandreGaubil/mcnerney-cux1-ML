@@ -1,0 +1,454 @@
+---
+title: "ML sc transcriptome and fate"
+author: "Weihan Liu"
+date: "12/08/2021"
+output: html_document
+---
+Use a Machine learning model on Weinreb_2020 data to test if
+
+Treatment
+1).Cux1 binding genes(from Jeff's Cut and Run on human CD34 HSPC)
+2).Intersect of Cux1 binding genes and DEGs after Cux1 KD in mouse Lin-CKit+Sca1+CD135- HSPC
+3).Cux1 signature(DEGs comparing Cux1 + and Cux1- cells)
+4).DE genes for each lineage from Tradeseq to predict fate of each lineage?
+5).Sites opened by Cux1 from Jeff's ATAC seq data on human CD34
+6).The intersect between these sites and DEGs from bulk RNA seq
+
+Controls:
+1).highly variable genes(+ ctrl)
+1).DEGs between progenitors genes(+ ctrl)
+3) randomly sampled genes (- ctrl)
+
+I want to test if the treatment groups are more accurate to predict HSPC cell fate than background(randomly sampled genes)
+
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+#setwd("/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
+#knitr::opts_knit$set(root.dir = "/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
+#set up working directory, this will vary from desktop to desktop
+# knitr::opts_knit$set(root.dir = "/Users/weihan/Box\ Sync/McNerney\ Lab\ Bioinformatics/Alexandre\ Gaubil/mcnerney-cux1-ML")
+```
+
+## Load relevant libraries
+```{r, message = FALSE, warning = FALSE}
+options(max.print=20)
+library(Seurat)
+library(tidyverse)
+library(ggplot2)
+library(Matrix)
+library(stringr)
+library("R.utils")
+library(hash)
+# library(mltools)
+```
+
+
+## Check directory & specify kind of data analysis
+```{r}
+# setwd(getwd())
+
+# If current directory is not valid, stop execution
+if (!dir.exists("./data")) {
+  stop("It seems that the current working directory is not correct (doesn't contain `data/`), you should check that.")
+}
+if (!dir.exists("./data/in_vivo/")) {
+  warning("No `data/in_vivo/` directory found, creating one now...")
+  dir.create("./data/in_vivo/")
+}
+if (!dir.exists("./data/in_vivo/input_for_Seurat/")) {
+  warning("No `data/in_vivo/input_for_Seurat/` directory found, creating one now...")
+  dir.create("./data/in_vivo/input_for_Seurat/")
+}
+if (!dir.exists("./data/in_vivo/RDS_objects/")) {
+  warning("No `data/in_vivo/RDS_objects/` directory found, creating one now...")
+  dir.create("./data/in_vivo/RDS_objects/")
+}
+if (!dir.exists("./data/in_vivo/analyses_input/")) {
+  warning("No `data/in_vivo/analyses_input/` directory found, creating one now...")
+  dir.create("./data/in_vivo/analyses_input/")
+}
+```
+
+## Set options for code
+```{r}
+# If TRUE, will remove variables as they are no longer needed.
+# Keep FALSE while developing to facilitate debugging. Set to TRUE to
+# optimize performance.
+settings.remove_unused <- FALSE
+```
+
+
+
+# Data loading & cleaning
+
+Read in the data from Weinreb 2020 and perform data cleaning.
+
+## Create Count Matrix (`matrix.mtx.gz`)
+```{r}
+# If the transposed normed counts matrix file doesn't exist yet, create it
+if (!file.exists("./data/in_vivo/input_for_Seurat/matrix.mtx.gz")) {
+  print("Creating `matrix.mtx.gz`...")
+  # Load the L1 normalized count matrix
+  count_mtx = readMM("./data/in_vivo/files_from_weinreb/normed_counts.mtx")
+  
+  # Read10X() expect gene-by-cell-matrix, so we need to transpose and export
+  count_mtx <- t(count_mtx)
+  
+  file.create("./data/in_vivo/input_for_Seurat/matrix.mtx")
+  writeMM(count_mtx, "./in_vivo/cache/input_for_Seurat/matrix.mtx")
+  gzip("./data/in_vivo/input_for_Seurat/matrix.mtx")
+  file.remove("./data/in_vivo/input_for_Seurat/matrix.mtx")
+}
+```
+
+## Load `metadata.txt`
+```{r}
+meta_data <- read.delim("./data/in_vivo/files_from_weinreb/metadata.txt", header = TRUE)
+```
+
+We need to find the clonal membership of each cell, in order to connect the final cell identity to day 2 cells.
+
+## Read in the clone membership metadata
+```{r}
+if (!file.exists("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")) {
+  print("Creating `clone_matrix_transposed.mtx`...")
+  clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix.mtx")
+  t_clone_matrix <- clone_matrix #t(clone_matrix)
+  
+  file.create("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
+  writeMM(t_clone_matrix, "./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
+  
+  if (settings.remove_unused) {
+    rm(clone_matrix)
+    rm(t_clone_matrix)
+  }
+}
+
+# Read in the clonal membership matrix & convert to dataframe
+# t_clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix_transposed.mtx")
+t_clone_matrix <- readMM("./data/in_vivo/files_from_weinreb/clone_matrix.mtx")
+clone_meta_data_df <- as.data.frame(t_clone_matrix, col.names = TRUE)
+
+if (settings.remove_unused) { rm(t_clone_matrix) }
+```
+
+## Extract Clonal Identity
+
+The `clone_meta_data_fr`'s row are clone membership IDs, and columns are all cells. For each cell / column, if it belong to a clone / row, the value in the matrix is 1. If it doesn't belong to this clone, the value is 0. Now we need to extract the clonal membership ID for each cell and attach the clonal ID back to each cell.
+```{r}
+# Use match function to find the row number where the 1 occurs (indicating this cell below to this clone), and store the location of 1 for all cells into a vector
+clone_membership <- lapply(clone_meta_data_df, function(x) match(1,x))
+if (settings.remove_unused) { rm(clone_meta_data_df) }
+
+clone_membership <- unlist(clone_membership)
+# Now clone membership is a vector that contains the clonal ID for each cell. The order should be the same as in the count matrix and metadata
+
+# Attach the clonal membership vector to the metadata
+meta_data$clone_membership <- clone_membership
+
+if (settings.remove_unused) { rm(clone_membership) }
+```
+
+
+Set the row name of the `meta_data` dataframe.
+```{r}
+# Create a new cell barcode column which incorporate library ID. This is used to link cells between day 2 & (9 and 16)
+meta_data$cell <- str_c(meta_data$Cell.barcode,"-",meta_data$Library)
+# Check if there are any duplicate values
+if (length(unique(meta_data$cell)) != dim(meta_data)[1]) {
+  warning("Duplicate values in meta_data$cell, used as ID column")
+  # There are still some duplicated cell barcode within each library even if we attach the library name after cell barcode, so let's add a general number to the very end of the barcode, to make every cell barcode unique
+  meta_data$index <- 1:nrow(meta_data)
+  meta_data$cell <- str_c(meta_data$cell,"-",meta_data$index)
+}
+
+# TODO: add this later on. `filter()` drops row names
+meta_data$cell.rowname <- meta_data$cell
+meta_data <- column_to_rownames(meta_data, var="cell.rowname")
+```
+
+## Create `barcode.tsv` file
+
+We use the new unique cell barcode to remake the `barcode.tsv` file for reading in Seurat object.
+```{r}
+if (!file.exists("./data/in_vivo/input_for_Seurat/barcodes.tsv.gz")) {
+  print("Creating `barcode.tsv.gz`...")
+  barcode <- as.data.frame(rownames(meta_data), col.names = NULL)
+  
+  # Export the new cell barcode tsv file
+  write.table(barcode, file='./data/in_vivo/input_for_Seurat/barcodes.tsv', quote=FALSE, sep='\t', col.names=FALSE, row.names=FALSE)
+  gzip("./data/in_vivo/input_for_Seurat/barcodes.tsv")
+  file.remove("./data/in_vivo/input_for_Seurat/barcodes.tsv")
+}
+```
+
+## Read in the Seurat object
+```{r}
+LT.data <- Read10X(data.dir="./data/in_vivo/input_for_Seurat", gene.column=1, cell.column = 1)
+
+# Initialize the Seurat object with the raw (non-normalized data).
+LT.seu <- CreateSeuratObject(counts=LT.data, project="Lineage_Tracing")
+
+if (settings.remove_unused) { rm(LT.data) }
+```
+
+## Find destiny of the cell
+
+Next, find the destiny fate of each day 2 cell by uniting with the clonal membership of week1 and week2 cells
+```{r}
+# Get rid of the cells that don't belong to any clones (i.e., column `clone_membership` is null or empty string)
+meta_data_unique <- meta_data[!((is.na(meta_data$clone_membership)) |
+                                  (meta_data$clone_membership == "")), ]
+
+if (settings.remove_unused) { rm(meta_data) }
+
+# Only retain the useful columns
+meta_data_unique <- dplyr::select(meta_data_unique,
+                                  c("Time.point",
+                                    "Cell.type.annotation",
+                                    "clone_membership",
+                                    "cell"))
+
+# Select day 2 cells
+meta_data_d2 <- filter(meta_data_unique, Time.point == 2)
+
+# Select terminal cells (4 & 6 for in vitro, 9 & 16 for in vivo)
+meta_data_terminal <- filter(meta_data_unique, Time.point %in% c(4,6,9,16))
+
+# Check how many clones in day 2 have sisters in week 1 and week 2
+meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership %>% sum()
+
+# Only retain the day 2 cells which has a clonal sister in week 1 and 2
+meta_data_d2 <- meta_data_d2[meta_data_d2$clone_membership %in% meta_data_terminal$clone_membership,]
+
+# Loop through all day 2 cells and store all terminal sister cell's annotations for each day 2 cell into a list
+sister_ident <- list()
+for (i in 1:nrow(meta_data_d2)) {
+  terminal_fate <- filter(meta_data_terminal, clone_membership == meta_data_d2$clone_membership[i]) %>% dplyr::select(Cell.type.annotation)
+  sister_ident <- append(sister_ident,terminal_fate)
+}
+
+# FIXME: can we get rid of more kinds of metadata?
+```
+
+Now let's loop through the list and find the most common cell annotation for each clone identity. We return the terminal identity with the most occurrences. If there is a tie for the most occurrences, we return ambiguous. If there is no identity provided at all (shouldn't happen), we return ambiguous.
+```{r}
+# Returns the most common identifier among those given. If there is a tie or no identifier, returns "ambiguous"
+count_and_sort_identifiers <- function(ids) {
+  ids_count <- hash()
+  
+  # Count every occurrence of every string in the identifiers
+  for (i in 1:length(ids)) {
+    if (is.null(ids_count[[ids[[i]]]])) {
+      ids_count[[ids[[i]]]] <- 1
+    } else {
+      ids_count[[ids[[i]]]] <- ids_count[[ids[[i]]]] + 1
+    }
+  }
+  
+  # Find identifier with most counts & identifier with second most count
+  m <- 0
+  m_prev <- 0
+  m_key <- ""
+  for (key in names(unlist(ids_count))) {
+    if (ids_count[[key]] >= m) {
+      m_prev <- m
+      m <- ids_count[[key]]
+      m_key <- key
+    }
+  }
+  
+  # Return the identifier with the most occurrences or the "ambiguous" if there is a tie
+  if (m == 0) { return("ambiguous") }
+  if (m > m_prev) { return(m_key) }
+  if (m == m_prev) { return ("ambiguous") }
+  
+  stop("`count_and_sort_identifiers()` has a bug")
+}
+
+# Create a holder data frame for day 2 cell's identity
+day2_cell_ident <- data.frame(index = seq(1:length(sister_ident)),ident = NA)
+n_day2_cells <- length(sister_ident)
+
+# TODO: use lapply() / parapply() to make it faster
+for (i in 1:n_day2_cells) {
+  day2_cell_ident[i,"ident"] <- count_and_sort_identifiers(sister_ident[[i]])
+}
+
+if (settings.remove_unused) {
+  rm(i)
+  rm(count_and_sort_identifiers)
+  rm(n_day2_cells)
+}
+```
+_In vitro_: We have 1,523 cells with unique terminal identity. They will be used for the machine learning classifier.
+
+## Select cells with appropriate cell fate by removing those with prog, ambiguous, or undifferentiated states
+```{r}
+# Attach the day 2 cell identity to the day 2 metadata file
+meta_data_d2 <- cbind(meta_data_d2, day2_cell_ident$ident)
+
+# Rename the day 2 identity column
+meta_data_d2 <- dplyr::rename(meta_data_d2, final.ident = "day2_cell_ident$ident")
+
+# Obtain day 2 Seurat object by subsetting the cell barcode
+LT.seu.day2 <- subset(LT.seu, cells = meta_data_d2$cell)
+LT.seu.day2@meta.data <- meta_data_d2
+
+if (settings.remove_unused) {
+  rm(day2_cell_ident)
+  rm(LT.seu)
+  rm(meta_data_d2)
+}
+
+# Obtain cell barcode of cells labeled as ambiguous, Prog, and Undifferentiated
+ambi_cells <- LT.seu.day2@meta.data %>%
+  filter(final.ident %in% c("Prog","ambiguous","Undifferentiated")) %>%
+  rownames()
+
+# Obtain cells with unique final identities
+unique_cells <- (LT.seu.day2@meta.data$cell)[!(rownames(LT.seu.day2@meta.data) %in% ambi_cells)]
+
+# Subset day 2 Seurat object to only retain the cells with unique identities
+LT.seu.day2 <- subset(LT.seu.day2, cells = unique_cells)
+
+table(LT.seu.day2@meta.data$final.ident)
+
+# Dimension reduction
+LT.seu.day2 <- FindVariableFeatures(LT.seu.day2, selection.method = "vst", nfeatures = 2000)
+# Scale the data for PCA
+all.genes <- rownames(LT.seu.day2)
+LT.seu.day2 <- ScaleData(LT.seu.day2, features = all.genes)
+# Run PCA
+LT.seu.day2 <- RunPCA(LT.seu.day2, features = VariableFeatures(object = LT.seu.day2))
+# UMAP
+LT.seu.day2 <- RunUMAP(LT.seu.day2, dims = 1:30)
+
+DimPlot(LT.seu.day2, group.by = "final.ident", reduction = "pca")
+```
+
+
+```{r, include = FALSE, eval = FALSE}
+# Save LT.seu.day2 to not have to redo all previous calculations every time
+saveRDS(LT.seu.day2, file = "./data/in_vivo/RDS_objects/LT_seu_day2_before_filtering.rds")
+
+# Load LT.seu.day2 from file
+LT.seu.day2 <- readRDS(file = "./data/in_vivo/RDS_objects/LT_seu_day2_before_filtering.rds")
+```
+
+## Combine cell final identities for rare cells and remove the ones that are very rare
+```{r}
+Idents(LT.seu.day2) <- "final.ident"
+
+# Delete the NK cell, since there is only one in vitro
+# In vivo: there is no NK cell
+# LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NK")
+
+LT.seu.day2@meta.data %>%
+  group_by(final.ident) %>%
+  summarize(count=n())
+
+LT.seu.day2@meta.data <- LT.seu.day2@meta.data %>%
+  mutate(final.ident = case_when(final.ident == "Baso" ~ "Baso",
+                                 final.ident == "Lymphoid" ~ "Lymphoid",
+                                 final.ident == "Mast" ~ "Mast",
+                                 final.ident == "Meg" ~ "Meg",
+                                 final.ident == "Neutrophil" ~ "Neutrophil",
+                                 final.ident == "Monocyte" ~ "Monocyte"))
+
+LT.seu.day2 <- subset(LT.seu.day2, subset = final.ident != "NA")
+
+LT.seu.day2@meta.data %>%
+  group_by(final.ident) %>%
+  summarize(count=n())
+```
+
+
+
+Save the day 2 Seurat object, this will be the object we will pull the training data from
+```{r}
+saveRDS(LT.seu.day2, file = "./data/in_vivo/RDS_objects/LT_seu_day2_ML_source_data_filtered.rds")
+```
+
+
+# Export Data
+
+Read in and preparing the training data, export to your desktop and we will implement ML classifier in python in `sklearn`.
+
+## Controls
+
+### Negative Control
+
+Randomly sampled 1000 genes from day 2 Seurat object (will be randomly sampled in Python)
+```{r} 
+day2.count.neg.ctrl <- as.data.frame(LT.seu.day2@assays$RNA@data)
+day2.count.neg.ctrl <- t(day2.count.neg.ctrl) %>% as.data.frame()
+# Attach the final identity (label) to the data
+day2.count.neg.ctrl$final.ident <- LT.seu.day2@meta.data$final.ident
+
+day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
+day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
+
+# Export the df
+day2.count.neg.ctrl.data <- subset(day2.count.neg.ctrl, select = -c(final.ident))
+day2.count.neg.ctrl.feature <- subset(day2.count.neg.ctrl, select = c(final.ident))
+
+if (!dir.exists("./data/output/neg_control/")) {
+  warning("No `data/output/neg_control` directory found, creating one now...")
+  dir.create("./data/output/neg_control")
+}
+
+write.table(day2.count.neg.ctrl.data,
+            row.names = FALSE,
+            col.names = FALSE,
+            "./data/in_vitro/analyses/rand_genes_neg_ctrl_data_all_cell_types.txt")
+write.table(day2.count.neg.ctrl.feature,
+            row.names = FALSE,
+            col.names = FALSE,
+            "./data/in_vitro/analyses/rand_genes_neg_ctrl_feature_all_cell_types.txt")
+```
+
+### Positive Control
+
+Top 2000 most variable genes
+```{r}
+LT.seu.day2@assays$RNA@var.features
+day2.count.var.2000 <- as.data.frame(LT.seu.day2@assays$RNA@data)
+
+day2.count.var.2000 <- filter(day2.count.var.2000,rownames(day2.count.var.2000) %in% LT.seu.day2@assays$RNA@var.features)
+
+day2.count.var.2000 <- t(day2.count.var.2000) %>% as.data.frame()
+day2.count.var.2000$final.ident <- LT.seu.day2@meta.data$final.ident
+
+day2.count.var.2000
+
+if (!dir.exists("./data/output/pos_control/")) {
+  warning("No `data/output/pos_control` directory found, creating one now...")
+  dir.create("./data/output/pos_control")
+}
+
+# Export the df
+day2.count.var.2000.data <- subset(day2.count.var.2000, select = -c(final.ident))
+day2.count.var.2000.feature <- subset(day2.count.var.2000, select = c(final.ident))
+
+write.table(day2.count.var.2000.data,
+            row.names = FALSE,
+            col.names = FALSE,
+            "./data/output/pos_control/var_2000_pos_ctrl_data.txt")
+write.table(day2.count.var.2000.feature,
+            row.names = FALSE,
+            col.names = FALSE,
+            "./data/output/pos_control/var_2000_pos_ctrl_feature.txt")
+
+write.table(day2.count.var.2000.data,
+            row.names = TRUE,
+            col.names = TRUE,
+            "./data/output/pos_control/var_2000_pos_ctrl_data_headers.txt")
+write.table(day2.count.var.2000.feature,
+            row.names = TRUE,
+            col.names = TRUE,
+            "./data/output/pos_control/var_2000_pos_ctrl_feature_headers.txt")
+```

@@ -1,0 +1,67 @@
+exception calling callback for <Future at 0x7fcc70d81cc0 state=finished raised TerminatedWorkerError>
+Traceback (most recent call last):
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/externals/loky/_base.py", line 26, in _invoke_callbacks
+    callback(self)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 385, in __call__
+    self.parallel.dispatch_next()
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 834, in dispatch_next
+    if not self.dispatch_one_batch(self._original_iterator):
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 901, in dispatch_one_batch
+    self._dispatch(tasks)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 819, in _dispatch
+    job = self._backend.apply_async(batch, callback=cb)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/_parallel_backends.py", line 556, in apply_async
+    future = self._workers.submit(SafeFunction(func))
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/externals/loky/reusable_executor.py", line 176, in submit
+    return super().submit(fn, *args, **kwargs)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/externals/loky/process_executor.py", line 1129, in submit
+    raise self._flags.broken
+joblib.externals.loky.process_executor.TerminatedWorkerError: A worker process managed by the executor was unexpectedly terminated. This could be caused by a segmentation fault while calling the function or by an excessive memory usage causing the Operating System to kill the worker.
+
+The exit codes of the workers are {SIGBUS(-7), SIGBUS(-7)}
+Traceback (most recent call last):
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/code/analyses_scripts/job_submit_scripts/../analyses/cux1.py", line 18, in <module>
+    run.run_model(
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/code/analyses_scripts/analyses/../run_model.py", line 183, in run_model
+    fit_model_filter_genes(
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/code/analyses_scripts/analyses/../run_model.py", line 117, in fit_model_filter_genes
+    accuracy_matrix.append(fit_model(
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/code/analyses_scripts/analyses/../run_model.py", line 38, in fit_model
+    fitted_model = model.fit(x_train, y_train)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/sklearn/model_selection/_search.py", line 874, in fit
+    self._run_search(evaluate_candidates)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/sklearn/model_selection/_search.py", line 1388, in _run_search
+    evaluate_candidates(ParameterGrid(self.param_grid))
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/sklearn/model_selection/_search.py", line 821, in evaluate_candidates
+    out = parallel(
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/sklearn/utils/parallel.py", line 63, in __call__
+    return super().__call__(iterable_with_config)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 1098, in __call__
+    self.retrieve()
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 975, in retrieve
+    self._output.extend(job.get(timeout=self.timeout))
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/_parallel_backends.py", line 567, in wrap_future_result
+    return future.result(timeout=timeout)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/concurrent/futures/_base.py", line 458, in result
+    return self.__get_result()
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
+    raise self._exception
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/externals/loky/_base.py", line 26, in _invoke_callbacks
+    callback(self)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 385, in __call__
+    self.parallel.dispatch_next()
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 834, in dispatch_next
+    if not self.dispatch_one_batch(self._original_iterator):
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 901, in dispatch_one_batch
+    self._dispatch(tasks)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/parallel.py", line 819, in _dispatch
+    job = self._backend.apply_async(batch, callback=cb)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/_parallel_backends.py", line 556, in apply_async
+    future = self._workers.submit(SafeFunction(func))
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/externals/loky/reusable_executor.py", line 176, in submit
+    return super().submit(fn, *args, **kwargs)
+  File "/project2/mcnerney/gaubil/mcnerney-cux1-ML/env/lib/python3.10/site-packages/joblib/externals/loky/process_executor.py", line 1129, in submit
+    raise self._flags.broken
+joblib.externals.loky.process_executor.TerminatedWorkerError: A worker process managed by the executor was unexpectedly terminated. This could be caused by a segmentation fault while calling the function or by an excessive memory usage causing the Operating System to kill the worker.
+
+The exit codes of the workers are {SIGBUS(-7), SIGBUS(-7)}

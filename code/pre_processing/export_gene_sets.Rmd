@@ -17,7 +17,8 @@ library(Seurat)
 library(tidyverse)
 library(ggplot2)
 
-LT.seu.day2 <- readRDS(file = "./data/in_vitro/RDS_objects/LT_seu_day2_ML_source_data.rds")
+# LT.seu.day2 <- readRDS(file = "./data/in_vitro/RDS_objects/LT_seu_day2_ML_source_data.rds")
+LT.seu.day2 <- readRDS(file = "./data/in_vivo/RDS_objects/LT_seu_day2_ML_source_data_filtered.rds")
 ```
 
 # Export
@@ -41,20 +42,24 @@ day2.all_cells.all_genes.feature <- subset(day2.all_cells.all_genes, select = c(
 write.table(day2.all_cells.all_genes.data,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/in_vitro/analyses/all_cells_all_genes_data.txt")
+            "data/in_vivo/analyses/all_cells_all_genes_data.txt")
+#            "./data/in_vitro/analyses/all_cells_all_genes_data.txt")
 write.table(day2.all_cells.all_genes.feature,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/in_vitro/analyses/all_cells_all_genes_features.txt")
+            "./data/in_vivo/analyses/all_cells_all_genes_features.txt")
+#            "./data/in_vitro/analyses/all_cells_all_genes_features.txt")
 
 write.table(day2.all_cells.all_genes.data,
             row.names = FALSE,
             col.names = TRUE,
-            "./data/in_vitro/analyses/all_cells_all_genes_data_headers.txt")
+            "./data/in_vivo/analyses/all_cells_all_genes_data_headers.txt")
+#            "./data/in_vitro/analyses/all_cells_all_genes_data_headers.txt")
 write.table(day2.all_cells.all_genes.feature,
             row.names = FALSE,
             col.names = TRUE,
-            "./data/in_vitro/analyses/all_cells_all_genes_features_headers.txt")
+            "./data/in_vivo/analyses/all_cells_all_genes_features_headers.txt")
+#            "./data/in_vitro/analyses/all_cells_all_genes_features_headers.txt")
 ```
 
 ## 2,000 most variable genes
@@ -77,18 +82,22 @@ day2.all_cells.2000_var.feature <- subset(day2.all_cells.2000_var, select = c(fi
 write.table(day2.all_cells.2000_var.data,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/in_vitro/analyses/all_cells_2000_var_data.txt")
+            "./data/in_vivo/analyses/all_cells_2000_var_data.txt")
+#            "./data/in_vitro/analyses/all_cells_2000_var_data.txt")
 write.table(day2.all_cells.2000_var.feature,
             row.names = FALSE,
             col.names = FALSE,
-            "./data/in_vitro/analyses/all_cells_2000_var_features.txt")
+            "./data/in_vivo/analyses/all_cells_2000_var_features.txt")
+#            "./data/in_vitro/analyses/all_cells_2000_var_features.txt")
 
 write.table(day2.all_cells.2000_var.data,
             row.names = FALSE,
             col.names = TRUE,
-            "./data/in_vitro/analyses/all_cells_2000_var_data_headers.txt")
+            "./data/in_vivo/analyses/all_cells_2000_var_data_headers.txt")
+#            "./data/in_vitro/analyses/all_cells_2000_var_data_headers.txt")
 write.table(day2.all_cells.2000_var.feature,
             row.names = FALSE,
             col.names = TRUE,
-            "./data/in_vitro/analyses/all_cells_2000_var_features_headers.txt")
+            "./data/in_vivo/analyses/all_cells_2000_var_features_headers.txt")
+#            "./data/in_vitro/analyses/all_cells_2000_var_features_headers.txt")
 ```

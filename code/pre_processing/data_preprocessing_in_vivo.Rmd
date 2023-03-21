@@ -28,9 +28,14 @@ I want to test if the treatment groups are more accurate to predict HSPC cell fa
 #set up working directory, this will vary from desktop to desktop
 wd <- "/Users/weihan/Desktop/Research/mcnerney-cux1-ML"
 
-knitr::opts_chunk$set(echo = FALSE)
-setwd(wd)
-knitr::opts_knit$set(root.dir = wd)
+#knitr::opts_chunk$set(echo = FALSE)
+#<<<<<<< solve_invivo_preprocessing
+#setwd(wd)
+#knitr::opts_knit$set(root.dir = wd)
+#=======
+##setwd("/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
+#knitr::opts_knit$set(root.dir = "/Users/alexandregaubil/Documents/Research/mcnerney-cux1-ML-github")
+#>>>>>>> main
 #set up working directory, this will vary from desktop to desktop
 
 ```

@@ -7,10 +7,9 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score as sklearn_f1_score
 from sklearn.exceptions import ConvergenceWarning
 import sys
-import numpy
+# import numpy
 from heapq import nlargest
-numpy.set_printoptions(threshold=sys.maxsize)
-
+np.set_printoptions(threshold=sys.maxsize)
 
 
 def fit_model(
@@ -21,24 +20,25 @@ def fit_model(
     hyper_param_tuning,
     f1_classification,
     f1_score,
-    print_coeffs):
+    print_coeffs
+):
     accuracy_array = []
 
     # Matrix of the coefficients used by each parameter
     # matrix_coeffs = np.array()
 
-    # Bootstrapping: Create 50 models of 1,000 random genes each and calculate
-    # each model's accuracy
+    # Bootstrapping: Create 50 models of 1,000 random genes each and
+    # calculate each model's accuracy
     for _ in range(1, (n_models + 1)):
         x_train, x_test, y_train, y_test = train_test_split(data_df,
                                                             features_array,
-                                                            test_size = 0.2)
+                                                            test_size=0.2)
 
         # Fit the model to the data
         fitted_model = model.fit(x_train, y_train)
 
-        # If we need the F1 classification (mostly for progenitor gene sets),
-        # print it out
+        # If we need the F1 classification (mostly for progenitor gene
+        # sets), print it out
         if f1_classification:
             y_pred = model.predict(x_test)
             print(classification_report(y_test, y_pred))
@@ -50,24 +50,22 @@ def fit_model(
             else:
                 y_pred = fitted_model.predict(x_test)
                 accuracy_array.append(sklearn_f1_score(
-                    y_true = y_test,
-                    y_pred = y_pred,
-                    average = 'macro'))
+                    y_true=y_test,
+                    y_pred=y_pred,
+                    average='macro'))
 
-        #if print_coeffs:
-        #    matrix_coeffs.append(fitted_model.coef_)
-        #    #print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
+        # if print_coeffs:
+        #     matrix_coeffs.append(fitted_model.coef_)
+        #     #print("     Coefficients: {} ; {}".format(fitted_model.coef_, fitted_model.intercept_))
 
-    #if print_coeffs:
-    #    col_averages = np.average(matrix_coeffs, axis=0)
-    #    col_names = df.columns
-    #    res = dict(zip(col_averages, col_names))
-    #    hundred_largest = nlargest(100, res, key=res.get)
-    #    print(hundred_largest)
-
+    # if print_coeffs:
+    #     col_averages = np.average(matrix_coeffs, axis=0)
+    #     col_names = df.columns
+    #     res = dict(zip(col_averages, col_names))
+    #     hundred_largest = nlargest(100, res, key=res.get)
+    #     print(hundred_largest)
 
     return accuracy_array
-
 
 
 def fit_model_filter_genes(
@@ -78,9 +76,11 @@ def fit_model_filter_genes(
     features_array_file,
     n_models,
     hyper_param_tuning,
+    submodel,
     f1_classification,
     f1_score,
-    print_coeffs):
+    print_coeffs,
+):
     goi_multi_array = []
 
     print("\nMODEL --- {}".format(model))
@@ -89,7 +89,7 @@ def fit_model_filter_genes(
 
     # List of transcriptor factors
     for i in range(len(genes_of_interest_files)):
-        genes_of_interest_np = np.genfromtxt(genes_of_interest_files[i], dtype = 'str')
+        genes_of_interest_np = np.genfromtxt(genes_of_interest_files[i], dtype='str')
         goi_multi_array.append(genes_of_interest_np)
 
     for i in range(len(goi_multi_array)):
@@ -97,8 +97,8 @@ def fit_model_filter_genes(
 
     genes_of_interest = goi_multi_array[0]
 
-    data_matrix = pd.read_csv(data_mtx_file, sep = data_mtx_col_sep)
-    features_array = np.genfromtxt(features_array_file, dtype = 'str')
+    data_matrix = pd.read_csv(data_mtx_file, sep=data_mtx_col_sep)
+    features_array = np.genfromtxt(features_array_file, dtype='str')
 
     # Keep only genes that are genes of interest
     if genes_of_interest:
@@ -111,9 +111,9 @@ def fit_model_filter_genes(
     if (len(df.columns) > 1000):
         for _ in (range(1, 10)):
             df_sample = df.sample(
-                n = 1000,
-                replace = False,
-                axis = 1)
+                n=1000,
+                replace=False,
+                axis=1)
             accuracy_matrix.append(fit_model(
                 df_sample,
                 features_array,
@@ -145,7 +145,7 @@ def fit_model_filter_genes(
         print("     Best estimator: {}".format(model.best_estimator_))
         print("     Best parameters: {}".format(model.best_params_))
         print("     Starting run of that model with optimal parameters...")
-        optimal_model = MLPClassifier(**model.best_params_)
+        optimal_model = submodel(**model.best_params_)
         fit_model_filter_genes(
             optimal_model,
             genes_of_interest_files,
@@ -154,13 +154,18 @@ def fit_model_filter_genes(
             features_array_file,
             50,
             False,
+            None,
             f1_classification,
             f1_score,
             print_coeffs)
 
 
-
-#@ignore_warnings(category=ConvergenceWarning)
+# @ignore_warnings(category=ConvergenceWarning)
+# For all the arrays, there are two possible lengths.
+# `model_list`, `n_models`, `hyper_param_tuning`, and `print_coeffs` must
+# all have the same length.
+# `data_mtx_files`, `data_mtx_col_seps`, and `features_array_files` must
+# all have the same length.
 def run_model(
     model_list,
     genes_of_interest_files,
@@ -169,9 +174,11 @@ def run_model(
     features_array_files,
     n_models,
     hyper_param_tuning,
-    f1_classification = False,
-    f1_score = False,
-    print_coeffs = [False, False]):
+    submodel,
+    f1_classification=False,
+    f1_score=False,
+    print_coeffs=[False, False]
+):
     for i in range(len(model_list)):
         for j in range(len(data_mtx_files)):
             fit_model_filter_genes(
@@ -182,6 +189,7 @@ def run_model(
                 features_array_files[j],
                 n_models[i],
                 hyper_param_tuning[i],
+                submodel[i],
                 f1_classification,
                 f1_score,
                 print_coeffs[i])

@@ -7,7 +7,8 @@
 #
 
 
-import os, sys
+import os
+import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import run_model as run
@@ -22,6 +23,7 @@ run.run_model(
     df.features_files,
     df.n_models,
     df.hyper_param_tuning,
+    df.submodel,
     False,
     df.f1_score,
     df.print_coeffs)
