@@ -1,3 +1,5 @@
+Note: 3C / 6C stands for "3 cells" and "6 cells" (i.e., if we used the 3 most frequent kind of cells or all of them), while LR and NN stand for logistic regression and neural network.
+
 # Negative Control & All Datasets
 
 ## 3C, LR
