@@ -1,0 +1,89 @@
+LogisticRegression
+DC: {'Baso': {'avg': 0.692, 'std': 0.052},
+ 'Monocyte': {'avg': 0.734, 'std': 0.030},
+ 'Neutrophil': {'avg': 0.727, 'std': 0.029}}
+
+MLPClassifier
+DC: {'Baso': {'avg': 0.711, 'std': 0.050},
+ 'Monocyte': {'avg': 0.752, 'std': 0.029},
+ 'Neutrophil': {'avg': 0.734, 'std': 0.029}}
+
+LogisticRegression
+GMP_MoDC: {'Baso': {'avg': 0.695, 'std': 0.057},
+ 'Monocyte': {'avg': 0.726, 'std': 0.030},
+ 'Neutrophil': {'avg': 0.721, 'std': 0.029}}
+
+MLPClassifier
+GMP_MoDC: {'Baso': {'avg': 0.694, 'std': 0.090},
+ 'Monocyte': {'avg': 0.727, 'std': 0.069},
+ 'Neutrophil': {'avg': 0.714, 'std': 0.041}}
+
+LogisticRegression
+GMP_MoNeu: {'Baso': {'avg': 0.718, 'std': 0.054},
+ 'Monocyte': {'avg': 0.728, 'std': 0.031},
+ 'Neutrophil': {'avg': 0.720, 'std': 0.030}}
+
+MLPClassifier
+GMP_MoNeu: {'Baso': {'avg': 0.715, 'std': 0.053},
+ 'Monocyte': {'avg': 0.740, 'std': 0.031},
+ 'Neutrophil': {'avg': 0.728, 'std': 0.033}}
+
+LogisticRegression
+Ba: {'Baso': {'avg': 0.752, 'std': 0.041},
+ 'Monocyte': {'avg': 0.739, 'std': 0.022},
+ 'Neutrophil': {'avg': 0.727, 'std': 0.028}}
+
+MLPClassifier
+Ba: {'Baso': {'avg': 0.753, 'std': 0.050},
+ 'Monocyte': {'avg': 0.743, 'std': 0.028},
+ 'Neutrophil': {'avg': 0.717, 'std': 0.028}}
+
+LogisticRegression
+CLP_B: {'Baso': {'avg': 0.729, 'std': 0.049},
+ 'Monocyte': {'avg': 0.743, 'std': 0.029},
+ 'Neutrophil': {'avg': 0.729, 'std': 0.029}}
+
+MLPClassifier
+CLP_B: {'Baso': {'avg': 0.700, 'std': 0.074},
+ 'Monocyte': {'avg': 0.741, 'std': 0.065},
+ 'Neutrophil': {'avg': 0.723, 'std': 0.046}}
+
+LogisticRegression
+CLP_Pre-B: {'Baso': {'avg': 0.716, 'std': 0.052},
+ 'Monocyte': {'avg': 0.739, 'std': 0.030},
+ 'Neutrophil': {'avg': 0.728, 'std': 0.029}}
+
+MLPClassifier
+CLP_Pre-B: {'Baso': {'avg': 0.726, 'std': 0.053},
+ 'Monocyte': {'avg': 0.753, 'std': 0.029},
+ 'Neutrophil': {'avg': 0.738, 'std': 0.029}}
+
+LogisticRegression
+GMP_Neu: {'Baso': {'avg': 0.685, 'std': 0.054},
+ 'Monocyte': {'avg': 0.718, 'std': 0.032},
+ 'Neutrophil': {'avg': 0.708, 'std': 0.030}}
+
+MLPClassifier
+GMP_Neu: {'Baso': {'avg': 0.682, 'std': 0.088},
+ 'Monocyte': {'avg': 0.721, 'std': 0.062},
+ 'Neutrophil': {'avg': 0.709, 'std': 0.055}}
+
+LogisticRegression
+HSC: {'Baso': {'avg': 0.726, 'std': 0.046},
+ 'Monocyte': {'avg': 0.741, 'std': 0.032},
+ 'Neutrophil': {'avg': 0.739, 'std': 0.030}}
+
+MLPClassifier
+HSC: {'Baso': {'avg': 0.735, 'std': 0.042},
+ 'Monocyte': {'avg': 0.750, 'std': 0.032},
+ 'Neutrophil': {'avg': 0.744, 'std': 0.029}}
+
+LogisticRegression
+MEP: {'Baso': {'avg': 0.715, 'std': 0.049},
+ 'Monocyte': {'avg': 0.730, 'std': 0.031},
+ 'Neutrophil': {'avg': 0.719, 'std': 0.032}}
+
+MLPClassifier
+MEP: {'Baso': {'avg': 0.710, 'std': 0.056},
+ 'Monocyte': {'avg': 0.735, 'std': 0.035},
+ 'Neutrophil': {'avg': 0.721, 'std': 0.037}}

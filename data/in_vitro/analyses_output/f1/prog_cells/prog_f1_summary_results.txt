@@ -1,0 +1,12 @@
+Model: MODEL --- LogisticRegression, 3 cells, Ba
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.csv']":
+    {
+        'Baso': {'avg': 0.76159996, 'std': 0.04124851},
+        'Monocyte': {'avg': 0.7332001, 'std': 0.03325297},
+        'Neutrophil': {'avg': 0.71840006, 'std': 0.031264037}}}
+
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_Ba_DEG_progenitor_markers.txt']":
+    {
+        'Baso': {'avg': 0.7682, 'std': 0.045329463},
+        'Monocyte': {'avg': 0.7594, 'std': 0.035688087},
+        'Neutrophil': {'avg': 0.7414, 'std': 0.033882733}}}

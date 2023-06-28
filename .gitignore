@@ -14,7 +14,10 @@ analyses_input/
 files_from_weinreb/
 input_for_Seurat/
 RDS_objects/
-analyses_output/
+data/analyses_output
+**/in_vitro/**/1000_degs_mouse_tf_f1.out
+**/in_vitro/**/cux1_f1.out
+*.zip
 other/*
 data/output/
 data/in_vivo/analyses/

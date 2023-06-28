@@ -1,0 +1,132 @@
+Model: MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_GMP_Neu_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.68542224, 'std': 0.054820307}, 'Monocyte': {'avg': 0.71808887, 'std': 0.03241935}, 'Neutrophil': {'avg': 0.70824444, 'std': 0.03037225}}}
+
+
+
+
+
+Model: MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+Data file: ./../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_GMP_Neu_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.60895556, 'std': 0.060317848}, 'Lymphoid': {'avg': 0.42288888, 'std': 0.16439414}, 'Mast': {'avg': 0.38866666, 'std': 0.18124017}, 'Meg': {'avg': 0.6437333, 'std': 0.11139049}, 'Monocyte': {'avg': 0.68773335, 'std': 0.033236127}, 'Neutrophil': {'avg': 0.69886667, 'std': 0.03257545}}}
+
+
+
+
+
+Model: MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 30))
+Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 30))
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_GMP_Neu_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.6822667, 'std': 0.088607594}, 'Monocyte': {'avg': 0.7213778, 'std': 0.062856905}, 'Neutrophil': {'avg': 0.7095778, 'std': 0.05562213}}}
+
+
+
+
+
+Model: MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 30))
+Data file: ./../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 30))
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_GMP_Neu_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.6016, 'std': 0.07993954}, 'Lymphoid': {'avg': 0.3868889, 'std': 0.18001014}, 'Mast': {'avg': 0.3504889, 'std': 0.19802633}, 'Meg': {'avg': 0.61604446, 'std': 0.15408769}, 'Monocyte': {'avg': 0.69904447, 'std': 0.04847655}, 'Neutrophil': {'avg': 0.7061777, 'std': 0.049428415}}}
+
+
+
+
+
+Model: MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_HSC_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.72660005, 'std': 0.046113335}, 'Monocyte': {'avg': 0.7412, 'std': 0.032350577}, 'Neutrophil': {'avg': 0.7398, 'std': 0.030560752}}}
+
+
+
+
+
+Model: MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+Data file: ./../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_HSC_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.64019996, 'std': 0.059547964}, 'Lymphoid': {'avg': 0.53379995, 'std': 0.17105426}, 'Mast': {'avg': 0.41799998, 'std': 0.14575322}, 'Meg': {'avg': 0.705, 'std': 0.07489326}, 'Monocyte': {'avg': 0.72300005, 'std': 0.028513158}, 'Neutrophil': {'avg': 0.7264001, 'std': 0.032909572}}}
+
+
+
+
+
+Model: MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(150, 50))
+Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(150, 50))
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_HSC_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.7356, 'std': 0.04233958}, 'Monocyte': {'avg': 0.7506, 'std': 0.032459818}, 'Neutrophil': {'avg': 0.7442, 'std': 0.029263623}}}
+
+
+
+
+
+Model: MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 30))
+Data file: ./../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- MLPClassifier(alpha=1e-05, hidden_layer_sizes=(250, 30))
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_HSC_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.643, 'std': 0.052201536}, 'Lymphoid': {'avg': 0.45880002, 'std': 0.13595058}, 'Mast': {'avg': 0.42439997, 'std': 0.15764719}, 'Meg': {'avg': 0.66260004, 'std': 0.08014511}, 'Monocyte': {'avg': 0.7156001, 'std': 0.027939936}, 'Neutrophil': {'avg': 0.7268001, 'std': 0.028031405}}}
+
+
+
+
+
+Model: MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_MEP_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.7150445, 'std': 0.049451414}, 'Monocyte': {'avg': 0.7309112, 'std': 0.031465195}, 'Neutrophil': {'avg': 0.7198667, 'std': 0.032413714}}}
+
+
+
+
+
+Model: MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+Data file: ./../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- LogisticRegression(C=0.008, max_iter=1000, multi_class='multinomial', n_jobs=-1,
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_MEP_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.63439995, 'std': 0.05686022}, 'Lymphoid': {'avg': 0.34486666, 'std': 0.18024084}, 'Mast': {'avg': 0.41068888, 'std': 0.16829395}, 'Meg': {'avg': 0.69560003, 'std': 0.094892785}, 'Monocyte': {'avg': 0.70631117, 'std': 0.032402895}, 'Neutrophil': {'avg': 0.7139333, 'std': 0.032329485}}}
+
+
+
+
+
+Model: MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(150, 50))
+Data file: ./../../../data/in_vitro/analyses_input/three_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(150, 50))
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_MEP_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.7104889, 'std': 0.056369662}, 'Monocyte': {'avg': 0.73535556, 'std': 0.035464946}, 'Neutrophil': {'avg': 0.72159994, 'std': 0.037209556}}}
+
+
+
+
+
+Model: MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 100))
+Data file: ./../../../data/in_vitro/analyses_input/all_cells_all_genes_data_headers.txt
+
+SUMMARY
+MODEL --- MLPClassifier(alpha=0.72, hidden_layer_sizes=(250, 100))
+{"Genes files: ['./../../../data/gene_sets/prog_genes/Ren_MEP_DEG_progenitor_markers.txt']": {'Baso': {'avg': 0.64224446, 'std': 0.062975004}, 'Lymphoid': {'avg': 0.3770889, 'std': 0.17175232}, 'Mast': {'avg': 0.4420889, 'std': 0.16499317}, 'Meg': {'avg': 0.6854, 'std': 0.09759074}, 'Monocyte': {'avg': 0.7147111, 'std': 0.03503054}, 'Neutrophil': {'avg': 0.7149111, 'std': 0.03209176}}}
+
+
+
+
+
