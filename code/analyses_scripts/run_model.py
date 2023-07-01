@@ -2,10 +2,13 @@ import numpy as np
 import pandas as pd
 from itertools import chain
 from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score as sklearn_f1_score
 from sklearn.exceptions import ConvergenceWarning
+
 import sys
 # import numpy
 from heapq import nlargest
@@ -145,19 +148,48 @@ def fit_model_filter_genes(
         print("     Best estimator: {}".format(model.best_estimator_))
         print("     Best parameters: {}".format(model.best_params_))
         print("     Starting run of that model with optimal parameters...")
-        optimal_model = submodel(**model.best_params_)
-        fit_model_filter_genes(
-            optimal_model,
-            genes_of_interest_files,
-            data_mtx_file,
-            data_mtx_col_sep,
-            features_array_file,
-            50,
-            False,
-            None,
-            f1_classification,
-            f1_score,
-            print_coeffs)
+        if (submodel == "random_forest"):
+            optimal_model = RandomForestClassifier(**model.best_params_)
+            fit_model_filter_genes(
+                optimal_model,
+                genes_of_interest_files,
+                data_mtx_file,
+                data_mtx_col_sep,
+                features_array_file,
+                50,
+                False,
+                None,
+                f1_classification,
+                f1_score,
+                print_coeffs)
+        elif (submodel == "gradient_boosting"):
+            optimal_model = GradientBoostingClassifier(**model.best_params_)
+            fit_model_filter_genes(
+                optimal_model,
+                genes_of_interest_files,
+                data_mtx_file,
+                data_mtx_col_sep,
+                features_array_file,
+                50,
+                False,
+                None,
+                f1_classification,
+                f1_score,
+                print_coeffs)
+        elif (submodel == "neural_network"):
+            optimal_model = MLPClassifier(**model.best_params_)
+            fit_model_filter_genes(
+                optimal_model,
+                genes_of_interest_files,
+                data_mtx_file,
+                data_mtx_col_sep,
+                features_array_file,
+                50,
+                False,
+                None,
+                f1_classification,
+                f1_score,
+                print_coeffs)
 
 
 # @ignore_warnings(category=ConvergenceWarning)

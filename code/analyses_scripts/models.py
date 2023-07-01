@@ -23,10 +23,11 @@ _random_forest_search_parameters = {
     'max_leaf_nodes': [1000, 2000, None],
 }
 
-_random_forest_model = RandomForestClassifier()
+_random_forest_model = "random_forest"
+# _random_forest_model = RandomForestClassifier()
 
 random_forest = GridSearchCV(
-    _random_forest_model,
+    RandomForestClassifier(),
     _random_forest_search_parameters,
     scoring=_f1_score_string,
     n_jobs=-1)
@@ -39,10 +40,11 @@ _gradient_boosting_search_parameters = {
     "max_leaf_nodes": [2, 10, 50, 100],
 }
 
-_gradient_boosting_model = GradientBoostingClassifier()
+_gradient_boosting_model = "gradient_boosting"
+# _gradient_boosting_model = GradientBoostingClassifier()
 
 gradient_boosting = GridSearchCV(
-    _gradient_boosting_model,
+    GradientBoostingClassifier(),
     _gradient_boosting_search_parameters,
     scoring=_f1_score_string,
     n_jobs=-1)
@@ -74,10 +76,11 @@ _neural_network_search_parameters = {
     'solver': ['adam']
 }
 
-_neural_network_model = MLPClassifier()
+_neural_network_model = "neural_network"
+# _neural_network_model = MLPClassifier()
 
 neural_network = GridSearchCV(
-    _neural_network_model,
+    MLPClassifier(),
     _neural_network_search_parameters,
     scoring=_f1_score_string,
     n_jobs=-1)
