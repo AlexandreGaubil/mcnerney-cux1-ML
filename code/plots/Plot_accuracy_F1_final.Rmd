@@ -1,0 +1,73 @@
+---
+title: "Untitled"
+author: "Weihan Liu"
+date: "2023-03-21"
+output: html_document
+---
+
+Plot the accuracy/F1 result of cell fate porediction
+
+```{r}
+library(ggplot2)
+library(stringr)
+library(dplyr)
+library(stats)
+# library(ggpubr)
+
+```
+
+
+Import variables
+```{r}
+setwd("/Users/weihan/Desktop/Research/mcnerney-cux1-ML/code/plots")
+source('model_strings.R')
+```
+
+Create vessel dataframes
+```{r}
+
+df <- data.frame(analysis = character(),
+                 dataset = character(),
+                 score_function = character(),
+                 n_cell_types = integer(),
+                 model = character(),
+                 n_genes = integer(),
+                 n_boostraps = integer(),
+                 n_rdm_gene_samples = integer(),
+                 average = numeric(),
+                 std_deviation = numeric(),
+                 t_test_neg_ctrl = numeric(),
+                 t_test_pos_ctrl = numeric())
+
+```
+
+we will use the in vivo dataset
+
+Import accuracy results to the df
+```{r}
+source('in_vivo_f1_results.R')
+
+```
+
+
+```{r}
+df.vivo <- dplyr::filter(df,dataset == "In vivo")
+
+df.vivo <- dplyr::filter(df.vivo, analysis %in% c("Random Gene Set","Mouse TFs","1,000 Most DEGs","CUX1 Binding Targets","CUX1 Binding Targets & Weihan"))
+
+df.vivo$analysis <- factor(df.vivo$analysis, levels = c("Random Gene Set","Mouse TFs","1,000 Most DEGs","CUX1 Binding Targets","CUX1 Binding Targets & Weihan"))
+df.vivo$model <- factor(df.vivo$model, levels = c("Logistic Regression","Neural Network"))
+```
+
+Plot
+```{r,fig.width=2.2,fig.height=1.5}
+df.vivo %>% ggplot(aes(x = analysis, y = average)) + 
+        geom_errorbar(aes(ymin = average-std_deviation, ymax = average+std_deviation, color = model),position = position_dodge(0.3), width = 0.3)+
+        geom_point(aes(color = model), position = position_dodge(0.3)) +
+        scale_color_manual(values = c("#00AFBB", "#E7B800"))  +
+        ylim(0,1) +
+        theme_bw()
+        
+```
+
+
