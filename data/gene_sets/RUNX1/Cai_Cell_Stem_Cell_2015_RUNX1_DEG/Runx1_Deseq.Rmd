@@ -1,0 +1,210 @@
+---
+title: "DE analysis for Jeff's human CD34 Erythrocyte differentiation bulkRNA Seq"
+author: "Weihan Liu"
+date: "06/11/2020"
+output: html_document
+---
+
+DE analysis of mouse bone marrow Flt3- LSK cells mRNA seq form Cai et al 2015:https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE67609
+Comparisons:
+
+normal (Runx1f/f, or WT) versus Runx1 deficient (Mut) hematopoietic stem cells.
+
+Note:
+1.The studdy used mm9 genome for alignment
+2.The raw data matrix contains columns for both mRNA seq and whole RNA seq,, we only need the mRNA seq columns
+
+
+```{r setup, include=FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE)
+```
+
+##data loading and initial set up
+Load necessary libraries. 
+
+```{r}
+library(DESeq2)
+library(RColorBrewer) #for plotting
+library(pheatmap) #for plotting
+library(tidyverse)# for data wrangling
+library(rmarkdown)
+library(apeglm)
+library(edgeR)
+```
+
+
+
+
+Read in raw count matrix
+```{r,include=FALSE}
+raw_count <- read.table("/Users/weihan/Desktop/Research/mcnerney-cux1-ML/data/gene_sets/RUNX1/Cai_Cell_Stem_Cell_2015_RUNX1_DEG/GSE67609_Runx1_raw_count_matrix.txt",header = TRUE) 
+
+raw_count <- dplyr::select(raw_count, contains("mRNA"))
+```
+
+
+
+
+
+create your metadata file
+day 7 and day 14 shares the same experimental design, so you only need to create one meta data file
+```{r,include=FALSE}
+genotype <- c("WT","WT","Mut","Mut")
+replicate <- c(1,2,1,2)
+#+ other optional columns
+#combines the vectors into a dataframe
+meta_data <- data.frame(genotype,replicate)
+
+#add sample names in a vector as row names. note that the row names in meta data need to be in the same order as the column/sample names in count matrix
+row.names(meta_data) <- c("WT1_mRNA","WT2_mRNA","Mut1_mRNA","Mut2_mRNA")
+meta_data$genotype <- as.factor(meta_data$genotype)
+meta_data$replicate <- as.factor(meta_data$replicate)
+```
+
+
+check the row names in your metadata is in the same order as column names in your count matrix, as this is the order DESeq2 corresponds each sample, if this returns FALSE, you need to go back and make the right order.
+```{r,include=FALSE}
+all(rownames(meta_data) == colnames(raw_count))
+```
+
+
+## DESeq2 analysis
+
+First, create DESeq2 object which contains a series of information including your raw counts, metadata and the design formula, specifying which variable in the meta data we want to test for differential expression analysis. you can use one or multiple variables(if testing for multiple, just type "variable1 + variable2 ...")
+
+Create Deseq object 
+```{r,include=FALSE}
+dds <- DESeqDataSetFromMatrix(countData = raw_count,colData = meta_data,design = ~genotype)
+#remove the genes that have less than 10 counts across all samples
+dds <- dds[rowSums(counts(dds)) > 10,]
+
+#set the WT as the baseline for comparison
+dds$genotype <- relevel(dds$genotype, ref = "WT")
+```
+
+next, normalize raw read counts. We perform normalization because there are several source of bias in raw read counts that will skew the RNA quantification
+    1.library size: samples are are sequenced deeper have more reads
+    2.gene length: longer genes have more reads aligned
+    3.outlier genes(RNA composition): highly expressed DE genes and highly expressed gene from PCR amplification bias will mask other genes
+Note that if we just divide raw reads by total number of reads, you cannot remove the bias from 3. So DESeq2 uses a method that adjust the #of reads based on library size and is resistant to ourlier genes.
+```{r}
+dds <- estimateSizeFactors(dds) #estimate scaling factors and reaasign back to the DESeq2 object
+
+sizeFactors(dds)   
+
+normalized_counts <- counts(dds,normalized = TRUE) #extract the normalized counts from DESeq2 object
+```
+
+Exploratiry data analysis to visualize data quality
+
+Hiearchical Clustering to examine similarity/difference relationships among samples
+
+```{r}
+vsd <- vst(dds, blind = TRUE)#log transformed the normalzied count to improve the visualization of clustering, DESeq2 uses a variance stabilization transformation that performs log transformation which moderates variance across mean
+vsd_mat <- assay(vsd) #extract the log transformed normalized count from the DESeq2 object
+vsd_cor <- cor(vsd_mat) #compute the correlation values
+pheatmap(vsd_cor, annotation = dplyr::select(meta_data,genotype,replicate)) #plot the correlation heatmap, specifying the variables in the metadata you want to visualize.You caninclude as many variables as possible in your meatdata, which you think might be sources for batch effect
+```
+
+
+PCA analysis to identify potential batch effect
+```{r}
+pcaData <- plotPCA(vsd, intgroup = c("genotype","replicate"),returnData = TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+
+ggplot(pcaData, aes(PC1, PC2, color=genotype,shape = replicate)) +
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  coord_fixed() 
+
+```
+
+
+Differrential expression analysis using DESeq function
+This function performs a default analysis through the steps:
+ 1.estimation of size factors: estimateSizeFactors
+ 2.estimation of dispersion: estimateDispersions
+ 3.Negative Binomial GLM fitting and Wald statistics: nbinomWaldTest
+```{r,include=FALSE}
+ #run the deseq analysis on your DESeq2 object containingb RAW COUNTS
+dds <- DESeq(dds)
+
+res <- results(dds,contrast = c("genotype","Mut","WT"))
+
+```
+
+
+Plot dispersion
+```{r}
+plotDispEsts(dds)
+```
+
+Lfc shrinkage(shrink the LFC of those genes with a high abs(LFC), but low significance(high padj). Those genes could be false positive DEGs
+```{r}
+resultsNames(dds)
+
+resLFC <- lfcShrink(dds, coef="genotype_Mut_vs_WT", type="apeglm")
+
+hist(resLFC$log2FoldChange)
+
+hist(resLFC$pvalue)
+
+```
+
+MA Plot
+```{r}
+plotMA(resLFC)
+
+
+```
+
+clean and filter the result table for DEGs
+```{r}
+res <- as.data.frame(resLFC)
+dplyr::filter(res, padj < 0.05)
+res <- dplyr::filter(res, padj < 0.05 & abs(log2FoldChange) > 0.75)
+```
+
+convert the ensembl id to gene symbol
+```{r}
+library(biomaRt)
+
+res$ensembl_id <- rownames(res) 
+mart <- useMart("ensembl", dataset = "mmusculus_gene_ensembl")
+
+genes <- getBM(attributes=c('ensembl_gene_id',
+                          'mgi_symbol'),
+             filters = "ensembl_gene_id",
+             values = res$ensembl_id,
+             mart = mart) %>% dplyr::rename(ensembl_id = ensembl_gene_id)
+
+res <- left_join(res, genes, by = "ensembl_id")
+res <- dplyr::filter(res,!grepl("Rik",mgi_symbol))
+res <- res[!is.na(res$mgi_symbol),]
+```
+
+export the result table (just the DEG names)
+```{r}
+write.table(res$mgi_symbol, "/Users/weihan/Desktop/Research/mcnerney-cux1-ML/data/gene_sets/RUNX1/Cai_Cell_Stem_Cell_2015_RUNX1_DEG/Runx1_LSK_DEG.txt", quote = FALSE, col.names = FALSE, row.names = FALSE)
+```
+
+
+Import the Runx1 binding sites' corresponding genes from this study in mouse EML multipotent progenitor cell line:https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1002565#s4
+```{r}
+Runx1_target_genes <- read.table("/Users/weihan/Desktop/Research/mcnerney-cux1-ML/data/gene_sets/RUNX1/Wu_2012_PlosOne_Runx1_ChIP/GSE31221_RUNX1Peak_TgtGeneList.txt", header = TRUE)
+
+#overlap the Runx1 DEG and Runx1 binding target
+Runx1_target_DEG <- intersect(Runx1_target_genes$Feature_Name,res$mgi_symbol)
+```
+
+export
+```{r}
+write.table(as.data.frame(unique(Runx1_target_genes$Feature_Name)),"/Users/weihan/Desktop/Research/mcnerney-cux1-ML/data/gene_sets/RUNX1/Wu_2012_PlosOne_Runx1_ChIP/Runx1_binding_gene.txt", quote = FALSE, col.names = FALSE, row.names = FALSE)
+
+write.table(as.data.frame(Runx1_target_DEG),"/Users/weihan/Desktop/Research/mcnerney-cux1-ML/data/gene_sets/RUNX1/Wu_2012_PlosOne_Runx1_ChIP/Runx1_binding_olp_DEG.txt", quote = FALSE, col.names = FALSE, row.names = FALSE)
+```
+
+
+
+
